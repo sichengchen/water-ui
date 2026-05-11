@@ -145,16 +145,16 @@ export const meetingActionsRegistry = createWaterRegistry({
 
         return createElement(
           Card,
-          { className: "gap-3 border-0 bg-transparent py-0 shadow-none" },
+          { className: "gap-3 py-4" },
           createElement(
             CardHeader,
-            { className: "px-0" },
+            { className: "px-4" },
             createElement(CardTitle, { className: "text-base" }, "Todo list"),
             createElement(CardDescription, null, `${summary.tasks.length} extracted tasks`),
           ),
           createElement(
             CardContent,
-            { className: "px-0" },
+            { className: "px-4" },
             createElement(
               "ul",
               { "aria-label": "Todo list", className: "flex flex-col gap-2" },
