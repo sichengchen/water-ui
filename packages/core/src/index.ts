@@ -2,7 +2,10 @@ export type RegistryDiagnosticCode =
   | "duplicate_component_type"
   | "empty_component_type"
   | "invalid_component_entry"
-  | "component_type_mismatch";
+  | "component_type_mismatch"
+  | "missing_component_description"
+  | "invalid_children_policy"
+  | "invalid_slot_policy";
 
 export type DiagnosticSeverity = "error" | "warning";
 
@@ -44,11 +47,24 @@ export type WaterComponentExample = {
   };
 };
 
+export type WaterPropPromptSummary = {
+  name: string;
+  description: string;
+  required?: boolean;
+  allowedValues?: readonly unknown[];
+};
+
+export type WaterComponentPromptHints = {
+  props?: readonly WaterPropPromptSummary[];
+  notes?: readonly string[];
+};
+
 export type WaterComponentDefinition<Props = Record<string, unknown>> = {
   description: string;
   propsSchema?: unknown;
   children?: ChildrenPolicy;
   slots?: SlotPolicy;
+  prompt?: WaterComponentPromptHints;
   examples?: readonly WaterComponentExample[];
   antiExamples?: readonly WaterComponentExample[];
   profile?: ComponentProfile;
@@ -82,15 +98,24 @@ export type RegistryComponentSummary = {
   type: string;
   description: string;
   children: ChildrenPolicy;
+  props?: readonly WaterPropPromptSummary[];
   slots?: SlotPolicy;
   profile?: ComponentProfile;
   risk?: WaterComponentEntry["risk"];
+  notes?: readonly string[];
   examples?: readonly WaterComponentExample[];
+  antiExamples?: readonly WaterComponentExample[];
 };
 
 export type RegistrySummary = {
   componentCount: number;
   components: readonly RegistryComponentSummary[];
+};
+
+type CollectedComponentEntry = {
+  entry: unknown;
+  typeHint?: string;
+  path: string;
 };
 
 export function defineWaterComponent<Props = Record<string, unknown>>(
@@ -104,7 +129,12 @@ export function createWaterRegistry(options: CreateWaterRegistryOptions): WaterR
 }
 
 export function mergeWaterRegistries(...registries: readonly WaterRegistry[]): WaterRegistry {
-  const entries = registries.flatMap((registry) => registry.entries);
+  const entries = registries.flatMap((registry, registryIndex) =>
+    registry.entries.map((entry, entryIndex) => ({
+      entry,
+      path: `$.registries[${registryIndex}].components[${entryIndex}]`,
+    })),
+  );
   const diagnostics = registries.flatMap((registry) => registry.diagnostics);
 
   return buildRegistry(entries, diagnostics);
@@ -143,6 +173,10 @@ export function summarizeWaterRegistry(
       children: entry.children ?? "none",
     };
 
+    if (entry.prompt?.props) {
+      summary.props = entry.prompt.props;
+    }
+
     if (entry.slots) {
       summary.slots = entry.slots;
     }
@@ -155,8 +189,16 @@ export function summarizeWaterRegistry(
       summary.risk = entry.risk;
     }
 
+    if (entry.prompt?.notes) {
+      summary.notes = entry.prompt.notes;
+    }
+
     if (entry.examples) {
       summary.examples = entry.examples;
+    }
+
+    if (entry.antiExamples) {
+      summary.antiExamples = entry.antiExamples;
     }
 
     return summary;
@@ -175,29 +217,43 @@ export function serializePromptSafeRegistryDescription(
   return JSON.stringify(summarizeWaterRegistry(registry, options), null, options.space);
 }
 
-function collectComponentEntries(input: WaterRegistryInput): WaterComponentEntry[] {
+function collectComponentEntries(input: WaterRegistryInput): CollectedComponentEntry[] {
   if (Array.isArray(input)) {
-    return input.map((entry) => ({ ...entry }));
+    return input.map((entry, index) => ({
+      entry: isRecord(entry) ? { ...entry } : entry,
+      path: `$.components[${index}]`,
+    }));
   }
 
-  return Object.entries(input).map(([type, definition]) => ({
-    ...definition,
-    type,
-  }));
+  return Object.entries(input).map(([type, definition]) => {
+    const definitionRecord: Record<string, unknown> | undefined = isRecord(definition)
+      ? definition
+      : undefined;
+    const entry = definitionRecord
+      ? {
+          ...definitionRecord,
+          type: Object.hasOwn(definitionRecord, "type") ? definitionRecord["type"] : type,
+        }
+      : definition;
+
+    return {
+      entry,
+      typeHint: type,
+      path: `$.components.${type}`,
+    };
+  });
 }
 
 function buildRegistry(
-  entries: readonly WaterComponentEntry[],
+  entries: readonly CollectedComponentEntry[],
   inheritedDiagnostics: readonly RegistryDiagnostic[] = [],
 ): WaterRegistry {
   const components: Record<string, WaterComponentEntry> = Object.create(null);
   const orderedEntries: WaterComponentEntry[] = [];
   const diagnostics: RegistryDiagnostic[] = [...inheritedDiagnostics];
 
-  entries.forEach((entry, index) => {
-    const path = `$.components[${index}]`;
-
-    if (!entry || typeof entry !== "object") {
+  entries.forEach(({ entry, typeHint, path }) => {
+    if (!isRecord(entry)) {
       diagnostics.push({
         code: "invalid_component_entry",
         severity: "error",
@@ -219,6 +275,50 @@ function buildRegistry(
 
     const type = entry.type.trim();
 
+    if (typeHint && typeHint !== type) {
+      diagnostics.push({
+        code: "component_type_mismatch",
+        severity: "error",
+        path: `${path}.type`,
+        componentType: type,
+        message: `Component entry key '${typeHint}' does not match declared type '${type}'.`,
+      });
+      return;
+    }
+
+    if (typeof entry.description !== "string" || entry.description.trim() === "") {
+      diagnostics.push({
+        code: "missing_component_description",
+        severity: "error",
+        path: `${path}.description`,
+        componentType: type,
+        message: `Component type '${type}' must include a non-empty description.`,
+      });
+      return;
+    }
+
+    if (!isValidChildrenPolicy(entry.children)) {
+      diagnostics.push({
+        code: "invalid_children_policy",
+        severity: "error",
+        path: `${path}.children`,
+        componentType: type,
+        message: `Component type '${type}' has an invalid children policy.`,
+      });
+      return;
+    }
+
+    if (!isValidSlotPolicy(entry.slots)) {
+      diagnostics.push({
+        code: "invalid_slot_policy",
+        severity: "error",
+        path: `${path}.slots`,
+        componentType: type,
+        message: `Component type '${type}' has an invalid slot policy.`,
+      });
+      return;
+    }
+
     if (Object.hasOwn(components, type)) {
       diagnostics.push({
         code: "duplicate_component_type",
@@ -232,9 +332,10 @@ function buildRegistry(
 
     const normalizedEntry = Object.freeze({
       ...entry,
+      description: entry.description.trim(),
       type,
-      children: entry.children ?? "none",
-    });
+      children: (entry.children ?? "none") as ChildrenPolicy,
+    }) as WaterComponentEntry;
 
     components[type] = normalizedEntry;
     orderedEntries.push(normalizedEntry);
@@ -249,6 +350,48 @@ function buildRegistry(
     components: frozenComponents,
     entries: frozenEntries,
     diagnostics: frozenDiagnostics,
+  });
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isValidChildrenPolicy(value: unknown): value is ChildrenPolicy | undefined {
+  if (value === undefined || value === "none" || value === "nodes") {
+    return true;
+  }
+
+  if (!isRecord(value) || value.kind !== "nodes") {
+    return false;
+  }
+
+  return isOptionalNonNegativeInteger(value.min) && isOptionalNonNegativeInteger(value.max);
+}
+
+function isOptionalNonNegativeInteger(value: unknown): boolean {
+  return value === undefined || (Number.isInteger(value) && Number(value) >= 0);
+}
+
+function isValidSlotPolicy(value: unknown): value is SlotPolicy | undefined {
+  if (value === undefined) {
+    return true;
+  }
+
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return Object.entries(value).every(([slotName, slot]) => {
+    if (slotName.trim() === "" || !isRecord(slot)) {
+      return false;
+    }
+
+    return (
+      (slot.description === undefined || typeof slot.description === "string") &&
+      (slot.required === undefined || typeof slot.required === "boolean") &&
+      (slot.multiple === undefined || typeof slot.multiple === "boolean")
+    );
   });
 }
 

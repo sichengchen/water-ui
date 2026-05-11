@@ -14,18 +14,18 @@ Each gate requires:
 
 ## Gate 1: Registry API
 
-Status: active
+Status: completed
 
 Acceptance criteria:
 
-- Can create a component registry.
-- Can define registry entries.
-- Can merge registry presets.
-- Can validate duplicate type names.
-- Can expose registry summaries.
-- Can select registry entries by profile.
-- Can serialize prompt-safe registry descriptions.
-- Core includes no Water-owned visual component definitions.
+- [x] Can create a component registry.
+- [x] Can define registry entries.
+- [x] Can merge registry presets.
+- [x] Can validate duplicate type names.
+- [x] Can expose registry summaries.
+- [x] Can select registry entries by profile.
+- [x] Can serialize prompt-safe registry descriptions.
+- [x] Core includes no Water-owned visual component definitions.
 
 Deliverables:
 
@@ -36,9 +36,15 @@ Deliverables:
 - registry fixtures
 - registry diagnostics
 
+Completion evidence:
+
+- implementation: `packages/core/src/index.ts`
+- fixtures: `packages/core/fixtures/registry.ts`
+- tests: `packages/core/tests/registry.test.ts`
+
 ## Gate 2: Schema UI Protocol
 
-Status: planned
+Status: next
 
 Acceptance criteria:
 
