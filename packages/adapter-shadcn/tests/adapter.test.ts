@@ -6,10 +6,16 @@ import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/react";
 import {
   createShadcnAdapterConfig,
   createShadcnComponents,
+  createShadcnRegistryIndex,
+  defineShadcnRegistryItem,
+  getShadcnCatalogEntry,
   getShadcnImportPath,
+  resolveShadcnRegistryTarget,
+  shadcnComponentCatalog,
   shadcnComponents,
 } from "../src/index.ts";
 import type { WaterRenderDiagnostic } from "@water-ui/react";
+import type { ShadcnGenericRenderProps } from "../src/index.ts";
 
 test("merges shadcn entries with user registry entries", () => {
   const registry = createWaterRegistry({
@@ -23,13 +29,15 @@ test("merges shadcn entries with user registry entries", () => {
 
   expect(registry.ok).toBe(true);
   expect(Object.keys(registry.components)).toEqual([
-    "Button",
-    "Card",
-    "Alert",
-    "Input",
-    "Badge",
+    ...shadcnComponentCatalog.map((entry) => entry.type),
     "CustomerTable",
   ]);
+  expect(registry.components.Accordion?.metadata?.shadcn).toEqual(
+    expect.objectContaining({
+      module: "accordion",
+      registryDependencies: ["accordion"],
+    }),
+  );
 });
 
 test("validates shadcn component props", () => {
@@ -140,10 +148,68 @@ test("renders shadcn-backed nodes through project component bindings", () => {
   expect(diagnostics[0]).toEqual([]);
 });
 
+test("renders generic shadcn catalog entries through project component bindings", () => {
+  const components = createShadcnComponents({
+    components: {
+      Accordion: ({ children, ...props }: ShadcnGenericRenderProps) =>
+        createElement(
+          "section",
+          {
+            "data-accordion": props["data-shadcn-component"],
+            "data-type": props.type,
+          },
+          children,
+        ),
+      Badge: ({ children }) => createElement("span", null, children),
+    },
+  });
+  const registry = createWaterRegistry({ components });
+  const ui = expectVerified(
+    verifyDocument(
+      {
+        kind: "water.ui.document",
+        version: "water.ui.v1",
+        root: "accordion",
+        nodes: {
+          accordion: {
+            type: "Accordion",
+            props: {
+              type: "single",
+            },
+            children: ["badge"],
+          },
+          badge: {
+            type: "Badge",
+            props: {
+              label: "Open",
+            },
+          },
+        },
+      },
+      {
+        registry,
+      },
+    ),
+  );
+
+  const html = renderToStaticMarkup(
+    createElement(
+      WaterRuntimeProvider,
+      { registry, runtime: {} },
+      createElement(WaterRenderer, { ui }),
+    ),
+  );
+
+  expect(html).toBe(
+    '<section data-accordion="accordion" data-type="single"><span>Open</span></section>',
+  );
+});
+
 test("generates prompt summaries for shadcn entries", () => {
   const registry = createWaterRegistry({ components: shadcnComponents });
   const summary = summarizeWaterRegistry(registry);
 
+  expect(summary.componentCount).toBe(shadcnComponentCatalog.length);
   expect(summary.components).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
@@ -160,19 +226,84 @@ test("generates prompt summaries for shadcn entries", () => {
         type: "Card",
         children: "nodes",
       }),
+      expect.objectContaining({
+        type: "Sidebar",
+        profile: ["shadcn", "shadcn:layout"],
+      }),
     ]),
   );
 });
 
-test("supports project-local shadcn import aliases", () => {
+test("supports project-local shadcn import aliases and registry targets", () => {
   const config = createShadcnAdapterConfig({
     aliases: {
+      components: "@/components",
+      hooks: "@/hooks/",
+      lib: "@/lib/",
       ui: "@/components/ui/",
     },
   });
 
   expect(getShadcnImportPath(config, "button")).toBe("@/components/ui/button");
   expect(getShadcnImportPath(config, "card")).toBe("@/components/ui/card");
+  expect(getShadcnImportPath(config, "alert-dialog")).toBe("@/components/ui/alert-dialog");
+  expect(getShadcnImportPath(config, "calendar")).toBe("@/components/ui/calendar");
+  expect(resolveShadcnRegistryTarget(config, "@ui/ai/prompt-input.tsx")).toBe(
+    "@/components/ui/ai/prompt-input.tsx",
+  );
+  expect(resolveShadcnRegistryTarget(config, "@lib/format-date.ts")).toBe("@/lib/format-date.ts");
+  expect(resolveShadcnRegistryTarget(config, "@foo/bar.ts")).toBe("foo/bar.ts");
+});
+
+test("defines shadcn registry item and index metadata", () => {
+  const item = defineShadcnRegistryItem({
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "customer-card",
+    type: "registry:block",
+    title: "Customer Card",
+    registryDependencies: ["card", "badge", "@acme/customer-avatar"],
+    dependencies: ["date-fns"],
+    files: [
+      {
+        path: "registry/customer-card/customer-card.tsx",
+        type: "registry:component",
+        target: "@components/customer-card.tsx",
+      },
+    ],
+    cssVars: {
+      theme: {
+        "font-heading": "Inter, sans-serif",
+      },
+    },
+    css: {
+      "@utility text-balance": {
+        "text-wrap": "balance",
+      },
+    },
+    envVars: {
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000",
+    },
+    docs: "Install the registry dependencies before rendering this item.",
+    categories: ["customers"],
+  });
+  const index = createShadcnRegistryIndex({
+    name: "water-ui",
+    homepage: "https://water-ui.test",
+    items: [item],
+  });
+
+  expect(Object.isFrozen(item.registryDependencies)).toBe(true);
+  expect(index).toEqual({
+    $schema: "https://ui.shadcn.com/schema/registry.json",
+    name: "water-ui",
+    homepage: "https://water-ui.test",
+    items: [item],
+  });
+  expect(getShadcnCatalogEntry("DataTable")).toEqual(
+    expect.objectContaining({
+      module: "data-table",
+    }),
+  );
 });
 
 function expectVerified(result: ReturnType<typeof verifyDocument>) {

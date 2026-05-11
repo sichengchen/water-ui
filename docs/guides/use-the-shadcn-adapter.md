@@ -46,13 +46,35 @@ The adapter also exposes import alias helpers for tools that need to describe
 where project-local shadcn modules live:
 
 ```ts
-import { createShadcnAdapterConfig, getShadcnImportPath } from "@water-ui/adapter-shadcn";
+import {
+  createShadcnAdapterConfig,
+  getShadcnImportPath,
+  resolveShadcnRegistryTarget,
+} from "@water-ui/adapter-shadcn";
 
 const config = createShadcnAdapterConfig({
   aliases: {
+    components: "@/components",
+    hooks: "@/hooks",
+    lib: "@/lib",
     ui: "@/components/ui",
   },
 });
 
 getShadcnImportPath(config, "button"); // "@/components/ui/button"
+getShadcnImportPath(config, "alert-dialog"); // "@/components/ui/alert-dialog"
+resolveShadcnRegistryTarget(config, "@ui/ai/prompt-input.tsx");
+// "@/components/ui/ai/prompt-input.tsx"
 ```
+
+`shadcnComponents` includes registry entries for the full shadcn/ui catalog.
+Components with Water-specific behavior, such as `Button`, `Card`, `Alert`,
+`Input`, and `Badge`, keep strict prop validation. Other shadcn entries accept
+project-local props and render through the component binding passed to
+`createShadcnComponents`.
+
+For shadcn registry publishing metadata, use `defineShadcnRegistryItem` and
+`createShadcnRegistryIndex`. These helpers model the current shadcn
+`registry-item.json` and `registry.json` fields, including `files`,
+`registryDependencies`, `dependencies`, `devDependencies`, `cssVars`, `css`,
+`envVars`, `docs`, `categories`, and `meta`.

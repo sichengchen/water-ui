@@ -4,6 +4,520 @@ import type { WaterComponentDefinition, WaterComponentExample } from "@water-ui/
 import type { WaterRenderBinding } from "@water-ui/react";
 import type { ComponentType, ReactNode } from "react";
 
+export const shadcnRegistryItemTypes = Object.freeze([
+  "registry:lib",
+  "registry:block",
+  "registry:component",
+  "registry:ui",
+  "registry:hook",
+  "registry:theme",
+  "registry:page",
+  "registry:file",
+  "registry:style",
+  "registry:base",
+  "registry:font",
+  "registry:item",
+] as const);
+
+export type ShadcnRegistryItemType = (typeof shadcnRegistryItemTypes)[number];
+
+export type ShadcnRegistryFile = {
+  path: string;
+  type: Exclude<ShadcnRegistryItemType, "registry:font">;
+  content?: string;
+  target?: string;
+};
+
+export type ShadcnRegistryFont = {
+  family: string;
+  provider: "google";
+  import: string;
+  variable: string;
+  weight?: readonly string[];
+  subsets?: readonly string[];
+  selector?: string;
+  dependency?: string;
+};
+
+export type ShadcnRegistryCssValue =
+  | string
+  | {
+      readonly [selectorOrProperty: string]: ShadcnRegistryCssValue;
+    };
+
+export type ShadcnRegistryItem = {
+  $schema?: "https://ui.shadcn.com/schema/registry-item.json";
+  name: string;
+  type: ShadcnRegistryItemType;
+  title?: string;
+  description?: string;
+  author?: string;
+  dependencies?: readonly string[];
+  devDependencies?: readonly string[];
+  registryDependencies?: readonly string[];
+  files?: readonly ShadcnRegistryFile[];
+  tailwind?: {
+    config?: {
+      content?: readonly string[];
+      theme?: Record<string, unknown>;
+      plugins?: readonly string[];
+    };
+  };
+  cssVars?: {
+    theme?: Record<string, string>;
+    light?: Record<string, string>;
+    dark?: Record<string, string>;
+  };
+  css?: Record<string, ShadcnRegistryCssValue>;
+  envVars?: Record<string, string>;
+  meta?: Record<string, unknown>;
+  docs?: string;
+  categories?: readonly string[];
+  extends?: string;
+  style?: string;
+  iconLibrary?: string;
+  baseColor?: string;
+  theme?: string;
+  font?: ShadcnRegistryFont;
+};
+
+export type ShadcnRegistryIndex = {
+  $schema?: "https://ui.shadcn.com/schema/registry.json";
+  name: string;
+  homepage: string;
+  items: readonly ShadcnRegistryItem[];
+};
+
+export type ShadcnCatalogEntry = {
+  type: string;
+  module: string;
+  title: string;
+  category: string;
+  description: string;
+  registryType?: ShadcnRegistryItemType;
+};
+
+const shadcnCatalogEntries = [
+  {
+    type: "Field",
+    module: "field",
+    title: "Field",
+    category: "form",
+    description: "shadcn Field for form inputs with labels, descriptions, and errors.",
+  },
+  {
+    type: "Button",
+    module: "button",
+    title: "Button",
+    category: "form",
+    description: "shadcn Button for actions and form submission.",
+  },
+  {
+    type: "ButtonGroup",
+    module: "button-group",
+    title: "Button Group",
+    category: "form",
+    description: "shadcn Button Group for visually grouping related buttons.",
+  },
+  {
+    type: "Input",
+    module: "input",
+    title: "Input",
+    category: "form",
+    description: "shadcn Input for single-line text entry.",
+  },
+  {
+    type: "InputGroup",
+    module: "input-group",
+    title: "Input Group",
+    category: "form",
+    description: "shadcn Input Group for inputs with addons and controls.",
+  },
+  {
+    type: "InputOTP",
+    module: "input-otp",
+    title: "Input OTP",
+    category: "form",
+    description: "shadcn Input OTP for one-time password entry.",
+  },
+  {
+    type: "Textarea",
+    module: "textarea",
+    title: "Textarea",
+    category: "form",
+    description: "shadcn Textarea for multi-line text entry.",
+  },
+  {
+    type: "Checkbox",
+    module: "checkbox",
+    title: "Checkbox",
+    category: "form",
+    description: "shadcn Checkbox for binary choices.",
+  },
+  {
+    type: "RadioGroup",
+    module: "radio-group",
+    title: "Radio Group",
+    category: "form",
+    description: "shadcn Radio Group for mutually exclusive choices.",
+  },
+  {
+    type: "Select",
+    module: "select",
+    title: "Select",
+    category: "form",
+    description: "shadcn Select for dropdown option selection.",
+  },
+  {
+    type: "NativeSelect",
+    module: "native-select",
+    title: "Native Select",
+    category: "form",
+    description: "shadcn Native Select for styled native option selection.",
+  },
+  {
+    type: "Switch",
+    module: "switch",
+    title: "Switch",
+    category: "form",
+    description: "shadcn Switch for toggling boolean settings.",
+  },
+  {
+    type: "Slider",
+    module: "slider",
+    title: "Slider",
+    category: "form",
+    description: "shadcn Slider for numeric range input.",
+  },
+  {
+    type: "Calendar",
+    module: "calendar",
+    title: "Calendar",
+    category: "form",
+    description: "shadcn Calendar for date selection.",
+  },
+  {
+    type: "DatePicker",
+    module: "date-picker",
+    title: "Date Picker",
+    category: "form",
+    description: "shadcn Date Picker patterns for choosing dates.",
+  },
+  {
+    type: "Combobox",
+    module: "combobox",
+    title: "Combobox",
+    category: "form",
+    description: "shadcn Combobox patterns for searchable selection.",
+  },
+  {
+    type: "Label",
+    module: "label",
+    title: "Label",
+    category: "form",
+    description: "shadcn Label for accessible form control labels.",
+  },
+  {
+    type: "Accordion",
+    module: "accordion",
+    title: "Accordion",
+    category: "layout",
+    description: "shadcn Accordion for collapsible content sections.",
+  },
+  {
+    type: "Breadcrumb",
+    module: "breadcrumb",
+    title: "Breadcrumb",
+    category: "layout",
+    description: "shadcn Breadcrumb for hierarchical navigation.",
+  },
+  {
+    type: "NavigationMenu",
+    module: "navigation-menu",
+    title: "Navigation Menu",
+    category: "layout",
+    description: "shadcn Navigation Menu for accessible site navigation.",
+  },
+  {
+    type: "Sidebar",
+    module: "sidebar",
+    title: "Sidebar",
+    category: "layout",
+    description: "shadcn Sidebar for app navigation layouts.",
+  },
+  {
+    type: "Tabs",
+    module: "tabs",
+    title: "Tabs",
+    category: "layout",
+    description: "shadcn Tabs for switching between related panels.",
+  },
+  {
+    type: "Separator",
+    module: "separator",
+    title: "Separator",
+    category: "layout",
+    description: "shadcn Separator for visual content separation.",
+  },
+  {
+    type: "ScrollArea",
+    module: "scroll-area",
+    title: "Scroll Area",
+    category: "layout",
+    description: "shadcn Scroll Area for custom scrollable regions.",
+  },
+  {
+    type: "Resizable",
+    module: "resizable",
+    title: "Resizable",
+    category: "layout",
+    description: "shadcn Resizable for split panel layouts.",
+  },
+  {
+    type: "Dialog",
+    module: "dialog",
+    title: "Dialog",
+    category: "overlay",
+    description: "shadcn Dialog for modal interactions.",
+  },
+  {
+    type: "AlertDialog",
+    module: "alert-dialog",
+    title: "Alert Dialog",
+    category: "overlay",
+    description: "shadcn Alert Dialog for confirmation prompts.",
+  },
+  {
+    type: "Sheet",
+    module: "sheet",
+    title: "Sheet",
+    category: "overlay",
+    description: "shadcn Sheet for side-panel overlays.",
+  },
+  {
+    type: "Drawer",
+    module: "drawer",
+    title: "Drawer",
+    category: "overlay",
+    description: "shadcn Drawer for mobile-friendly bottom sheets.",
+  },
+  {
+    type: "Popover",
+    module: "popover",
+    title: "Popover",
+    category: "overlay",
+    description: "shadcn Popover for floating contextual content.",
+  },
+  {
+    type: "Tooltip",
+    module: "tooltip",
+    title: "Tooltip",
+    category: "overlay",
+    description: "shadcn Tooltip for brief contextual help.",
+  },
+  {
+    type: "HoverCard",
+    module: "hover-card",
+    title: "Hover Card",
+    category: "overlay",
+    description: "shadcn Hover Card for preview content on hover.",
+  },
+  {
+    type: "ContextMenu",
+    module: "context-menu",
+    title: "Context Menu",
+    category: "overlay",
+    description: "shadcn Context Menu for right-click actions.",
+  },
+  {
+    type: "DropdownMenu",
+    module: "dropdown-menu",
+    title: "Dropdown Menu",
+    category: "overlay",
+    description: "shadcn Dropdown Menu for action lists.",
+  },
+  {
+    type: "Menubar",
+    module: "menubar",
+    title: "Menubar",
+    category: "overlay",
+    description: "shadcn Menubar for horizontal command menus.",
+  },
+  {
+    type: "Command",
+    module: "command",
+    title: "Command",
+    category: "overlay",
+    description: "shadcn Command for command palettes and searchable command lists.",
+  },
+  {
+    type: "Alert",
+    module: "alert",
+    title: "Alert",
+    category: "feedback",
+    description: "shadcn Alert for inline status and warning messages.",
+  },
+  {
+    type: "Toast",
+    module: "toast",
+    title: "Toast",
+    category: "feedback",
+    description: "shadcn Toast integration for transient notifications.",
+  },
+  {
+    type: "Sonner",
+    module: "sonner",
+    title: "Sonner",
+    category: "feedback",
+    description: "shadcn Sonner integration for toast notifications.",
+  },
+  {
+    type: "Progress",
+    module: "progress",
+    title: "Progress",
+    category: "feedback",
+    description: "shadcn Progress for completion state.",
+  },
+  {
+    type: "Spinner",
+    module: "spinner",
+    title: "Spinner",
+    category: "feedback",
+    description: "shadcn Spinner for loading state.",
+  },
+  {
+    type: "Skeleton",
+    module: "skeleton",
+    title: "Skeleton",
+    category: "feedback",
+    description: "shadcn Skeleton for loading placeholders.",
+  },
+  {
+    type: "Badge",
+    module: "badge",
+    title: "Badge",
+    category: "feedback",
+    description: "shadcn Badge for compact labels and status.",
+  },
+  {
+    type: "Empty",
+    module: "empty",
+    title: "Empty",
+    category: "feedback",
+    description: "shadcn Empty for empty states.",
+  },
+  {
+    type: "Avatar",
+    module: "avatar",
+    title: "Avatar",
+    category: "display",
+    description: "shadcn Avatar for profile imagery and fallbacks.",
+  },
+  {
+    type: "Card",
+    module: "card",
+    title: "Card",
+    category: "display",
+    description: "shadcn Card for grouped content.",
+  },
+  {
+    type: "Table",
+    module: "table",
+    title: "Table",
+    category: "display",
+    description: "shadcn Table for tabular data display.",
+  },
+  {
+    type: "DataTable",
+    module: "data-table",
+    title: "Data Table",
+    category: "display",
+    description: "shadcn Data Table patterns for sortable and filterable tables.",
+  },
+  {
+    type: "Chart",
+    module: "chart",
+    title: "Chart",
+    category: "display",
+    description: "shadcn Chart wrappers for Recharts visualizations.",
+  },
+  {
+    type: "Carousel",
+    module: "carousel",
+    title: "Carousel",
+    category: "display",
+    description: "shadcn Carousel for swipeable or paged content.",
+  },
+  {
+    type: "AspectRatio",
+    module: "aspect-ratio",
+    title: "Aspect Ratio",
+    category: "display",
+    description: "shadcn Aspect Ratio for fixed-ratio media containers.",
+  },
+  {
+    type: "Typography",
+    module: "typography",
+    title: "Typography",
+    category: "display",
+    description: "shadcn Typography styles for prose content.",
+  },
+  {
+    type: "Item",
+    module: "item",
+    title: "Item",
+    category: "display",
+    description: "shadcn Item for structured list and menu rows.",
+  },
+  {
+    type: "Kbd",
+    module: "kbd",
+    title: "Kbd",
+    category: "display",
+    description: "shadcn Kbd for keyboard shortcut display.",
+  },
+  {
+    type: "Collapsible",
+    module: "collapsible",
+    title: "Collapsible",
+    category: "misc",
+    description: "shadcn Collapsible for expandable content.",
+  },
+  {
+    type: "Toggle",
+    module: "toggle",
+    title: "Toggle",
+    category: "misc",
+    description: "shadcn Toggle for pressed or unpressed button state.",
+  },
+  {
+    type: "ToggleGroup",
+    module: "toggle-group",
+    title: "Toggle Group",
+    category: "misc",
+    description: "shadcn Toggle Group for grouped toggle options.",
+  },
+  {
+    type: "Pagination",
+    module: "pagination",
+    title: "Pagination",
+    category: "misc",
+    description: "shadcn Pagination for navigating paged data.",
+  },
+  {
+    type: "Direction",
+    module: "direction",
+    title: "Direction",
+    category: "misc",
+    description: "shadcn Direction provider for right-to-left support.",
+  },
+] as const satisfies readonly ShadcnCatalogEntry[];
+
+export const shadcnComponentCatalog = Object.freeze(shadcnCatalogEntries);
+
+export type ShadcnComponentType = (typeof shadcnCatalogEntries)[number]["type"];
+export type ShadcnComponentModule = (typeof shadcnCatalogEntries)[number]["module"];
+
 export type ShadcnButtonProps = {
   label: string;
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
@@ -72,7 +586,13 @@ export type ShadcnBadgeRenderProps = {
   children?: ReactNode;
 };
 
-export type ShadcnComponentBindings = {
+export type ShadcnGenericRenderProps = Record<string, unknown> & {
+  children?: ReactNode;
+};
+
+type AnyShadcnComponent = ComponentType<never>;
+
+export type ShadcnKnownComponentBindings = {
   Button?: ComponentType<ShadcnButtonRenderProps>;
   Card?: ComponentType<ShadcnCardRenderProps>;
   CardHeader?: ComponentType<ShadcnCardSectionProps>;
@@ -87,6 +607,12 @@ export type ShadcnComponentBindings = {
   Badge?: ComponentType<ShadcnBadgeRenderProps>;
 };
 
+export type ShadcnComponentBindings = ShadcnKnownComponentBindings &
+  Readonly<Record<string, AnyShadcnComponent | undefined>>;
+
+type ResolvedShadcnComponentBindings = Required<ShadcnKnownComponentBindings> &
+  Readonly<Record<string, AnyShadcnComponent | undefined>>;
+
 export type CreateShadcnComponentsOptions = {
   components?: ShadcnComponentBindings;
 };
@@ -95,14 +621,17 @@ export type ShadcnRegistryComponents = Readonly<Record<string, WaterComponentDef
 
 export type ShadcnImportAliases = {
   ui: string;
+  components?: string;
+  lib?: string;
+  hooks?: string;
 };
-
-export type ShadcnComponentModule = "button" | "card" | "alert" | "input" | "badge";
 
 export type ShadcnAdapterConfig = {
-  aliases: ShadcnImportAliases;
+  aliases: Readonly<Required<Pick<ShadcnImportAliases, "ui">> & Omit<ShadcnImportAliases, "ui">>;
   imports: Readonly<Record<ShadcnComponentModule, string>>;
 };
+
+const genericShadcnPropsSchema = z.object({}).passthrough();
 
 const buttonSchema = z
   .object({
@@ -215,7 +744,7 @@ export const shadcnPromptExamples: Readonly<Record<string, readonly WaterCompone
     ],
   });
 
-export const shadcnFallbackComponents: Required<ShadcnComponentBindings> = Object.freeze({
+export const shadcnFallbackComponents: Required<ShadcnKnownComponentBindings> = Object.freeze({
   Button: ({ children, onClick, disabled, type }) =>
     createElement("button", { disabled, onClick, type: type ?? "button" }, children),
   Card: ({ children }) => createElement("section", { "data-shadcn-fallback": "card" }, children),
@@ -246,9 +775,17 @@ export function createShadcnComponents(
   const components = {
     ...shadcnFallbackComponents,
     ...options.components,
-  };
+  } as ResolvedShadcnComponentBindings;
+
+  const definitions = Object.fromEntries(
+    shadcnComponentCatalog.map((entry) => [
+      entry.type,
+      createGenericShadcnDefinition(entry, components),
+    ]),
+  ) as Record<ShadcnComponentType, WaterComponentDefinition>;
 
   return Object.freeze({
+    ...definitions,
     Button: createButtonDefinition(components),
     Card: createCardDefinition(components),
     Alert: createAlertDefinition(components),
@@ -260,19 +797,13 @@ export function createShadcnComponents(
 export function createShadcnAdapterConfig(options: {
   aliases: ShadcnImportAliases;
 }): ShadcnAdapterConfig {
-  const uiAlias = normalizeAlias(options.aliases.ui);
-  const imports: Record<ShadcnComponentModule, string> = {
-    button: `${uiAlias}/button`,
-    card: `${uiAlias}/card`,
-    alert: `${uiAlias}/alert`,
-    input: `${uiAlias}/input`,
-    badge: `${uiAlias}/badge`,
-  };
+  const aliases = normalizeAliases(options.aliases);
+  const imports = Object.fromEntries(
+    shadcnComponentCatalog.map((entry) => [entry.module, `${aliases.ui}/${entry.module}`]),
+  ) as Record<ShadcnComponentModule, string>;
 
   return Object.freeze({
-    aliases: Object.freeze({
-      ui: uiAlias,
-    }),
+    aliases: Object.freeze(aliases),
     imports: Object.freeze(imports),
   });
 }
@@ -284,8 +815,115 @@ export function getShadcnImportPath(
   return config.imports[module];
 }
 
+export function resolveShadcnRegistryTarget(config: ShadcnAdapterConfig, target: string): string {
+  const trimmed = target.trim();
+  if (trimmed === "") {
+    throw new TypeError("shadcn registry target must be a non-empty string.");
+  }
+
+  const placeholders = [
+    ["@components/", config.aliases.components],
+    ["@ui/", config.aliases.ui],
+    ["@lib/", config.aliases.lib],
+    ["@hooks/", config.aliases.hooks],
+  ] as const;
+
+  for (const [placeholder, alias] of placeholders) {
+    if (!trimmed.startsWith(placeholder)) {
+      continue;
+    }
+
+    if (!alias) {
+      throw new TypeError(`shadcn registry target '${placeholder}' requires an alias.`);
+    }
+
+    return `${alias}/${trimmed.slice(placeholder.length)}`;
+  }
+
+  if (trimmed.startsWith("@")) {
+    return trimmed.slice(1);
+  }
+
+  return trimmed;
+}
+
+export function defineShadcnRegistryItem(item: ShadcnRegistryItem): Readonly<ShadcnRegistryItem> {
+  return Object.freeze({
+    ...item,
+    dependencies: freezeArray(item.dependencies),
+    devDependencies: freezeArray(item.devDependencies),
+    registryDependencies: freezeArray(item.registryDependencies),
+    files: freezeArray(item.files),
+    categories: freezeArray(item.categories),
+  });
+}
+
+export function createShadcnRegistryIndex(options: {
+  name: string;
+  homepage: string;
+  items: readonly ShadcnRegistryItem[];
+}): Readonly<ShadcnRegistryIndex> {
+  return Object.freeze({
+    $schema: "https://ui.shadcn.com/schema/registry.json",
+    name: options.name,
+    homepage: options.homepage,
+    items: Object.freeze(options.items.map((item) => defineShadcnRegistryItem(item))),
+  });
+}
+
+export function getShadcnCatalogEntry(componentType: string): ShadcnCatalogEntry | undefined {
+  return shadcnComponentCatalog.find((entry) => entry.type === componentType);
+}
+
+function createGenericShadcnDefinition(
+  entry: ShadcnCatalogEntry,
+  components: ResolvedShadcnComponentBindings,
+): WaterComponentDefinition<ShadcnGenericRenderProps> {
+  const render: WaterRenderBinding<ShadcnGenericRenderProps> = ({ props, children }) => {
+    const Component =
+      (components[entry.type] as ComponentType<ShadcnGenericRenderProps> | undefined) ??
+      GenericShadcnFallback;
+
+    return createElement(Component, {
+      ...props,
+      children,
+      "data-shadcn-component": entry.module,
+    });
+  };
+
+  return {
+    description: entry.description,
+    propsSchema: genericShadcnPropsSchema,
+    children: "nodes",
+    profile: ["shadcn", `shadcn:${entry.category}`],
+    prompt: {
+      notes: [
+        `Backed by the shadcn ${entry.title} registry item (${entry.module}).`,
+        "Pass props that match the project-local shadcn source component.",
+      ],
+    },
+    metadata: {
+      shadcn: {
+        module: entry.module,
+        title: entry.title,
+        category: entry.category,
+        registryDependencies: [entry.module],
+        registryType: entry.registryType ?? "registry:ui",
+      },
+    },
+    render,
+  };
+}
+
+function GenericShadcnFallback({ children, ...props }: ShadcnGenericRenderProps): ReactNode {
+  const component =
+    typeof props["data-shadcn-component"] === "string" ? props["data-shadcn-component"] : "unknown";
+
+  return createElement("section", { "data-shadcn-fallback": component }, children);
+}
+
 function createButtonDefinition(
-  components: Required<ShadcnComponentBindings>,
+  components: ResolvedShadcnComponentBindings,
 ): WaterComponentDefinition<ShadcnButtonProps> {
   const render: WaterRenderBinding<ShadcnButtonProps> = ({ props, bindings }) => {
     const actionId = props.actionId;
@@ -340,7 +978,7 @@ function createButtonDefinition(
 }
 
 function createCardDefinition(
-  components: Required<ShadcnComponentBindings>,
+  components: ResolvedShadcnComponentBindings,
 ): WaterComponentDefinition<ShadcnCardProps> {
   const render: WaterRenderBinding<ShadcnCardProps> = ({ props, children, slots }) => {
     const header =
@@ -395,7 +1033,7 @@ function createCardDefinition(
 }
 
 function createAlertDefinition(
-  components: Required<ShadcnComponentBindings>,
+  components: ResolvedShadcnComponentBindings,
 ): WaterComponentDefinition<ShadcnAlertProps> {
   const render: WaterRenderBinding<ShadcnAlertProps> = ({ props, children }) =>
     createElement(
@@ -435,7 +1073,7 @@ function createAlertDefinition(
 }
 
 function createInputDefinition(
-  components: Required<ShadcnComponentBindings>,
+  components: ResolvedShadcnComponentBindings,
 ): WaterComponentDefinition<ShadcnInputProps> {
   const render: WaterRenderBinding<ShadcnInputProps> = ({ props }) =>
     createElement(components.Input, {
@@ -474,7 +1112,7 @@ function createInputDefinition(
 }
 
 function createBadgeDefinition(
-  components: Required<ShadcnComponentBindings>,
+  components: ResolvedShadcnComponentBindings,
 ): WaterComponentDefinition<ShadcnBadgeProps> {
   const render: WaterRenderBinding<ShadcnBadgeProps> = ({ props }) =>
     createElement(components.Badge, { variant: props.variant }, props.label);
@@ -502,11 +1140,24 @@ function createBadgeDefinition(
   };
 }
 
-function normalizeAlias(alias: string): string {
+function normalizeAliases(aliases: ShadcnImportAliases): ShadcnAdapterConfig["aliases"] {
+  return {
+    ui: normalizeAlias(aliases.ui, "ui"),
+    ...(aliases.components ? { components: normalizeAlias(aliases.components, "components") } : {}),
+    ...(aliases.lib ? { lib: normalizeAlias(aliases.lib, "lib") } : {}),
+    ...(aliases.hooks ? { hooks: normalizeAlias(aliases.hooks, "hooks") } : {}),
+  };
+}
+
+function normalizeAlias(alias: string, name = "ui"): string {
   const trimmed = alias.trim();
   if (trimmed === "") {
-    throw new TypeError("shadcn ui alias must be a non-empty string.");
+    throw new TypeError(`shadcn ${name} alias must be a non-empty string.`);
   }
 
   return trimmed.replace(/\/+$/, "");
+}
+
+function freezeArray<T>(items: readonly T[] | undefined): readonly T[] | undefined {
+  return items ? Object.freeze([...items]) : undefined;
 }
