@@ -29,6 +29,7 @@ Completed gates:
 
 - Gate 1: Registry API
 - Gate 2: Schema UI Protocol
+- Gate 3: Verification
 
 Implemented now:
 
@@ -42,10 +43,12 @@ Implemented now:
 - semantic patch parsing
 - JSONL stream event parsing
 - protocol fixtures and diagnostics
+- registry-aware Schema UI verification
+- VerifiedSchemaUI branding
+- verification fixtures and diagnostics
 
 Intentionally not implemented yet:
 
-- registry-aware Schema UI verification
 - React renderer
 - shadcn adapter
 - runtime capability execution

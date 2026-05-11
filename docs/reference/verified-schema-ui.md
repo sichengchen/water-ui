@@ -1,6 +1,6 @@
 # VerifiedSchemaUI Reference
 
-Status: planned for Gate 3.
+Status: implemented in Gate 3.
 
 VerifiedSchemaUI is the branded, safe rendering boundary.
 
@@ -20,3 +20,21 @@ type VerificationResult =
 ```
 
 Rendering APIs consume `VerifiedSchemaUI`, not raw Schema UI.
+
+Implemented Gate 3 exports:
+
+- `verifyDocument`
+- `isVerifiedSchemaUI`
+- `assertVerifiedSchemaUI`
+
+Verifier responsibilities:
+
+- Normalize and verify document shape.
+- Verify that the root, children, and slots reference nodes in the document map.
+- Reject cycles and unreachable nodes.
+- Reject component types that are absent from the active registry.
+- Validate children and slot policies from registry entries.
+- Validate props against the registry entry `propsSchema` subset used by Water.
+- Validate `actionId`, `dataRef`, and `stateKey` references against runtime
+  capabilities.
+- Return stable diagnostics with JSON paths and repair metadata where possible.

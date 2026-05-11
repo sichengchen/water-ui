@@ -72,20 +72,20 @@ Completion evidence:
 
 ## Gate 3: Verification
 
-Status: planned
+Status: completed
 
 Acceptance criteria:
 
-- Can verify document shape.
-- Can verify root and node map.
-- Can verify children references.
-- Can verify slot references.
-- Can reject unknown component types.
-- Can validate props against registry schemas.
-- Can validate action IDs against runtime registry.
-- Can validate data refs against runtime registry.
-- Can return VerifiedSchemaUI on success.
-- Can return diagnostics on failure.
+- [x] Can verify document shape.
+- [x] Can verify root and node map.
+- [x] Can verify children references.
+- [x] Can verify slot references.
+- [x] Can reject unknown component types.
+- [x] Can validate props against registry schemas.
+- [x] Can validate action IDs against runtime registry.
+- [x] Can validate data refs against runtime registry.
+- [x] Can return VerifiedSchemaUI on success.
+- [x] Can return diagnostics on failure.
 
 Deliverables:
 
@@ -94,6 +94,12 @@ Deliverables:
 - validation fixtures
 - diagnostic fixtures
 - repair metadata
+
+Completion evidence:
+
+- implementation: `packages/core/src/verification.ts`
+- fixtures: `docs/fixtures/verification/`
+- tests: `packages/core/tests/verification.test.ts`
 
 ## Gate 4: React Renderer
 

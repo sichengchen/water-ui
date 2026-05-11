@@ -12,8 +12,8 @@ registry and runtime capabilities.
 1. Read `rfc/001-positioning.md`.
 2. Read `rfc/002-registry-first-architecture.md`.
 3. Read `capability-gates.md`.
-4. Use `tasks/gate-*.md` for implementation contracts. Gates 1 and 2 are
-   complete; Gate 3 is next.
+4. Use `tasks/gate-*.md` for implementation contracts. Gates 1 through 3 are
+   complete; Gate 4 is next.
 5. Use `reference/*.md` for public API targets.
 
 ## Non-Negotiables

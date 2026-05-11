@@ -16,6 +16,12 @@ docs/fixtures/protocol/patches/
 docs/fixtures/protocol/streams/
 ```
 
+Verification fixtures:
+
+```txt
+docs/fixtures/verification/documents/
+```
+
 Golden eval fixtures live at repo root:
 
 ```txt
