@@ -9,10 +9,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./com
 import { Textarea } from "./components/ui/textarea.js";
 import { meetingActionsRegistry } from "./registry.js";
 import { createMeetingRuntimeFromNote } from "./runtime.js";
-import { CREATE_TASKS_ACTION_ID, MEETING_SUMMARY_DATA_REF, exampleMeetingNote } from "./types.js";
+import { CREATE_TASKS_ACTION_ID, exampleMeetingNote, meetingTaskSchema } from "./types.js";
 import "./styles.css";
 import type { VerifiedSchemaUI } from "@water-ui/core";
 import type { MeetingRuntime } from "./runtime.js";
+import type { MeetingTask } from "./types.js";
 import type { ReactNode } from "react";
 
 type ChatState =
@@ -27,6 +28,7 @@ type ChatState =
       status: "ready";
       prompt: string;
       ui: VerifiedSchemaUI;
+      tasks: readonly MeetingTask[];
       meetingRuntime: MeetingRuntime;
     }
   | {
@@ -52,7 +54,7 @@ function App(): ReactNode {
       await wait(500);
 
       const runtime = createMeetingRuntimeFromNote(note);
-      const document = await mockMeetingActionsAgent();
+      const document = await mockMeetingActionsAgent({ tasks: runtime.summary.tasks });
       const verification = verifyDocument(document, {
         registry: meetingActionsRegistry,
         runtime: runtime.capabilityRuntime.describe(),
@@ -70,6 +72,7 @@ function App(): ReactNode {
         status: "ready",
         prompt: defaultPrompt,
         ui: verification.ui,
+        tasks: getGeneratedTasks(verification.ui),
         meetingRuntime: runtime,
       });
     } catch (error) {
@@ -198,8 +201,7 @@ function renderCreateTasksButton(chat: ChatState): ReactNode {
       data-action-id={CREATE_TASKS_ACTION_ID}
       onClick={() => {
         void chat.meetingRuntime.capabilityRuntime.runAction(CREATE_TASKS_ACTION_ID, {
-          dataRef: MEETING_SUMMARY_DATA_REF,
-          tasks: chat.meetingRuntime.summary.tasks,
+          tasks: chat.tasks,
         });
       }}
     >
@@ -212,6 +214,12 @@ function wait(ms: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
+}
+
+function getGeneratedTasks(ui: VerifiedSchemaUI): readonly MeetingTask[] {
+  const rootNode = ui.nodes[ui.root];
+
+  return meetingTaskSchema.array().parse(rootNode?.props?.tasks);
 }
 
 const root = document.getElementById("root");

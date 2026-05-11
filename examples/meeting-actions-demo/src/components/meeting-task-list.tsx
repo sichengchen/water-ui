@@ -1,23 +1,23 @@
 import { Badge } from "./ui/badge.js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card.js";
 import { Checkbox } from "./ui/checkbox.js";
-import type { MeetingSummary } from "../types.js";
+import type { MeetingTask } from "../types.js";
 import type { ReactNode } from "react";
 
 export type MeetingTaskListProps = {
-  summary: MeetingSummary;
+  tasks: readonly MeetingTask[];
 };
 
-export function MeetingTaskList({ summary }: MeetingTaskListProps): ReactNode {
+export function MeetingTaskList({ tasks }: MeetingTaskListProps): ReactNode {
   return (
     <Card className="gap-2 py-3">
       <CardHeader className="gap-1 px-4">
         <CardTitle className="text-base">Todo list</CardTitle>
-        <CardDescription>{summary.tasks.length} extracted tasks</CardDescription>
+        <CardDescription>{tasks.length} extracted tasks</CardDescription>
       </CardHeader>
       <CardContent className="px-4">
         <ul aria-label="Todo list" className="flex flex-col gap-1">
-          {summary.tasks.map((task) => (
+          {tasks.map((task) => (
             <li key={task.id} className="border-b py-1.5 last:border-b-0">
               <label className="grid cursor-pointer grid-cols-[1rem_minmax(0,1fr)] gap-3">
                 <Checkbox aria-label={task.title} className="mt-0.5" />
@@ -33,7 +33,7 @@ export function MeetingTaskList({ summary }: MeetingTaskListProps): ReactNode {
                       </Badge>
                     ))}
                   </div>
-                  <p className="text-xs text-muted-foreground">People: {task.owner}</p>
+                  <p className="text-xs text-muted-foreground">People: {task.people.join(", ")}</p>
                 </div>
               </label>
             </li>

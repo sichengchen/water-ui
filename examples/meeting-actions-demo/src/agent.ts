@@ -1,7 +1,12 @@
 import { compileDocumentPrompt } from "@water-ui/prompt";
-import { MEETING_SUMMARY_DATA_REF, exampleMeetingNote } from "./types.js";
+import {
+  createMeetingSummaryFromNote,
+  exampleMeetingNote,
+  exampleMeetingSummary,
+} from "./types.js";
 import { meetingActionsRegistry } from "./registry.js";
 import type { SchemaUIDocument, RuntimeCapabilityDescription } from "@water-ui/core";
+import type { MeetingTask } from "./types.js";
 
 export const meetingActionsIntent = "Turn this meeting note into action items.";
 
@@ -12,7 +17,6 @@ export function compileMeetingActionsPrompt(options: {
   return compileDocumentPrompt({
     registry: meetingActionsRegistry,
     runtime: {
-      dataRefs: options.runtime.dataRefs,
       state: options.runtime.state,
       stateKeys: options.runtime.stateKeys,
     },
@@ -20,7 +24,18 @@ export function compileMeetingActionsPrompt(options: {
   });
 }
 
-export async function mockMeetingActionsAgent(): Promise<SchemaUIDocument> {
+export async function mockMeetingActionsAgent(
+  options: {
+    meetingNote?: string;
+    tasks?: readonly MeetingTask[];
+  } = {},
+): Promise<SchemaUIDocument> {
+  const tasks =
+    options.tasks ??
+    (options.meetingNote
+      ? createMeetingSummaryFromNote(options.meetingNote).tasks
+      : exampleMeetingSummary.tasks);
+
   return {
     kind: "water.ui.document",
     version: "water.ui.v1",
@@ -29,7 +44,7 @@ export async function mockMeetingActionsAgent(): Promise<SchemaUIDocument> {
       task_list: {
         type: "TaskList",
         props: {
-          dataRef: MEETING_SUMMARY_DATA_REF,
+          tasks,
         },
       },
     },

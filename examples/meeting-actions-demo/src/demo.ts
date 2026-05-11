@@ -1,7 +1,7 @@
 import { verifyDocument } from "@water-ui/core";
 import { mockMeetingActionsAgent, compileMeetingActionsPrompt } from "./agent.js";
 import { meetingActionsRegistry } from "./registry.js";
-import { createMeetingRuntime } from "./runtime.js";
+import { createMeetingRuntime, createMeetingRuntimeFromNote } from "./runtime.js";
 import type { VerifiedSchemaUI, VerificationDiagnostic } from "@water-ui/core";
 import type { MeetingRuntime } from "./runtime.js";
 
@@ -16,12 +16,14 @@ export async function runMeetingActionsDemo(
     meetingNote?: string;
   } = {},
 ): Promise<MeetingActionsDemoResult> {
-  const runtime = createMeetingRuntime();
+  const runtime = options.meetingNote
+    ? createMeetingRuntimeFromNote(options.meetingNote)
+    : createMeetingRuntime();
   const prompt = compileMeetingActionsPrompt({
     runtime: runtime.capabilityRuntime.describe(),
     meetingNote: options.meetingNote,
   });
-  const document = await mockMeetingActionsAgent();
+  const document = await mockMeetingActionsAgent({ tasks: runtime.summary.tasks });
   const verification = verifyDocument(document, {
     registry: meetingActionsRegistry,
     runtime: runtime.capabilityRuntime.describe(),

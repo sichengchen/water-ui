@@ -1,12 +1,10 @@
 import { createWaterRuntime } from "@water-ui/runtime";
 import {
   CREATE_TASKS_ACTION_ID,
-  MEETING_SUMMARY_DATA_REF,
   createTasksInputSchema,
   createTasksOutputSchema,
   createMeetingSummaryFromNote,
   exampleMeetingSummary,
-  meetingSummarySchema,
 } from "./types.js";
 import type { WaterRuntime as ReactWaterRuntime } from "@water-ui/react";
 import type { WaterRuntime } from "@water-ui/runtime";
@@ -29,17 +27,10 @@ export function createMeetingRuntime(
     },
   });
 
-  capabilityRuntime.queries.register({
-    id: "meetingSummary",
-    dataRef: MEETING_SUMMARY_DATA_REF,
-    outputSchema: meetingSummarySchema,
-    handler: () => summary,
-  });
-
   capabilityRuntime.actions.register<CreateTasksInput, CreateTasksOutput>({
     id: CREATE_TASKS_ACTION_ID,
     label: "Create tasks",
-    description: "Create task records from the verified meeting summary.",
+    description: "Create task records from the generated todo list.",
     risk: "low",
     inputSchema: createTasksInputSchema,
     outputSchema: createTasksOutputSchema,
@@ -51,10 +42,7 @@ export function createMeetingRuntime(
     },
   });
 
-  const renderRuntime: ReactWaterRuntime = {
-    resolveData: (dataRef) => (dataRef === MEETING_SUMMARY_DATA_REF ? summary : undefined),
-    runAction: (actionId, payload) => capabilityRuntime.runAction(actionId, payload),
-  };
+  const renderRuntime: ReactWaterRuntime = {};
 
   return {
     summary,

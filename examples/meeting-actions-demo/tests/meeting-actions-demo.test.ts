@@ -4,7 +4,6 @@ import { expect, test } from "vite-plus/test";
 import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/react";
 import {
   CREATE_TASKS_ACTION_ID,
-  MEETING_SUMMARY_DATA_REF,
   compileMeetingActionsPrompt,
   createMeetingRuntime,
   exampleMeetingSummary,
@@ -25,7 +24,7 @@ test("mock agent output verifies against app components and runtime capabilities
   expect(verification.ok).toBe(true);
   expect(runtime.capabilityRuntime.describe()).toEqual({
     actions: [CREATE_TASKS_ACTION_ID],
-    dataRefs: [MEETING_SUMMARY_DATA_REF],
+    dataRefs: [],
     stateKeys: [],
   });
 });
@@ -37,9 +36,10 @@ test("compiled prompt exposes only registered app components and runtime ids", (
   });
 
   expect(prompt).toContain("TaskList");
-  expect(prompt).toContain("only generated component");
+  expect(prompt).toContain("Fill props.tasks with todos");
+  expect(prompt).toContain("id, title, tags, people, and priority");
   expect(prompt).toContain('stable root id such as "task_list"');
-  expect(prompt).toContain(MEETING_SUMMARY_DATA_REF);
+  expect(prompt).not.toContain("queries.meetingSummary.data");
   expect(prompt).not.toContain("MeetingPage");
   expect(prompt).not.toContain("SummaryCard");
   expect(prompt).not.toContain("ActionButton");
@@ -66,7 +66,6 @@ test("renders the verified panel and action creates tasks", async () => {
 
   await expect(
     result.runtime.capabilityRuntime.runAction(CREATE_TASKS_ACTION_ID, {
-      dataRef: MEETING_SUMMARY_DATA_REF,
       tasks: exampleMeetingSummary.tasks,
     }),
   ).resolves.toEqual({

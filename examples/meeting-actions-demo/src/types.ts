@@ -4,9 +4,8 @@ export const meetingTaskSchema = z
   .object({
     id: z.string().min(1),
     title: z.string().min(1),
-    owner: z.string().min(1),
-    due: z.string().min(1),
     tags: z.array(z.string().min(1)),
+    people: z.array(z.string().min(1)),
     priority: z.enum(["low", "medium", "high"]),
   })
   .strict();
@@ -24,7 +23,6 @@ export const meetingSummarySchema = z
 
 export const createTasksInputSchema = z
   .object({
-    dataRef: z.literal("queries.meetingSummary.data"),
     tasks: z.array(meetingTaskSchema),
   })
   .strict();
@@ -40,7 +38,6 @@ export type MeetingSummary = z.infer<typeof meetingSummarySchema>;
 export type CreateTasksInput = z.infer<typeof createTasksInputSchema>;
 export type CreateTasksOutput = z.infer<typeof createTasksOutputSchema>;
 
-export const MEETING_SUMMARY_DATA_REF = "queries.meetingSummary.data";
 export const CREATE_TASKS_ACTION_ID = "actions.createTasks";
 
 export const exampleMeetingNote = [
@@ -64,25 +61,22 @@ export const exampleMeetingSummary: MeetingSummary = {
     {
       id: "task-onboarding-copy",
       title: "Finalize onboarding copy",
-      owner: "Mina",
-      due: "Friday",
       tags: ["Copy", "Friday"],
+      people: ["Mina"],
       priority: "high",
     },
     {
       id: "task-staging-checklist",
       title: "Open staging checklist",
-      owner: "Dev",
-      due: "Before beta",
       tags: ["Staging", "Beta"],
+      people: ["Dev"],
       priority: "medium",
     },
     {
       id: "task-support-coverage",
       title: "Confirm support coverage",
-      owner: "Sam",
-      due: "Release week",
       tags: ["Support", "Release week"],
+      people: ["Sam"],
       priority: "medium",
     },
   ],
@@ -125,8 +119,8 @@ function inferAttendees(lines: readonly string[]): string[] {
 }
 
 function createTaskFromLine(line: string, index: number): MeetingTask {
-  const owner = line.match(/^([A-Z][a-z]+)\b/)?.[1] ?? "Team";
-  const due = line.match(/\bby\s+([^,.]+)|\bbefore\s+([^,.]+)|\bfor\s+([^,.]+)/i);
+  const person = line.match(/^([A-Z][a-z]+)\b/)?.[1] ?? "Team";
+  const deadline = line.match(/\bby\s+([^,.]+)|\bbefore\s+([^,.]+)|\bfor\s+([^,.]+)/i);
   const title = line
     .replace(/^([A-Z][a-z]+)\s+(will|needs? to|must|to)\s+/i, "")
     .replace(/\s+by\s+[^,.]+/i, "")
@@ -138,14 +132,13 @@ function createTaskFromLine(line: string, index: number): MeetingTask {
   return {
     id: `task-${index + 1}`,
     title: title || line,
-    owner,
-    due: due?.[1] ?? due?.[2] ?? due?.[3] ?? "Next",
-    tags: inferTaskTags(title || line, due?.[1] ?? due?.[2] ?? due?.[3] ?? "Next"),
+    tags: inferTaskTags(title || line, deadline?.[1] ?? deadline?.[2] ?? deadline?.[3] ?? "Next"),
+    people: [person],
     priority: index === 0 ? "high" : "medium",
   };
 }
 
-function inferTaskTags(title: string, due: string): string[] {
+function inferTaskTags(title: string, deadline: string): string[] {
   const ignoredWords = new Set(["finalize", "open", "confirm", "create", "review"]);
   const firstKeyword = title
     .split(/\s+/)
@@ -153,7 +146,7 @@ function inferTaskTags(title: string, due: string): string[] {
     .find((word) => word.length > 4 && !ignoredWords.has(word.toLowerCase()))
     ?.replace(/[^a-z]/gi, "");
 
-  return [firstKeyword ? toTitleCase(firstKeyword) : "Task", toTitleCase(due)];
+  return [firstKeyword ? toTitleCase(firstKeyword) : "Task", toTitleCase(deadline)];
 }
 
 function toTitleCase(value: string): string {
