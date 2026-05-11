@@ -84,13 +84,13 @@ function App(): ReactNode {
 
   return createElement(
     "main",
-    { className: "mx-auto min-h-screen w-full max-w-6xl p-6" },
+    { className: "mx-auto h-dvh w-full max-w-6xl overflow-hidden p-6" },
     createElement(
       "section",
-      { className: "grid gap-6 lg:grid-cols-[minmax(0,1fr)_440px]" },
+      { className: "grid h-full min-h-0 gap-6 lg:grid-cols-[minmax(0,1fr)_440px]" },
       createElement(
         Card,
-        { className: "rounded-lg" },
+        { className: "min-h-0 rounded-lg" },
         createElement(
           CardHeader,
           null,
@@ -103,12 +103,12 @@ function App(): ReactNode {
         ),
         createElement(
           CardContent,
-          { className: "flex flex-1 flex-col" },
+          { className: "flex min-h-0 flex-1 flex-col" },
           createElement(Textarea, {
             "aria-label": "Meeting note",
             autoComplete: "off",
             className:
-              "min-h-[420px] resize-none border-0 bg-[linear-gradient(#fff_31px,#f1f5f9_32px)] bg-[length:100%_32px] leading-8 shadow-none focus-visible:ring-0 max-lg:min-h-80",
+              "min-h-0 flex-1 resize-none overflow-auto border-0 bg-[linear-gradient(#fff_31px,#f1f5f9_32px)] bg-[length:100%_32px] leading-8 shadow-none focus-visible:ring-0",
             name: "meeting-note",
             value: note,
             onChange: (event) => setNote(event.currentTarget.value),
@@ -117,7 +117,7 @@ function App(): ReactNode {
       ),
       createElement(
         Card,
-        { className: "rounded-lg" },
+        { className: "min-h-0 rounded-lg" },
         createElement(
           CardHeader,
           null,
@@ -140,7 +140,7 @@ function App(): ReactNode {
             "div",
             {
               className:
-                "flex min-h-0 flex-col gap-3 overflow-auto rounded-lg bg-muted/30 p-3 empty:hidden",
+                "flex min-h-0 flex-1 flex-col gap-3 overflow-auto rounded-lg bg-muted/30 p-3 empty:hidden",
               "aria-live": "polite",
             },
             chat.status === "thinking" || chat.status === "ready"
