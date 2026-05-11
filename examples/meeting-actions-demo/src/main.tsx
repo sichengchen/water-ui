@@ -38,17 +38,15 @@ const defaultPrompt = "Turn this meeting note into a todo list.";
 
 function App(): ReactNode {
   const [note, setNote] = useState(exampleMeetingNote);
-  const [prompt, setPrompt] = useState(defaultPrompt);
   const [chat, setChat] = useState<ChatState>({ status: "idle" });
-  const canSend = note.trim().length > 0 && prompt.trim().length > 0 && chat.status !== "thinking";
+  const canSend = note.trim().length > 0 && chat.status !== "thinking";
 
   async function sendMessage(): Promise<void> {
     if (!canSend) {
       return;
     }
 
-    const sentPrompt = prompt.trim();
-    setChat({ status: "thinking", prompt: sentPrompt });
+    setChat({ status: "thinking", prompt: defaultPrompt });
 
     try {
       await wait(500);
@@ -70,7 +68,7 @@ function App(): ReactNode {
 
       setChat({
         status: "ready",
-        prompt: sentPrompt,
+        prompt: defaultPrompt,
         ui: verification.ui,
         meetingRuntime: runtime,
       });
@@ -125,24 +123,14 @@ function App(): ReactNode {
               {renderAssistantMessage(chat)}
             </div>
             {renderCreateTasksButton(chat)}
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 pt-2 max-sm:grid-cols-1">
-              <Textarea
-                aria-label="Chat message"
-                autoComplete="off"
-                className="min-h-16 resize-none"
-                name="chat-message"
-                value={prompt}
-                onChange={(event) => setPrompt(event.currentTarget.value)}
-                onKeyDown={(event) => {
-                  if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
-                    void sendMessage();
-                  }
-                }}
-              />
-              <Button disabled={!canSend} onClick={() => void sendMessage()}>
-                {chat.status === "thinking" ? "Sending..." : "Send"}
-              </Button>
-            </div>
+            <Button
+              aria-label={defaultPrompt}
+              className="w-full"
+              disabled={!canSend}
+              onClick={() => void sendMessage()}
+            >
+              {chat.status === "thinking" ? "Thinking..." : defaultPrompt}
+            </Button>
           </CardContent>
         </Card>
       </section>
@@ -162,7 +150,7 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
   if (chat.status === "idle") {
     return (
       <div className="mr-auto max-w-[88%] text-sm text-muted-foreground">
-        <p>Send the prompt to generate a Water UI todo list from the note.</p>
+        <p>Click the prompt to generate a Water UI todo list from the note.</p>
       </div>
     );
   }
