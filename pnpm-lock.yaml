@@ -43,6 +43,46 @@ importers:
         specifier: 'catalog:'
         version: 0.1.20(@types/node@24.12.3)(typescript@5.9.3)(vite@8.0.11(@types/node@24.12.3))
 
+  examples/meeting-actions-demo:
+    dependencies:
+      '@water-ui/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@water-ui/prompt':
+        specifier: workspace:*
+        version: link:../../packages/prompt
+      '@water-ui/react':
+        specifier: workspace:*
+        version: link:../../packages/react
+      '@water-ui/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      react:
+        specifier: 'catalog:'
+        version: 19.2.6
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.2.6(react@19.2.6)
+      zod:
+        specifier: 'catalog:'
+        version: 4.4.3
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.12.3
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.2.3(@types/react@19.2.14)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vite-plus:
+        specifier: 'catalog:'
+        version: 0.1.20(@types/node@24.12.3)(typescript@5.9.3)(vite@8.0.11(@types/node@24.12.3))
+
   packages/adapter-shadcn:
     dependencies:
       '@water-ui/core':
