@@ -2,6 +2,8 @@
 
 Schema UI is the model-facing JSON-compatible protocol.
 
+Current protocol version: `water.ui.v1`.
+
 Document:
 
 ```ts
@@ -30,3 +32,58 @@ Rule:
 ```txt
 node.type is a key into the active registry.
 ```
+
+Patch:
+
+```ts
+type SchemaUIPatch = {
+  kind: "water.ui.patch";
+  version: "water.ui.v1";
+  target: NodeId;
+  ops: SchemaUIPatchOperation[];
+  meta?: DocumentMeta;
+};
+```
+
+Supported Gate 2 patch operation names:
+
+- `upsertNode`
+- `removeNode`
+- `replaceNode`
+- `updateProps`
+- `appendChild`
+- `prependChild`
+- `insertChildBefore`
+- `insertChildAfter`
+- `removeChild`
+- `moveNode`
+- `replaceChildren`
+- `setSlot`
+- `unsetSlot`
+
+Stream events are newline-delimited JSON objects with a non-negative integer
+`seq` and one of the supported event kinds:
+
+- `node.upsert`
+- `node.remove`
+- `node.replace`
+- `node.props.update`
+- `child.append`
+- `child.prepend`
+- `child.insertBefore`
+- `child.insertAfter`
+- `child.remove`
+- `slot.set`
+- `slot.unset`
+- `done`
+
+Parser API:
+
+- `parseSchemaUIDocument`
+- `parseSchemaUIPatch`
+- `parseSchemaUIStreamEvent`
+- `normalizeSchemaUIDocument`
+
+Gate 2 parsers validate protocol shape and version only. They do not verify
+registry component existence, props schemas, runtime references, or node graph
+integrity; those checks belong to verification and runtime gates.

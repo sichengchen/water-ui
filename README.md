@@ -23,9 +23,12 @@ vp install
 vp run ready
 ```
 
-## First Implementation Gate
+## Implementation Gates
 
-The active gate is Gate 1: Registry API.
+Completed gates:
+
+- Gate 1: Registry API
+- Gate 2: Schema UI Protocol
 
 Implemented now:
 
@@ -35,12 +38,17 @@ Implemented now:
 - registry merge diagnostics
 - prompt-safe registry summaries
 - profile-aware registry selection
+- Schema UI document parsing and normalization
+- semantic patch parsing
+- JSONL stream event parsing
+- protocol fixtures and diagnostics
 
 Intentionally not implemented yet:
 
+- registry-aware Schema UI verification
 - React renderer
 - shadcn adapter
 - runtime capability execution
-- semantic patch engine
-- streaming engine
+- semantic patch application
+- streaming state application
 - DevTools

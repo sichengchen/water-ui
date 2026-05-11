@@ -44,17 +44,17 @@ Completion evidence:
 
 ## Gate 2: Schema UI Protocol
 
-Status: next
+Status: completed
 
 Acceptance criteria:
 
-- Can parse `water.ui.document`.
-- Can parse `water.ui.patch`.
-- Can parse JSONL stream events.
-- Can reject invalid protocol versions.
-- Can normalize valid protocol input.
-- Can emit structured diagnostics.
-- Can run protocol fixtures in CI.
+- [x] Can parse `water.ui.document`.
+- [x] Can parse `water.ui.patch`.
+- [x] Can parse JSONL stream events.
+- [x] Can reject invalid protocol versions.
+- [x] Can normalize valid protocol input.
+- [x] Can emit structured diagnostics.
+- [x] Can run protocol fixtures in CI.
 
 Deliverables:
 
@@ -63,6 +63,12 @@ Deliverables:
 - patch fixtures
 - stream fixtures
 - invalid fixtures
+
+Completion evidence:
+
+- implementation: `packages/core/src/protocol.ts`
+- fixtures: `docs/fixtures/protocol/`
+- tests: `packages/core/tests/protocol.test.ts`
 
 ## Gate 3: Verification
 
