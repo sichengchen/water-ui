@@ -19,9 +19,37 @@ type DataBackedProps = z.infer<typeof dataBackedPropsSchema>;
 export const meetingActionsRegistry = createWaterRegistry({
   components: {
     TaskList: defineWaterComponent<DataBackedProps>({
-      description: "Todo list generated from the meeting summary action items.",
+      description:
+        "Use TaskList as the only generated component to show todos extracted from the meeting note. It requires props.dataRef.",
       propsSchema: dataBackedPropsSchema,
       children: "none",
+      prompt: {
+        props: [
+          {
+            name: "dataRef",
+            description:
+              'Set this to the exact string "queries.meetingSummary.data". It is the only available meeting-summary data source for this demo.',
+            required: true,
+            allowedValues: [MEETING_SUMMARY_DATA_REF],
+          },
+        ],
+        notes: [
+          'Return exactly one node: type "TaskList" with props.dataRef set to "queries.meetingSummary.data".',
+          'Use TaskList as the document root; a stable root id such as "task_list" is appropriate.',
+          "Do not generate the notebook, chat UI, summary card, forms, or Create tasks button.",
+        ],
+      },
+      examples: [
+        {
+          intent: "show the todo list extracted from the current meeting note",
+          node: {
+            type: "TaskList",
+            props: {
+              dataRef: MEETING_SUMMARY_DATA_REF,
+            },
+          },
+        },
+      ],
       render: (({ props, bindings }) => {
         const summary = meetingSummarySchema.parse(bindings.data[props.dataRef]);
 

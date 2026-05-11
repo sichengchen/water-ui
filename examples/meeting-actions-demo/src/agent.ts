@@ -11,7 +11,11 @@ export function compileMeetingActionsPrompt(options: {
 }): string {
   return compileDocumentPrompt({
     registry: meetingActionsRegistry,
-    runtime: options.runtime,
+    runtime: {
+      dataRefs: options.runtime.dataRefs,
+      state: options.runtime.state,
+      stateKeys: options.runtime.stateKeys,
+    },
     userIntent: `${meetingActionsIntent}\n\nMeeting note:\n${options.meetingNote ?? exampleMeetingNote}`,
   });
 }

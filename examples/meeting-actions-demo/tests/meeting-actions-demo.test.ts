@@ -37,10 +37,13 @@ test("compiled prompt exposes only registered app components and runtime ids", (
   });
 
   expect(prompt).toContain("TaskList");
+  expect(prompt).toContain("only generated component");
+  expect(prompt).toContain('stable root id such as "task_list"');
   expect(prompt).toContain(MEETING_SUMMARY_DATA_REF);
   expect(prompt).not.toContain("MeetingPage");
   expect(prompt).not.toContain("SummaryCard");
   expect(prompt).not.toContain("ActionButton");
+  expect(prompt).not.toContain(CREATE_TASKS_ACTION_ID);
 });
 
 test("renders the verified panel and action creates tasks", async () => {
