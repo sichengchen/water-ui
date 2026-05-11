@@ -139,8 +139,7 @@ function App(): ReactNode {
           createElement(
             "div",
             {
-              className:
-                "flex min-h-0 flex-1 flex-col gap-3 overflow-auto rounded-lg bg-muted/30 p-3 empty:hidden",
+              className: "flex min-h-0 flex-1 flex-col gap-3 overflow-auto empty:hidden",
               "aria-live": "polite",
             },
             chat.status === "thinking" || chat.status === "ready"
@@ -198,8 +197,7 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
     return createElement(
       "div",
       {
-        className:
-          "mr-auto max-w-[88%] rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground",
+        className: "mr-auto max-w-[88%] text-sm text-muted-foreground",
       },
       createElement("p", null, "Send the prompt to generate a Water UI todo list from the note."),
     );
@@ -209,8 +207,7 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
     return createElement(
       "div",
       {
-        className:
-          "mr-auto inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground",
+        className: "mr-auto inline-flex items-center gap-2 text-sm text-muted-foreground",
       },
       createElement("span", {
         className:
@@ -241,7 +238,7 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
 
   return createElement(
     "div",
-    { className: "mr-auto max-w-[92%] rounded-lg border bg-background p-3 shadow-xs" },
+    { className: "mr-auto w-full max-w-[92%]" },
     createElement(
       WaterRuntimeProvider,
       {

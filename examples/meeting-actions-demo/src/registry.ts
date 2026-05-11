@@ -163,11 +163,11 @@ export const meetingActionsRegistry = createWaterRegistry({
                   "li",
                   {
                     key: task.id,
-                    className: "rounded-md bg-muted/40 transition-colors hover:bg-muted/70",
+                    className: "border-b py-2 last:border-b-0",
                   },
                   createElement(
                     "label",
-                    { className: "grid cursor-pointer grid-cols-[1rem_minmax(0,1fr)] gap-3 p-2" },
+                    { className: "grid cursor-pointer grid-cols-[1rem_minmax(0,1fr)] gap-3" },
                     createElement(Checkbox, {
                       "aria-label": task.title,
                       className: "mt-0.5",
