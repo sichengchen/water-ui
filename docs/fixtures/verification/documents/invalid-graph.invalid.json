@@ -1,0 +1,34 @@
+{
+  "kind": "water.ui.document",
+  "version": "water.ui.v1",
+  "root": "page",
+  "nodes": {
+    "page": {
+      "type": "AdminPage",
+      "children": ["cycle", "missing_child"],
+      "slots": {
+        "toolbar": "missing_toolbar"
+      }
+    },
+    "cycle": {
+      "type": "AdminPage",
+      "children": ["cycle"],
+      "slots": {
+        "toolbar": "cycle_toolbar"
+      }
+    },
+    "cycle_toolbar": {
+      "type": "ExportButton",
+      "props": {
+        "actionId": "exportCustomers"
+      }
+    },
+    "orphan": {
+      "type": "CustomerTable",
+      "props": {
+        "dataRef": "queries.customers.data",
+        "columns": [{ "key": "name", "label": "Name" }]
+      }
+    }
+  }
+}

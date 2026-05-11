@@ -1,0 +1,279 @@
+import { readFileSync } from "node:fs";
+import { expect, test } from "vite-plus/test";
+import {
+  assertVerifiedSchemaUI,
+  createWaterRegistry,
+  isVerifiedSchemaUI,
+  verifyDocument,
+} from "../src/index.ts";
+import type { RuntimeCapabilityDescription, VerificationResult } from "../src/index.ts";
+
+const fixtureRoot = new URL("../../../docs/fixtures/verification/", import.meta.url);
+
+const registry = createWaterRegistry({
+  components: {
+    AdminPage: {
+      description: "Page shell for admin workflows.",
+      children: {
+        kind: "nodes",
+        min: 1,
+      },
+      slots: {
+        toolbar: {
+          required: true,
+          multiple: false,
+        },
+      },
+    },
+    CustomerTable: {
+      description: "Displays customers with configured columns.",
+      children: "none",
+      propsSchema: {
+        type: "object",
+        required: ["dataRef", "columns"],
+        properties: {
+          dataRef: { type: "string" },
+          columns: {
+            type: "array",
+            items: {
+              type: "object",
+              required: ["key", "label"],
+              properties: {
+                key: { type: "string" },
+                label: { type: "string" },
+              },
+            },
+          },
+        },
+        additionalProperties: false,
+      },
+    },
+    ExportButton: {
+      description: "Runs a registered export action.",
+      children: "none",
+      propsSchema: {
+        type: "object",
+        required: ["actionId"],
+        properties: {
+          actionId: { enum: ["exportCustomers"] },
+        },
+        additionalProperties: false,
+      },
+    },
+    StatusFilter: {
+      description: "Binds a status value to runtime state.",
+      children: "none",
+      propsSchema: {
+        type: "object",
+        required: ["stateKey"],
+        properties: {
+          stateKey: { type: "string" },
+        },
+        additionalProperties: false,
+      },
+    },
+  },
+});
+
+const runtime: RuntimeCapabilityDescription = {
+  actions: ["exportCustomers"],
+  dataRefs: ["queries.customers.data"],
+  stateKeys: ["filters.status"],
+};
+
+test("returns VerifiedSchemaUI for valid registry and runtime references", () => {
+  const source = JSON.parse(readFixture("documents/admin-page.valid.json")) as unknown;
+  const result = verifyDocument(source, { registry, runtime });
+  const ui = expectVerified(result);
+
+  expect(isVerifiedSchemaUI(ui)).toBe(true);
+  expect(Object.isFrozen(ui)).toBe(true);
+  expect(ui.root).toBe("page");
+  expect(result.diagnostics).toEqual([]);
+  expect(source).toEqual(JSON.parse(readFixture("documents/admin-page.valid.json")));
+});
+
+test("assertVerifiedSchemaUI narrows branded documents", () => {
+  const result = verifyDocument(readFixture("documents/admin-page.valid.json"), {
+    registry,
+    runtime,
+  });
+  const ui = expectVerified(result);
+
+  assertVerifiedSchemaUI(ui);
+  expect(() => assertVerifiedSchemaUI({})).toThrow("Expected VerifiedSchemaUI.");
+});
+
+test("verifies root, child references, slot references, cycles, and orphans", () => {
+  const result = verifyDocument(readFixture("documents/invalid-graph.invalid.json"), {
+    registry,
+    runtime,
+  });
+
+  expect(result.ok).toBe(false);
+  expect(result.diagnostics.map(({ code, path }) => ({ code, path }))).toEqual([
+    {
+      code: "invalid_node_reference",
+      path: "$.nodes.page.children[1]",
+    },
+    {
+      code: "invalid_node_reference",
+      path: "$.nodes.page.slots.toolbar",
+    },
+    {
+      code: "cycle_detected",
+      path: "$.nodes.cycle.children[0]",
+    },
+    {
+      code: "unreachable_node",
+      path: "$.nodes.orphan",
+    },
+  ]);
+});
+
+test("rejects unknown component types", () => {
+  const result = verifyDocument(
+    {
+      kind: "water.ui.document",
+      version: "water.ui.v1",
+      root: "root",
+      nodes: {
+        root: {
+          type: "MissingComponent",
+        },
+      },
+    },
+    { registry, runtime },
+  );
+
+  expect(result.ok).toBe(false);
+  expect(result.diagnostics).toEqual([
+    expect.objectContaining({
+      code: "unknown_component_type",
+      path: "$.nodes.root.type",
+      componentType: "MissingComponent",
+    }),
+  ]);
+});
+
+test("validates props against registry schemas", () => {
+  const result = verifyDocument(
+    {
+      kind: "water.ui.document",
+      version: "water.ui.v1",
+      root: "table",
+      nodes: {
+        table: {
+          type: "CustomerTable",
+          props: {
+            dataRef: "queries.customers.data",
+            columns: [{ key: "name" }],
+            extra: true,
+          },
+        },
+      },
+    },
+    { registry, runtime },
+  );
+
+  expect(result.ok).toBe(false);
+  expect(result.diagnostics.map(({ code, path }) => ({ code, path }))).toEqual([
+    {
+      code: "invalid_component_props",
+      path: "$.nodes.table.props.columns[0].label",
+    },
+    {
+      code: "invalid_component_props",
+      path: "$.nodes.table.props.extra",
+    },
+  ]);
+});
+
+test("validates action IDs, data refs, and state keys against runtime capabilities", () => {
+  const result = verifyDocument(
+    {
+      kind: "water.ui.document",
+      version: "water.ui.v1",
+      root: "page",
+      nodes: {
+        page: {
+          type: "AdminPage",
+          children: ["table"],
+          slots: {
+            toolbar: "button",
+          },
+        },
+        table: {
+          type: "CustomerTable",
+          props: {
+            dataRef: "queries.unknown.data",
+            columns: [{ key: "name", label: "Name" }],
+          },
+        },
+        button: {
+          type: "ExportButton",
+          props: {
+            actionId: "deleteCustomers",
+          },
+        },
+        filter: {
+          type: "StatusFilter",
+          props: {
+            stateKey: "filters.unknown",
+          },
+        },
+      },
+    },
+    { registry, runtime },
+  );
+
+  expect(result.ok).toBe(false);
+  expect(result.diagnostics.map(({ code, path }) => ({ code, path }))).toEqual([
+    {
+      code: "unreachable_node",
+      path: "$.nodes.filter",
+    },
+    {
+      code: "invalid_component_props",
+      path: "$.nodes.button.props.actionId",
+    },
+    {
+      code: "invalid_runtime_action",
+      path: "$.nodes.button.props.actionId",
+    },
+    {
+      code: "invalid_runtime_state_key",
+      path: "$.nodes.filter.props.stateKey",
+    },
+    {
+      code: "invalid_runtime_data_ref",
+      path: "$.nodes.table.props.dataRef",
+    },
+  ]);
+});
+
+test("returns parser diagnostics for invalid document shapes", () => {
+  const result = verifyDocument(readFixture("../protocol/documents/invalid-shape.invalid.json"), {
+    registry,
+    runtime,
+  });
+
+  expect(result.ok).toBe(false);
+  expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
+    "invalid_document_root",
+    "invalid_node_type",
+    "invalid_node_children",
+  ]);
+});
+
+function readFixture(path: string): string {
+  return readFileSync(new URL(path, fixtureRoot), "utf8");
+}
+
+function expectVerified(result: VerificationResult) {
+  if (!result.ok) {
+    throw new Error(`Expected verification success: ${JSON.stringify(result.diagnostics)}`);
+  }
+
+  return result.ui;
+}

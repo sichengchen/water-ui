@@ -411,3 +411,4 @@ function matchesProfile(
 }
 
 export * from "./protocol.js";
+export * from "./verification.js";
