@@ -1,9 +1,20 @@
+import { z } from "zod";
 import { defineWaterComponent } from "../src/index.ts";
 import type { WaterRegistryInput } from "../src/index.ts";
 
 export const CustomerTable = defineWaterComponent({
   description: "Displays customers with status, revenue, and account owner.",
-  propsSchema: { type: "object", required: ["dataRef", "columns"] },
+  propsSchema: z
+    .object({
+      dataRef: z.string(),
+      columns: z.array(
+        z.object({
+          key: z.string(),
+          label: z.string(),
+        }),
+      ),
+    })
+    .strict(),
   children: "none",
   prompt: {
     props: [

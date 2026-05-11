@@ -65,6 +65,15 @@ export type VerifyDocumentOptions = {
   runtime?: RuntimeCapabilityDescription;
 };
 
+type PropsVerificationResult =
+  | {
+      ok: true;
+      props?: Record<string, unknown>;
+    }
+  | {
+      ok: false;
+    };
+
 export function verifyDocument(input: unknown, options: VerifyDocumentOptions): VerificationResult {
   const parsed = normalizeSchemaUIDocument(input);
   if (!parsed.ok) {
@@ -72,6 +81,7 @@ export function verifyDocument(input: unknown, options: VerifyDocumentOptions): 
   }
 
   const document = parsed.value;
+  const verifiedNodes = cloneNodeMap(document.nodes);
   const diagnostics: VerificationDiagnostic[] = [];
   const root = document.nodes[document.root];
 
@@ -93,7 +103,7 @@ export function verifyDocument(input: unknown, options: VerifyDocumentOptions): 
 
   verifyNodeReferences(document, diagnostics);
   verifyReachability(document, diagnostics);
-  verifyRegistry(document, options, diagnostics);
+  verifyRegistry(document, options, verifiedNodes, diagnostics);
 
   if (hasErrors(diagnostics)) {
     return fail(diagnostics);
@@ -101,7 +111,10 @@ export function verifyDocument(input: unknown, options: VerifyDocumentOptions): 
 
   return Object.freeze({
     ok: true,
-    ui: brandVerifiedSchemaUI(document),
+    ui: brandVerifiedSchemaUI({
+      ...document,
+      nodes: Object.freeze(verifiedNodes),
+    }),
     diagnostics: Object.freeze([]),
   });
 }
@@ -254,6 +267,7 @@ function verifyReachability(
 function verifyRegistry(
   document: SchemaUIDocument,
   options: VerifyDocumentOptions,
+  verifiedNodes: Record<string, SchemaUINode>,
   diagnostics: VerificationDiagnostic[],
 ): void {
   for (const [nodeId, node] of Object.entries(document.nodes)) {
@@ -279,8 +293,20 @@ function verifyRegistry(
 
     verifyChildrenPolicy(nodeId, node, entry, diagnostics);
     verifySlotPolicy(nodeId, node, entry, diagnostics);
-    verifyProps(nodeId, node, entry, diagnostics);
-    verifyRuntimeReferences(nodeId, node, options.runtime ?? {}, diagnostics);
+    const propsResult = verifyProps(nodeId, node, entry, diagnostics);
+    if (propsResult.ok) {
+      verifiedNodes[nodeId] = freezeNode({
+        ...node,
+        props: propsResult.props,
+      });
+    }
+
+    verifyRuntimeReferences(
+      nodeId,
+      propsResult.ok ? { ...node, props: propsResult.props } : node,
+      options.runtime ?? {},
+      diagnostics,
+    );
   }
 }
 
@@ -409,16 +435,51 @@ function verifyProps(
   node: SchemaUINode,
   entry: WaterComponentEntry,
   diagnostics: VerificationDiagnostic[],
-): void {
+): PropsVerificationResult {
   if (!entry.propsSchema) {
-    return;
+    return { ok: true, props: node.props };
   }
 
-  validateSchema(entry.propsSchema, node.props ?? {}, `$.nodes.${toPathKey(nodeId)}.props`, {
-    diagnostics,
-    nodeId,
-    componentType: entry.type,
-  });
+  const propsPath = `$.nodes.${toPathKey(nodeId)}.props`;
+  const result = entry.propsSchema.safeParse(node.props ?? {});
+  if (result.success) {
+    if (!isRecord(result.data)) {
+      diagnostics.push(
+        diagnostic(
+          "invalid_component_props",
+          propsPath,
+          `Component type '${entry.type}' Zod props schema must return an object.`,
+          {
+            nodeId,
+            componentType: entry.type,
+          },
+        ),
+      );
+      return { ok: false };
+    }
+
+    return { ok: true, props: Object.freeze({ ...result.data }) };
+  }
+
+  for (const issue of result.error.issues) {
+    const paths = getZodIssuePaths(issue, propsPath);
+
+    for (const path of paths) {
+      diagnostics.push(
+        diagnostic(
+          "invalid_component_props",
+          path,
+          `Component type '${entry.type}' props failed Zod validation: ${issue.message}`,
+          {
+            nodeId,
+            componentType: entry.type,
+          },
+        ),
+      );
+    }
+  }
+
+  return { ok: false };
 }
 
 function verifyRuntimeReferences(
@@ -516,136 +577,42 @@ function validateRuntimeReference(
   }
 }
 
-function validateSchema(
-  schema: unknown,
-  value: unknown,
-  path: string,
-  context: {
-    diagnostics: VerificationDiagnostic[];
-    nodeId: string;
-    componentType: string;
-  },
-): void {
-  if (!isRecord(schema)) {
-    return;
-  }
-
-  if (
-    schema.enum !== undefined &&
-    Array.isArray(schema.enum) &&
-    !schema.enum.some((item) => deepEqual(item, value))
-  ) {
-    context.diagnostics.push(
-      diagnostic(
-        "invalid_component_props",
-        path,
-        `Component type '${context.componentType}' prop value is not one of the allowed values.`,
-        {
-          nodeId: context.nodeId,
-          componentType: context.componentType,
-        },
-      ),
-    );
-    return;
-  }
-
-  if (schema.type !== undefined && !matchesSchemaType(schema.type, value)) {
-    context.diagnostics.push(
-      diagnostic(
-        "invalid_component_props",
-        path,
-        `Component type '${context.componentType}' prop value must be ${formatSchemaType(schema.type)}.`,
-        {
-          nodeId: context.nodeId,
-          componentType: context.componentType,
-        },
-      ),
-    );
-    return;
-  }
-
-  if (schema.type === "object" || schema.properties || schema.required) {
-    if (!isRecord(value)) {
-      context.diagnostics.push(
-        diagnostic(
-          "invalid_component_props",
-          path,
-          `Component type '${context.componentType}' props must be an object.`,
-          {
-            nodeId: context.nodeId,
-            componentType: context.componentType,
-          },
-        ),
-      );
-      return;
-    }
-
-    if (Array.isArray(schema.required)) {
-      for (const propertyName of schema.required) {
-        if (typeof propertyName !== "string") {
-          continue;
-        }
-
-        if (value[propertyName] === undefined) {
-          context.diagnostics.push(
-            diagnostic(
-              "invalid_component_props",
-              `${path}.${toPathKey(propertyName)}`,
-              `Component type '${context.componentType}' requires prop '${propertyName}'.`,
-              {
-                nodeId: context.nodeId,
-                componentType: context.componentType,
-              },
-            ),
-          );
-        }
-      }
-    }
-
-    if (isRecord(schema.properties)) {
-      for (const [propertyName, propertySchema] of Object.entries(schema.properties)) {
-        if (value[propertyName] !== undefined) {
-          validateSchema(
-            propertySchema,
-            value[propertyName],
-            `${path}.${toPathKey(propertyName)}`,
-            context,
-          );
-        }
-      }
-    }
-
-    if (schema.additionalProperties === false && isRecord(schema.properties)) {
-      for (const propertyName of Object.keys(value)) {
-        if (schema.properties[propertyName] === undefined) {
-          context.diagnostics.push(
-            diagnostic(
-              "invalid_component_props",
-              `${path}.${toPathKey(propertyName)}`,
-              `Component type '${context.componentType}' does not allow prop '${propertyName}'.`,
-              {
-                nodeId: context.nodeId,
-                componentType: context.componentType,
-              },
-            ),
-          );
-        }
-      }
-    }
-  }
-
-  if (schema.type === "array" && Array.isArray(value) && schema.items) {
-    value.forEach((item, index) => {
-      validateSchema(schema.items, item, `${path}[${index}]`, context);
-    });
-  }
-}
-
 function brandVerifiedSchemaUI(document: SchemaUIDocument): VerifiedSchemaUI {
   return Object.freeze({
     ...document,
     [verifiedSchemaUIBrand]: true,
   }) as VerifiedSchemaUI;
+}
+
+function cloneNodeMap(nodes: Record<string, SchemaUINode>): Record<string, SchemaUINode> {
+  const clonedNodes: Record<string, SchemaUINode> = Object.create(null);
+
+  for (const [nodeId, node] of Object.entries(nodes)) {
+    clonedNodes[nodeId] = freezeNode(node);
+  }
+
+  return clonedNodes;
+}
+
+function freezeNode(node: SchemaUINode): SchemaUINode {
+  return Object.freeze({
+    type: node.type,
+    ...(node.props ? { props: Object.freeze({ ...node.props }) } : {}),
+    ...(node.children ? { children: Object.freeze([...node.children]) } : {}),
+    ...(node.slots ? { slots: freezeSlots(node.slots) } : {}),
+  }) as SchemaUINode;
+}
+
+function freezeSlots(slots: Record<string, string | string[]>): Record<string, string | string[]> {
+  const frozenSlots: Record<string, string | string[]> = Object.create(null);
+
+  for (const [slotName, slotValue] of Object.entries(slots)) {
+    frozenSlots[slotName] = Array.isArray(slotValue)
+      ? (Object.freeze([...slotValue]) as string[])
+      : slotValue;
+  }
+
+  return Object.freeze(frozenSlots);
 }
 
 function hasCapability(
@@ -687,37 +654,43 @@ function getRuntimeReferenceKind(key: string): "action" | "dataRef" | "stateKey"
   return undefined;
 }
 
-function matchesSchemaType(type: unknown, value: unknown): boolean {
-  if (Array.isArray(type)) {
-    return type.some((item) => matchesSchemaType(item, value));
+function getZodIssuePaths(
+  issue: {
+    path: readonly unknown[];
+    code?: unknown;
+    keys?: unknown;
+  },
+  basePath: string,
+): string[] {
+  if (
+    issue.code === "unrecognized_keys" &&
+    Array.isArray(issue.keys) &&
+    issue.keys.every((key) => typeof key === "string")
+  ) {
+    return issue.keys.map((key) => appendJsonPath(basePath, [...issue.path, key]));
   }
 
-  switch (type) {
-    case "array":
-      return Array.isArray(value);
-    case "boolean":
-      return typeof value === "boolean";
-    case "integer":
-      return Number.isInteger(value);
-    case "null":
-      return value === null;
-    case "number":
-      return typeof value === "number" && Number.isFinite(value);
-    case "object":
-      return isRecord(value);
-    case "string":
-      return typeof value === "string";
-    default:
-      return true;
+  return [appendJsonPath(basePath, issue.path)];
+}
+
+function appendJsonPath(basePath: string, path: readonly unknown[]): string {
+  let currentPath = basePath;
+
+  for (const segment of path) {
+    if (typeof segment === "number") {
+      currentPath = `${currentPath}[${segment}]`;
+      continue;
+    }
+
+    if (typeof segment === "string") {
+      currentPath = `${currentPath}.${toPathKey(segment)}`;
+      continue;
+    }
+
+    currentPath = `${currentPath}.${toPathKey(String(segment))}`;
   }
-}
 
-function formatSchemaType(type: unknown): string {
-  return Array.isArray(type) ? type.join(" or ") : String(type);
-}
-
-function deepEqual(left: unknown, right: unknown): boolean {
-  return JSON.stringify(left) === JSON.stringify(right);
+  return currentPath;
 }
 
 function diagnostic(

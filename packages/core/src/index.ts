@@ -1,3 +1,5 @@
+import type { z } from "zod";
+
 export type RegistryDiagnosticCode =
   | "duplicate_component_type"
   | "empty_component_type"
@@ -59,9 +61,11 @@ export type WaterComponentPromptHints = {
   notes?: readonly string[];
 };
 
-export type WaterComponentDefinition<Props = Record<string, unknown>> = {
+export type WaterPropsSchema<Props = unknown> = z.ZodType<Props>;
+
+export type WaterComponentDefinition<Props = unknown> = {
   description: string;
-  propsSchema?: unknown;
+  propsSchema?: WaterPropsSchema<Props>;
   children?: ChildrenPolicy;
   slots?: SlotPolicy;
   prompt?: WaterComponentPromptHints;
@@ -74,10 +78,9 @@ export type WaterComponentDefinition<Props = Record<string, unknown>> = {
   __type?: Props;
 };
 
-export type WaterComponentEntry<Props = Record<string, unknown>> =
-  WaterComponentDefinition<Props> & {
-    type: string;
-  };
+export type WaterComponentEntry<Props = unknown> = WaterComponentDefinition<Props> & {
+  type: string;
+};
 
 export type WaterRegistryInput =
   | Record<string, WaterComponentDefinition | WaterComponentEntry>

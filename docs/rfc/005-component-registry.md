@@ -9,7 +9,7 @@ Registry entries may include:
 
 - type
 - description
-- props schema
+- Zod props schema
 - children policy
 - slot policy
 - data binding policy
@@ -25,6 +25,20 @@ Registry entries may include:
 Minimal example:
 
 ```ts
+import { z } from "zod";
+
+const CustomerTablePropsSchema = z
+  .object({
+    dataRef: z.string(),
+    columns: z.array(
+      z.object({
+        key: z.string(),
+        label: z.string(),
+      }),
+    ),
+  })
+  .strict();
+
 const registry = createWaterRegistry({
   components: {
     CustomerTable: defineWaterComponent({
@@ -55,6 +69,10 @@ const registry = createWaterRegistry({
   },
 });
 ```
+
+`propsSchema` is intentionally Zod-backed rather than a Water-specific schema
+dialect. The verifier calls `safeParse` and reports Zod issue paths as Water
+diagnostics.
 
 Water core owns registry mechanics. User applications and adapters own component
 definitions.

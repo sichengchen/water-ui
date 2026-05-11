@@ -16,6 +16,7 @@ Implemented Gate 1 exports:
 Registry contract:
 
 - Input components may be keyed object entries or entry arrays.
+- Component `propsSchema` values are Zod schemas.
 - Duplicate component types produce diagnostics.
 - Keyed entries with a mismatched declared `type` produce diagnostics.
 - Missing descriptions produce diagnostics.

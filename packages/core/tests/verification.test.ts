@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { expect, test } from "vite-plus/test";
+import { z } from "zod";
 import {
   assertVerifiedSchemaUI,
   createWaterRegistry,
@@ -28,49 +29,44 @@ const registry = createWaterRegistry({
     CustomerTable: {
       description: "Displays customers with configured columns.",
       children: "none",
-      propsSchema: {
-        type: "object",
-        required: ["dataRef", "columns"],
-        properties: {
-          dataRef: { type: "string" },
-          columns: {
-            type: "array",
-            items: {
-              type: "object",
-              required: ["key", "label"],
-              properties: {
-                key: { type: "string" },
-                label: { type: "string" },
-              },
-            },
-          },
-        },
-        additionalProperties: false,
-      },
+      propsSchema: z
+        .object({
+          dataRef: z.string(),
+          columns: z.array(
+            z.object({
+              key: z.string(),
+              label: z.string(),
+            }),
+          ),
+        })
+        .strict(),
     },
     ExportButton: {
       description: "Runs a registered export action.",
       children: "none",
-      propsSchema: {
-        type: "object",
-        required: ["actionId"],
-        properties: {
-          actionId: { enum: ["exportCustomers"] },
-        },
-        additionalProperties: false,
-      },
+      propsSchema: z
+        .object({
+          actionId: z.literal("exportCustomers"),
+        })
+        .strict(),
     },
     StatusFilter: {
       description: "Binds a status value to runtime state.",
       children: "none",
-      propsSchema: {
-        type: "object",
-        required: ["stateKey"],
-        properties: {
-          stateKey: { type: "string" },
-        },
-        additionalProperties: false,
-      },
+      propsSchema: z
+        .object({
+          stateKey: z.string(),
+        })
+        .strict(),
+    },
+    DisplaySettings: {
+      description: "Stores display settings parsed by Zod.",
+      children: "none",
+      propsSchema: z
+        .object({
+          pageSize: z.coerce.number().int().positive(),
+        })
+        .strict(),
     },
   },
 });
@@ -187,6 +183,30 @@ test("validates props against registry schemas", () => {
       path: "$.nodes.table.props.extra",
     },
   ]);
+});
+
+test("stores Zod-parsed props in VerifiedSchemaUI", () => {
+  const result = verifyDocument(
+    {
+      kind: "water.ui.document",
+      version: "water.ui.v1",
+      root: "settings",
+      nodes: {
+        settings: {
+          type: "DisplaySettings",
+          props: {
+            pageSize: "25",
+          },
+        },
+      },
+    },
+    { registry, runtime },
+  );
+  const ui = expectVerified(result);
+
+  expect(ui.nodes.settings?.props).toEqual({
+    pageSize: 25,
+  });
 });
 
 test("validates action IDs, data refs, and state keys against runtime capabilities", () => {

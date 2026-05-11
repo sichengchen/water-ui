@@ -34,7 +34,7 @@ Verifier responsibilities:
 - Reject cycles and unreachable nodes.
 - Reject component types that are absent from the active registry.
 - Validate children and slot policies from registry entries.
-- Validate props against the registry entry `propsSchema` subset used by Water.
+- Validate props with the registry entry's Zod `propsSchema`.
 - Validate `actionId`, `dataRef`, and `stateKey` references against runtime
   capabilities.
 - Return stable diagnostics with JSON paths and repair metadata where possible.
