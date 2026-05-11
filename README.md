@@ -30,6 +30,7 @@ Completed gates:
 - Gate 1: Registry API
 - Gate 2: Schema UI Protocol
 - Gate 3: Verification
+- Gate 4: React Renderer
 
 Implemented now:
 
@@ -46,10 +47,14 @@ Implemented now:
 - registry-aware Schema UI verification
 - VerifiedSchemaUI branding
 - verification fixtures and diagnostics
+- React renderer for VerifiedSchemaUI
+- recursive node and slot rendering
+- registry render bindings
+- runtime data/action binding helpers
+- render diagnostics and safe fallbacks
 
 Intentionally not implemented yet:
 
-- React renderer
 - shadcn adapter
 - runtime capability execution
 - semantic patch application

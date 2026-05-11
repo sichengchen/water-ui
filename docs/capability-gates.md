@@ -103,19 +103,19 @@ Completion evidence:
 
 ## Gate 4: React Renderer
 
-Status: planned
+Status: implemented
 
 Acceptance criteria:
 
-- Can render VerifiedSchemaUI in React.
-- Can render recursive children.
-- Can render slots.
-- Can call registry render bindings.
-- Can bind runtime data.
-- Can bind runtime actions.
-- Can apply permission guard.
-- Can report render diagnostics.
-- Can render fallbacks safely.
+- [x] Can render VerifiedSchemaUI in React.
+- [x] Can render recursive children.
+- [x] Can render slots.
+- [x] Can call registry render bindings.
+- [x] Can bind runtime data.
+- [x] Can bind runtime actions.
+- [x] Can apply permission guard.
+- [x] Can report render diagnostics.
+- [x] Can render fallbacks safely.
 
 Deliverables:
 
@@ -127,6 +127,11 @@ Deliverables:
 - `SlotRenderer`
 - fallback components
 - renderer tests
+
+Completion evidence:
+
+- implementation: `packages/react/src/index.ts`
+- tests: `packages/react/tests/renderer.test.ts`
 
 ## Gate 5: shadcn Registry Adapter
 

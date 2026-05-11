@@ -12,6 +12,10 @@ catalog:
   vitest: npm:@voidzero-dev/vite-plus-test@latest
   vite-plus: latest
   zod: ^4.4.3
+  "@types/react": ^19.2.14
+  react: ^19.2.6
+  react-dom: ^19.2.6
+  "@types/react-dom": ^19.2.3
 overrides:
   vite: "catalog:"
   vitest: "catalog:"
