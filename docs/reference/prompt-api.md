@@ -1,7 +1,5 @@
 # Prompt API Reference
 
-Status: available in Gate 9.
-
 Prompt compiler target:
 
 ```ts

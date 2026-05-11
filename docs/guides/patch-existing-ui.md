@@ -1,7 +1,5 @@
 # Patch Existing UI
 
-Status: available in Gate 7.
-
 Agents edit existing UI through semantic patches.
 
 Flow:

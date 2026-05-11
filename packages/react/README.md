@@ -1,18 +1,18 @@
 # @water-ui/react
 
-React renderer package for VerifiedSchemaUI.
+React renderer package for `VerifiedSchemaUI`.
 
-Implemented gate: Gate 4.
-
-Responsibilities:
+This package provides:
 
 - `WaterRenderer`
 - `WaterStreamRenderer`
 - `WaterRuntimeProvider`
-- recursive node rendering
-- slot rendering
+- `NodeRenderer`
+- `SlotRenderer`
+- recursive node and slot rendering
 - runtime data and action binding
 - render diagnostics
 - safe fallback rendering
 
-This package renders VerifiedSchemaUI only.
+`@water-ui/react` renders verified UI only. Pass raw model output through
+`@water-ui/core` verification before rendering.

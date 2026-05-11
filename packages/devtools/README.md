@@ -1,10 +1,8 @@
 # @water-ui/devtools
 
-DevTools package.
+DevTools inspection models for Water UI.
 
-Gate: 10.
-
-Responsibilities:
+This package provides:
 
 - registry inspector
 - Schema UI inspector

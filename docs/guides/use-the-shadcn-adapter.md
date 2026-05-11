@@ -1,7 +1,5 @@
 # Use the shadcn Adapter
 
-Status: available in Gate 5.
-
 The shadcn adapter provides optional registry entries and render bindings.
 
 Usage target:

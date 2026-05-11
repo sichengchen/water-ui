@@ -1,6 +1,6 @@
 # Fixture Map
 
-Fixtures are grouped by gate and protocol area.
+Fixtures are grouped by protocol and package area.
 
 Core registry fixtures:
 

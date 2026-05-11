@@ -33,5 +33,4 @@ Core layers:
 - Prompt layer: registry and runtime capability instructions
 - DevTools layer: explainability and inspection
 
-The first implementation gate is the registry API because every later gate
-depends on it.
+The registry API is the foundation because every later layer depends on it.

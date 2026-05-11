@@ -1,6 +1,6 @@
 # Patch Protocol Fixtures
 
-Gate 2 and Gate 7 patch fixtures prove:
+Patch protocol fixtures cover:
 
 - valid `water.ui.patch` inputs parse
 - invalid patch shapes are diagnosed

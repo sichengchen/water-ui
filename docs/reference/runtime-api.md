@@ -1,7 +1,5 @@
 # Runtime API Reference
 
-Status: available in Gate 6.
-
 Runtime target:
 
 ```ts

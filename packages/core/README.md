@@ -2,34 +2,26 @@
 
 Core registry, protocol, verification, patch, streaming, and safety primitives.
 
-Current status: Gates 1, 2, 3, 7, and 8 complete.
-
-Implemented:
+Core includes:
 
 - `defineWaterComponent`
 - `createWaterRegistry`
 - `mergeWaterRegistries`
-- registry lookup/listing
-- profile-aware entry selection
-- prompt-safe registry summaries
-- registry diagnostics
-- registry fixtures
+- registry lookup, listing, profile selection, diagnostics, and prompt-safe
+  summaries
 - `parseSchemaUIDocument`
 - `parseSchemaUIPatch`
 - `parseSchemaUIStreamEvent`
 - `normalizeSchemaUIDocument`
-- protocol fixtures and diagnostics
 - `verifyDocument`
 - `VerifiedSchemaUI`
 - `applyPatch`
 - `validatePatch`
 - `createPatchHistory`
-- patch diagnostics
-- patch history entries
 - `parseStreamEvent`
 - `createStreamState`
 - `applyStreamEvent`
 - `finalizeStreamState`
-- stream diagnostics
 
-Core must not contain Water-owned visual component definitions.
+Core must not contain Water-owned visual component definitions. Component
+definitions belong in application registries or adapter packages.

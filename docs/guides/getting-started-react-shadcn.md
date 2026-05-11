@@ -1,9 +1,8 @@
 # Getting Started: React + shadcn
 
-Status: planned for Gates 4 and 5.
-
-This guide exists to keep the intended first adapter path explicit without
-making shadcn the Water core abstraction.
+This guide shows the React renderer with the optional shadcn adapter. shadcn
+entries live outside Water core so the core package remains component-library
+neutral.
 
 Flow:
 
@@ -13,5 +12,5 @@ Flow:
 4. Verify generated Schema UI.
 5. Render VerifiedSchemaUI with `@water-ui/react`.
 
-The shadcn adapter owns shadcn entries. Water core does not define Button,
-Card, Table, Dialog, Form, or any visual component.
+The shadcn adapter owns shadcn entries. Water core does not define `Button`,
+`Card`, `Table`, `Dialog`, `Form`, or any visual component.

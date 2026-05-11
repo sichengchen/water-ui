@@ -1,7 +1,5 @@
 # Schema UI v1
 
-Status: implemented in Gate 2.
-
 Schema UI v1 is the model-facing protocol for Water UI. It supports full
 documents, semantic patches, and JSONL stream events.
 

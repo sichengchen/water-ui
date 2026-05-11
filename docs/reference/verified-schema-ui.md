@@ -1,7 +1,5 @@
 # VerifiedSchemaUI Reference
 
-Status: implemented in Gate 3.
-
 VerifiedSchemaUI is the branded, safe rendering boundary.
 
 Verifier result target:
@@ -21,7 +19,7 @@ type VerificationResult =
 
 Rendering APIs consume `VerifiedSchemaUI`, not raw Schema UI.
 
-Implemented Gate 3 exports:
+Public exports:
 
 - `verifyDocument`
 - `isVerifiedSchemaUI`

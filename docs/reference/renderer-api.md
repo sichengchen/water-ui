@@ -1,7 +1,5 @@
 # Renderer API Reference
 
-Status: implemented in Gate 4.
-
 React API target:
 
 ```tsx

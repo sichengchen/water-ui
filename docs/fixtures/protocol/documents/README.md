@@ -1,6 +1,6 @@
 # Document Protocol Fixtures
 
-Gate 2 and Gate 3 document fixtures prove:
+Document protocol fixtures cover:
 
 - valid `water.ui.document` inputs parse
 - invalid versions are rejected

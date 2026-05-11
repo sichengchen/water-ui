@@ -1,81 +1,156 @@
 # Water UI
 
-Water UI is a registry-first Generative UI library for agent-driven applications.
+Water UI is a registry-first generative UI toolkit for agent-driven
+applications.
 
-Developers expose their own components through a registry. Water uses that
-registry to compile prompts, verify model-generated Schema UI, render only
-verified UI, and support patches and streaming updates.
+Applications expose their own components through a Water registry. Water uses
+that registry to compile prompts, parse model output, verify Schema UI, render
+only verified UI, apply semantic patches, and consume streaming UI updates.
 
-Water core is component-library-neutral. shadcn is planned as the first adapter,
-not the core abstraction.
+Water core is component-library-neutral. Visual components belong in application
+registries or adapter packages such as `@water-ui/adapter-shadcn`, not in
+`@water-ui/core`.
+
+## Packages
+
+- `@water-ui/core`: registries, Schema UI protocol parsing, verification,
+  semantic patches, stream state, and diagnostics.
+- `@water-ui/react`: React rendering for `VerifiedSchemaUI`, runtime binding,
+  safe fallbacks, and stream rendering.
+- `@water-ui/runtime`: state, query, action, mutation, permission, and runtime
+  event registries.
+- `@water-ui/prompt`: prompt compilers for document, patch, stream, and repair
+  flows.
+- `@water-ui/adapter-shadcn`: optional shadcn registry entries and render
+  bindings.
+- `@water-ui/devtools`: serializable inspection models for registries, Schema
+  UI, verification, patches, streams, runtime events, prompts, and render
+  bindings.
+- `@water-ui/cli`: command-line package entry point.
+
+## How It Works
+
+1. Define a registry of user-owned components.
+2. Register runtime capabilities for data, actions, mutations, and state.
+3. Compile prompts from the same registry and runtime capabilities.
+4. Parse model output as a Water document, patch, or JSONL stream.
+5. Verify the output against the registry and runtime description.
+6. Render `VerifiedSchemaUI` with React or inspect it with DevTools.
+
+Raw model output is always untrusted. Rendering starts only after verification
+returns a `VerifiedSchemaUI`.
+
+## Basic Usage
+
+```ts
+import { createWaterRegistry, defineWaterComponent, verifyDocument } from "@water-ui/core";
+import { createWaterRuntime } from "@water-ui/runtime";
+import { compileDocumentPrompt } from "@water-ui/prompt";
+import { z } from "zod";
+
+const CustomerTable = defineWaterComponent({
+  description: "Displays customers with status, revenue, and owner.",
+  propsSchema: z
+    .object({
+      dataRef: z.literal("queries.customers.data"),
+    })
+    .strict(),
+  children: "none",
+  prompt: {
+    props: [
+      {
+        name: "dataRef",
+        description: "Registered customer query data reference.",
+        required: true,
+        allowedValues: ["queries.customers.data"],
+      },
+    ],
+  },
+});
+
+const registry = createWaterRegistry({
+  components: {
+    CustomerTable,
+  },
+});
+
+const runtime = createWaterRuntime();
+
+runtime.queries.register({
+  id: "customers",
+  dataRef: "queries.customers.data",
+  handler: async () => api.customers.list(),
+});
+
+const prompt = compileDocumentPrompt({
+  registry,
+  runtime: runtime.describe(),
+  userIntent: "Show the customer list.",
+});
+
+const result = verifyDocument(modelOutput, {
+  registry,
+  runtime: runtime.describe(),
+});
+
+if (result.ok) {
+  render(result.ui);
+} else {
+  showDiagnostics(result.diagnostics);
+}
+```
+
+React rendering consumes verified UI:
+
+```tsx
+import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/react";
+
+<WaterRuntimeProvider runtime={runtime} registry={registry}>
+  <WaterRenderer ui={verifiedUi} />
+</WaterRuntimeProvider>;
+```
+
+## shadcn Adapter
+
+Use `@water-ui/adapter-shadcn` when an application wants standard shadcn-backed
+entries in its registry:
+
+```ts
+import { createWaterRegistry } from "@water-ui/core";
+import { shadcnComponents } from "@water-ui/adapter-shadcn";
+
+const registry = createWaterRegistry({
+  components: {
+    ...shadcnComponents,
+    CustomerTable,
+  },
+});
+```
+
+Project-local shadcn components can be bound with `createShadcnComponents`.
+
+## Documentation
+
+- `docs/guides/`: task-focused usage guides.
+- `docs/reference/`: public API and protocol references.
+- `docs/fixtures/`: protocol, registry, and verification fixtures.
+- `docs/rfc/`: architecture notes and design rationale.
+- `goldens/`: golden fixtures for registries, documents, patches, streams, and
+  prompts.
 
 ## Development
 
-- Install dependencies:
+This repository uses Vite+ through the `vp` CLI.
 
 ```bash
 vp install
+vp check
+vp test
+vp run -r build
 ```
 
-- Check, test, and build:
+The root `ready` script runs check, tests, and builds:
 
 ```bash
 vp run ready
 ```
-
-## Implementation Gates
-
-Completed gates:
-
-- Gate 1: Registry API
-- Gate 2: Schema UI Protocol
-- Gate 3: Verification
-- Gate 4: React Renderer
-- Gate 5: shadcn Registry Adapter
-- Gate 6: Runtime
-- Gate 7: Semantic Patch
-- Gate 8: Streaming
-- Gate 9: Prompt Compiler
-- Gate 10: DevTools
-
-Implemented now:
-
-- `@water-ui/core`
-- `defineWaterComponent`
-- `createWaterRegistry`
-- registry merge diagnostics
-- prompt-safe registry summaries
-- profile-aware registry selection
-- Schema UI document parsing and normalization
-- semantic patch parsing
-- JSONL stream event parsing
-- protocol fixtures and diagnostics
-- registry-aware Schema UI verification
-- VerifiedSchemaUI branding
-- verification fixtures and diagnostics
-- React renderer for VerifiedSchemaUI
-- recursive node and slot rendering
-- registry render bindings
-- runtime data/action binding helpers
-- render diagnostics and safe fallbacks
-- optional shadcn registry entries
-- shadcn render binding factory
-- shadcn prompt examples
-- shadcn project-local import alias helpers
-- runtime state, query, action, and mutation registries
-- runtime permission guard and event log
-- safe data/action/mutation execution boundary
-- semantic patch application
-- patch diagnostics and history
-- JSONL stream state engine
-- progressive verified UI snapshots
-- stream buffering and diagnostics
-- registry/runtime prompt compiler
-- document, patch, stream, and repair prompt modes
-- prompt golden fixtures
-- DevTools inspection panels
-- debug event protocol
-
-Intentionally not implemented yet:
-
-- eval harness

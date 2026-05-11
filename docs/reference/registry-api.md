@@ -2,7 +2,7 @@
 
 Package: `@water-ui/core`
 
-Implemented Gate 1 exports:
+Public exports:
 
 - `defineWaterComponent`
 - `createWaterRegistry`

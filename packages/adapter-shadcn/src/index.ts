@@ -466,7 +466,7 @@ function createInputDefinition(
           description: "Registered Water runtime state key.",
         },
       ],
-      notes: ["Input is rendered as read-only until Gate 6 runtime state mutation APIs exist."],
+      notes: ["Input is rendered as read-only unless the host app binds state updates."],
     },
     examples: shadcnPromptExamples.Input,
     render,

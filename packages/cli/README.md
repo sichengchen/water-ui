@@ -1,13 +1,5 @@
 # @water-ui/cli
 
-Command-line tools for Water UI.
+Command-line package entry point for Water UI.
 
-Planned responsibilities:
-
-- `init`
-- `validate`
-- `inspect`
-- `check-registry`
-- `check-adapter`
-- `generate-fixtures`
-- `run-evals`
+The package exposes the `water-ui` binary from `dist/index.mjs`.

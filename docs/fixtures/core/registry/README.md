@@ -1,6 +1,6 @@
 # Registry Fixtures
 
-Gate 1 fixtures prove:
+Registry fixtures cover:
 
 - user-defined registries work
 - adapter presets can merge

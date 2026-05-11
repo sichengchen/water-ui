@@ -1,7 +1,5 @@
 # Stream UI From an Agent
 
-Status: available in Gate 8.
-
 Streaming uses ordered JSONL events.
 
 Flow:

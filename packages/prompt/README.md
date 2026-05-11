@@ -1,10 +1,8 @@
 # @water-ui/prompt
 
-Prompt compiler package.
+Prompt compiler package for Water UI.
 
-Gate: 9.
-
-Responsibilities:
+This package provides:
 
 - system prompt compiler
 - registry summarizer

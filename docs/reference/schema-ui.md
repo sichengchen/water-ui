@@ -45,7 +45,7 @@ type SchemaUIPatch = {
 };
 ```
 
-Supported Gate 2 patch operation names:
+Supported patch operation names:
 
 - `upsertNode`
 - `removeNode`
@@ -91,14 +91,14 @@ Parser API:
 - `applyStreamEvent`
 - `finalizeStreamState`
 
-Gate 2 parsers validate protocol shape and version only. They do not verify
-registry component existence, props schemas, runtime references, or node graph
-integrity; those checks belong to verification and runtime gates.
+Parsers validate protocol shape and version only. They do not verify registry
+component existence, props schemas, runtime references, or node graph integrity;
+those checks belong to verification and runtime APIs.
 
-Gate 7 patch APIs apply semantic patches to `VerifiedSchemaUI`, validate
-operation references, run full document verification, and return a fresh
+Patch APIs apply semantic patches to `VerifiedSchemaUI`, validate operation
+references, run full document verification, and return a fresh
 `VerifiedSchemaUI` only on success.
 
-Gate 8 stream APIs consume JSONL stream events into stream state, buffer
-unresolved references, reject invalid events, and expose only verified partial
-UI snapshots.
+Stream APIs consume JSONL stream events into stream state, buffer unresolved
+references, reject invalid events, and expose only verified partial UI
+snapshots.

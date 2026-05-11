@@ -1,7 +1,5 @@
 # Register Actions
 
-Status: available in Gate 6.
-
 The model may reference actions. The application implements actions.
 
 Runtime target:

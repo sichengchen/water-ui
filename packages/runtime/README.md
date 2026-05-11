@@ -1,10 +1,8 @@
 # @water-ui/runtime
 
-Runtime capability system.
+Runtime capability system for Water UI applications.
 
-Gate: 6.
-
-Responsibilities:
+This package provides:
 
 - state registry
 - query registry
@@ -49,4 +47,5 @@ runtime.describe();
 ```
 
 `runtime.describe()` returns the capability lists used by Water verification.
-Unknown actions, queries, mutations, and state keys are blocked before execution.
+Unknown actions, queries, mutations, and state keys are blocked before
+execution.

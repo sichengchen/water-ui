@@ -1,6 +1,6 @@
 # Stream Protocol Fixtures
 
-Gate 2 and Gate 8 stream fixtures prove:
+Stream protocol fixtures cover:
 
 - ordered JSONL events parse
 - duplicate sequence numbers are rejected

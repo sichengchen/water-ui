@@ -1,16 +1,14 @@
 # @water-ui/adapter-shadcn
 
-Optional shadcn registry adapter.
+Optional shadcn registry adapter for Water UI.
 
-Gate: 5.
-
-Responsibilities:
+This package provides:
 
 - shadcn component registry entries
 - shadcn render bindings
 - shadcn prompt examples
 - shadcn fallback components
-- shadcn install and config helpers
+- shadcn import alias helpers
 
 shadcn is an adapter, not the Water core abstraction.
 

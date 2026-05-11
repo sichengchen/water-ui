@@ -14,7 +14,7 @@ Required panels:
 - Prompt Viewer
 - Render Viewer
 
-Gate 10 implementation:
+Implementation:
 
 - `createDevToolsInspection` produces a serializable panel map for all required
   panels.
