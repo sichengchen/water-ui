@@ -35,6 +35,7 @@ Completed gates:
 - Gate 6: Runtime
 - Gate 7: Semantic Patch
 - Gate 8: Streaming
+- Gate 9: Prompt Compiler
 
 Implemented now:
 
@@ -68,6 +69,9 @@ Implemented now:
 - JSONL stream state engine
 - progressive verified UI snapshots
 - stream buffering and diagnostics
+- registry/runtime prompt compiler
+- document, patch, stream, and repair prompt modes
+- prompt golden fixtures
 
 Intentionally not implemented yet:
 

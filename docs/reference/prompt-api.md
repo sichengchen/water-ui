@@ -1,6 +1,6 @@
 # Prompt API Reference
 
-Status: planned for Gate 9.
+Status: available in Gate 9.
 
 Prompt compiler target:
 
@@ -22,3 +22,63 @@ Modes:
 
 The prompt is compiled from the same registry and runtime capabilities used for
 verification.
+
+## API
+
+```ts
+import {
+  compileDocumentPrompt,
+  compilePatchPrompt,
+  compileRepairPrompt,
+  compileStreamPrompt,
+  compileSystemPrompt,
+} from "@water-ui/prompt";
+```
+
+System prompt:
+
+```ts
+const systemPrompt = compileSystemPrompt({
+  mode: "document",
+  profile: "admin",
+  registry,
+  runtime: runtime.describe(),
+});
+```
+
+Document generation:
+
+```ts
+compileDocumentPrompt({ registry, runtime: runtime.describe() });
+```
+
+Patch generation:
+
+```ts
+compilePatchPrompt({
+  registry,
+  runtime: runtime.describe(),
+  currentDocument: verifiedUi,
+});
+```
+
+Stream generation:
+
+```ts
+compileStreamPrompt({ registry, runtime: runtime.describe() });
+```
+
+Repair:
+
+```ts
+compileRepairPrompt({
+  registry,
+  runtime: runtime.describe(),
+  invalidOutput,
+  diagnostics,
+});
+```
+
+Compiler output includes prompt-safe component summaries, profile-filtered
+registry entries, allowed runtime action IDs, data refs, state keys, forbidden
+behavior rules, and mode-specific output requirements.

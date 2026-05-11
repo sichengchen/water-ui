@@ -251,18 +251,18 @@ Completion evidence:
 
 ## Gate 9: Prompt Compiler
 
-Status: planned
+Status: completed
 
 Acceptance criteria:
 
-- Can compile registry into compact system prompt.
-- Can select registry entries by profile.
-- Can include allowed actions and queries.
-- Can generate document-mode instructions.
-- Can generate patch-mode instructions.
-- Can generate stream-mode instructions.
-- Can generate repair prompts from diagnostics.
-- Can evaluate model outputs against fixtures.
+- [x] Can compile registry into compact system prompt.
+- [x] Can select registry entries by profile.
+- [x] Can include allowed actions and queries.
+- [x] Can generate document-mode instructions.
+- [x] Can generate patch-mode instructions.
+- [x] Can generate stream-mode instructions.
+- [x] Can generate repair prompts from diagnostics.
+- [x] Can evaluate model outputs against fixtures.
 
 Deliverables:
 
@@ -272,6 +272,12 @@ Deliverables:
 - repair prompt templates
 - prompt fixtures
 - eval harness
+
+Completion evidence:
+
+- implementation: `packages/prompt/src/index.ts`
+- tests: `packages/prompt/tests/prompt.test.ts`
+- fixtures: `goldens/prompts/custom-admin.system.txt`, `goldens/prompts/repair-invalid-props.txt`
 
 ## Gate 10: DevTools
 

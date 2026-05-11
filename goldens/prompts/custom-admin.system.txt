@@ -1,0 +1,54 @@
+Water UI Prompt
+Mode: document
+Profile: admin
+
+Rules:
+- Only output Water Schema UI.
+- Do not output JSX.
+- Do not output JavaScript.
+- Do not invent component types.
+- Do not invent action IDs.
+- Do not invent query refs.
+- Do not invent state keys.
+- Use only registered components.
+- Use only props allowed by each component summary.
+- Use stable node IDs.
+- Do not define actions, queries, mutations, permission rules, imports, network calls, raw HTML, event handlers, arbitrary className, or arbitrary inline style.
+
+Available components:
+- AdminPage: Admin page shell.
+  Children: nodes
+  Props:
+    - title: Page title.
+- CustomerTable: Displays customers.
+  Children: none
+  Props:
+    - dataRef (required): Customer query data ref. Allowed: [
+  "queries.customers.data"
+]
+  Examples:
+    - Intent: show customers
+      Node: {
+  "props": {
+    "dataRef": "queries.customers.data"
+  },
+  "type": "CustomerTable"
+}
+- ExportButton: Runs a registered export action.
+  Children: none
+  Risk: low
+  Props:
+    - actionId (required): Registered export action. Allowed: [
+  "exportCustomers"
+]
+
+Runtime capabilities:
+- actions: exportCustomers
+- dataRefs: queries.customers.data
+- stateKeys: filters.status
+- mutations: deleteCustomer
+
+Output requirements:
+- Return exactly one JSON object with kind "water.ui.document".
+- Use version "water.ui.v1".
+- Include root and nodes.
