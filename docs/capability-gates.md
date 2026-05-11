@@ -192,19 +192,19 @@ Completion evidence:
 
 ## Gate 7: Semantic Patch
 
-Status: planned
+Status: completed
 
 Acceptance criteria:
 
-- Can apply `upsertNode`.
-- Can apply `removeNode`.
-- Can apply `updateProps`.
-- Can apply `insertChildBefore` and `insertChildAfter`.
-- Can apply `moveNode`.
-- Can validate patch operations against registry.
-- Can validate document after patch.
-- Can produce patch diagnostics.
-- Can support repair loops.
+- [x] Can apply `upsertNode`.
+- [x] Can apply `removeNode`.
+- [x] Can apply `updateProps`.
+- [x] Can apply `insertChildBefore` and `insertChildAfter`.
+- [x] Can apply `moveNode`.
+- [x] Can validate patch operations against registry.
+- [x] Can validate document after patch.
+- [x] Can produce patch diagnostics.
+- [x] Can support repair loops.
 
 Deliverables:
 
@@ -213,6 +213,11 @@ Deliverables:
 - patch fixtures
 - patch diagnostics
 - patch history API
+
+Completion evidence:
+
+- implementation: `packages/core/src/patch.ts`
+- tests: `packages/core/tests/patch.test.ts`
 
 ## Gate 8: Streaming
 

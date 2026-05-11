@@ -33,6 +33,7 @@ Completed gates:
 - Gate 4: React Renderer
 - Gate 5: shadcn Registry Adapter
 - Gate 6: Runtime
+- Gate 7: Semantic Patch
 
 Implemented now:
 
@@ -61,9 +62,10 @@ Implemented now:
 - runtime state, query, action, and mutation registries
 - runtime permission guard and event log
 - safe data/action/mutation execution boundary
+- semantic patch application
+- patch diagnostics and history
 
 Intentionally not implemented yet:
 
-- semantic patch application
 - streaming state application
 - DevTools

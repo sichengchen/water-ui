@@ -2,7 +2,7 @@
 
 Core registry, protocol, verification, patch, streaming, and safety primitives.
 
-Current status: Gates 1 and 2 complete.
+Current status: Gates 1, 2, 3, and 7 complete.
 
 Implemented:
 
@@ -19,5 +19,12 @@ Implemented:
 - `parseSchemaUIStreamEvent`
 - `normalizeSchemaUIDocument`
 - protocol fixtures and diagnostics
+- `verifyDocument`
+- `VerifiedSchemaUI`
+- `applyPatch`
+- `validatePatch`
+- `createPatchHistory`
+- patch diagnostics
+- patch history entries
 
 Core must not contain Water-owned visual component definitions.

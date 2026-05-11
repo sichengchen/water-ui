@@ -83,7 +83,14 @@ Parser API:
 - `parseSchemaUIPatch`
 - `parseSchemaUIStreamEvent`
 - `normalizeSchemaUIDocument`
+- `applyPatch`
+- `validatePatch`
+- `createPatchHistory`
 
 Gate 2 parsers validate protocol shape and version only. They do not verify
 registry component existence, props schemas, runtime references, or node graph
 integrity; those checks belong to verification and runtime gates.
+
+Gate 7 patch APIs apply semantic patches to `VerifiedSchemaUI`, validate
+operation references, run full document verification, and return a fresh
+`VerifiedSchemaUI` only on success.
