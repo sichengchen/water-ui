@@ -6,6 +6,7 @@ export const meetingTaskSchema = z
     title: z.string().min(1),
     owner: z.string().min(1),
     due: z.string().min(1),
+    tags: z.array(z.string().min(1)),
     priority: z.enum(["low", "medium", "high"]),
   })
   .strict();
@@ -65,6 +66,7 @@ export const exampleMeetingSummary: MeetingSummary = {
       title: "Finalize onboarding copy",
       owner: "Mina",
       due: "Friday",
+      tags: ["Copy", "Friday"],
       priority: "high",
     },
     {
@@ -72,6 +74,7 @@ export const exampleMeetingSummary: MeetingSummary = {
       title: "Open staging checklist",
       owner: "Dev",
       due: "Before beta",
+      tags: ["Staging", "Beta"],
       priority: "medium",
     },
     {
@@ -79,6 +82,7 @@ export const exampleMeetingSummary: MeetingSummary = {
       title: "Confirm support coverage",
       owner: "Sam",
       due: "Release week",
+      tags: ["Support", "Release week"],
       priority: "medium",
     },
   ],
@@ -136,6 +140,26 @@ function createTaskFromLine(line: string, index: number): MeetingTask {
     title: title || line,
     owner,
     due: due?.[1] ?? due?.[2] ?? due?.[3] ?? "Next",
+    tags: inferTaskTags(title || line, due?.[1] ?? due?.[2] ?? due?.[3] ?? "Next"),
     priority: index === 0 ? "high" : "medium",
   };
+}
+
+function inferTaskTags(title: string, due: string): string[] {
+  const ignoredWords = new Set(["finalize", "open", "confirm", "create", "review"]);
+  const firstKeyword = title
+    .split(/\s+/)
+    .map((word) => word.replace(/[^a-z]/gi, ""))
+    .find((word) => word.length > 4 && !ignoredWords.has(word.toLowerCase()))
+    ?.replace(/[^a-z]/gi, "");
+
+  return [firstKeyword ? toTitleCase(firstKeyword) : "Task", toTitleCase(due)];
+}
+
+function toTitleCase(value: string): string {
+  return value
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 }

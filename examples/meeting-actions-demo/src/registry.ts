@@ -174,32 +174,28 @@ export const meetingActionsRegistry = createWaterRegistry({
                     }),
                     createElement(
                       "div",
-                      { className: "flex min-w-0 flex-col gap-1" },
+                      { className: "flex min-w-0 flex-col gap-1.5" },
                       createElement(
-                        "strong",
-                        { className: "text-sm font-medium leading-5" },
-                        task.title,
+                        "div",
+                        { className: "grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3" },
+                        createElement(
+                          "strong",
+                          { className: "text-sm font-medium leading-5" },
+                          task.title,
+                        ),
+                        createElement(Badge, { variant: "outline" }, task.priority),
                       ),
                       createElement(
                         "div",
                         { className: "flex flex-wrap gap-1.5" },
-                        createElement(
-                          "span",
-                          {
-                            className:
-                              "rounded-md bg-background px-2 py-0.5 text-xs text-muted-foreground",
-                          },
-                          task.owner,
+                        task.tags.map((tag) =>
+                          createElement(Badge, { key: tag, variant: "secondary" }, tag),
                         ),
-                        createElement(
-                          "span",
-                          {
-                            className:
-                              "rounded-md bg-background px-2 py-0.5 text-xs text-muted-foreground",
-                          },
-                          task.due,
-                        ),
-                        createElement(Badge, { variant: "secondary" }, task.priority),
+                      ),
+                      createElement(
+                        "p",
+                        { className: "text-xs text-muted-foreground" },
+                        `People: ${task.owner}`,
                       ),
                     ),
                   ),
