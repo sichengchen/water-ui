@@ -2,6 +2,7 @@ import { assertVerifiedSchemaUI, getWaterComponent, isVerifiedSchemaUI } from "@
 import { createContext, createElement, Fragment, useContext } from "react";
 import type {
   SchemaUINode,
+  StreamState,
   VerifiedSchemaUI,
   WaterComponentEntry,
   WaterRegistry,
@@ -130,6 +131,7 @@ export type WaterRendererProps = {
 
 export type WaterStreamRendererProps = Omit<WaterRendererProps, "ui"> & {
   ui?: VerifiedSchemaUI;
+  stream?: StreamState;
 };
 
 export type NodeRendererProps = {
@@ -212,16 +214,18 @@ export function WaterRenderer({
 
 export function WaterStreamRenderer({
   ui,
+  stream,
   fallback,
   onDiagnostics,
   registry,
 }: WaterStreamRendererProps): ReactNode {
-  if (!ui) {
+  const verifiedUi = ui ?? stream?.ui;
+  if (!verifiedUi) {
     return fallback ?? null;
   }
 
   return createElement(WaterRenderer, {
-    ui,
+    ui: verifiedUi,
     registry,
     fallback,
     onDiagnostics,

@@ -416,3 +416,4 @@ function matchesProfile(
 export * from "./protocol.js";
 export * from "./verification.js";
 export * from "./patch.js";
+export * from "./stream.js";

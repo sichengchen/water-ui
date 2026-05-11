@@ -34,6 +34,7 @@ Completed gates:
 - Gate 5: shadcn Registry Adapter
 - Gate 6: Runtime
 - Gate 7: Semantic Patch
+- Gate 8: Streaming
 
 Implemented now:
 
@@ -64,8 +65,10 @@ Implemented now:
 - safe data/action/mutation execution boundary
 - semantic patch application
 - patch diagnostics and history
+- JSONL stream state engine
+- progressive verified UI snapshots
+- stream buffering and diagnostics
 
 Intentionally not implemented yet:
 
-- streaming state application
 - DevTools

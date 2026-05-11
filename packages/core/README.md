@@ -2,7 +2,7 @@
 
 Core registry, protocol, verification, patch, streaming, and safety primitives.
 
-Current status: Gates 1, 2, 3, and 7 complete.
+Current status: Gates 1, 2, 3, 7, and 8 complete.
 
 Implemented:
 
@@ -26,5 +26,10 @@ Implemented:
 - `createPatchHistory`
 - patch diagnostics
 - patch history entries
+- `parseStreamEvent`
+- `createStreamState`
+- `applyStreamEvent`
+- `finalizeStreamState`
+- stream diagnostics
 
 Core must not contain Water-owned visual component definitions.

@@ -1,7 +1,12 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, test } from "vite-plus/test";
-import { createWaterRegistry, verifyDocument } from "@water-ui/core";
+import {
+  applyStreamEvent,
+  createStreamState,
+  createWaterRegistry,
+  verifyDocument,
+} from "@water-ui/core";
 import {
   NodeRenderer,
   SlotRenderer,
@@ -196,6 +201,70 @@ test("exposes node, slot, and stream renderer components", () => {
   expect(nodeHtml).toBe("<p>Customers</p>");
   expect(slotHtml).toBe("<p>Customers</p>");
   expect(streamHtml).toBe("<section><p>Customers</p></section>");
+});
+
+test("renders verified stream state through WaterStreamRenderer", () => {
+  const registry = createWaterRegistry({
+    components: {
+      Page: {
+        description: "Page shell.",
+        children: "nodes",
+        render: (({ children }) =>
+          createElement("main", null, children)) satisfies WaterRenderBinding,
+      },
+      Text: {
+        description: "Text node.",
+        render: (({ props }) =>
+          createElement("p", null, String(props.label))) satisfies WaterRenderBinding<{
+          label: string;
+        }>,
+      },
+    },
+  });
+  let stream = createStreamState();
+  stream = applyStreamEvent(
+    stream,
+    {
+      seq: 1,
+      kind: "node.upsert",
+      id: "page",
+      type: "Page",
+    },
+    { registry },
+  ).state;
+  stream = applyStreamEvent(
+    stream,
+    {
+      seq: 2,
+      kind: "node.upsert",
+      id: "text",
+      type: "Text",
+      props: {
+        label: "Streaming",
+      },
+    },
+    { registry },
+  ).state;
+  stream = applyStreamEvent(
+    stream,
+    {
+      seq: 3,
+      kind: "child.append",
+      parent: "page",
+      child: "text",
+    },
+    { registry },
+  ).state;
+
+  const html = renderToStaticMarkup(
+    createElement(
+      WaterRuntimeProvider,
+      { runtime: {}, registry },
+      createElement(WaterStreamRenderer, { stream }),
+    ),
+  );
+
+  expect(html).toBe("<main><p>Streaming</p></main>");
 });
 
 test("binds runtime data, actions, and telemetry into render context", () => {

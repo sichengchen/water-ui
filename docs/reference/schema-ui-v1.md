@@ -10,6 +10,7 @@ Public parser API:
 - `parseSchemaUIDocument`
 - `parseSchemaUIPatch`
 - `parseSchemaUIStreamEvent`
+- `parseStreamEvent`
 - `normalizeSchemaUIDocument`
 
 All parsers return structured diagnostics for ordinary invalid input instead of

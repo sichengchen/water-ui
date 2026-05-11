@@ -1,6 +1,6 @@
 # Stream UI From an Agent
 
-Status: planned for Gate 8.
+Status: available in Gate 8.
 
 Streaming uses ordered JSONL events.
 
@@ -15,3 +15,39 @@ Flow:
 7. Run full verification on `done`.
 
 Invalid events emit diagnostics and must not crash the stream.
+
+API:
+
+```ts
+import { applyStreamEvent, createStreamState, finalizeStreamState } from "@water-ui/core";
+
+let stream = createStreamState();
+
+for await (const line of modelJsonlStream) {
+  const result = applyStreamEvent(stream, line, {
+    registry,
+    runtime: runtime.describe(),
+  });
+
+  stream = result.state;
+
+  if (result.ui) {
+    render(result.ui);
+  }
+}
+
+const final = finalizeStreamState(stream, {
+  registry,
+  runtime: runtime.describe(),
+});
+```
+
+React:
+
+```tsx
+<WaterStreamRenderer stream={stream} registry={registry} />
+```
+
+Water buffers unresolved relationship events, rejects duplicate sequence numbers,
+rejects invalid component events, and exposes only verified partial UI snapshots.
+The `done` event triggers full-document verification.

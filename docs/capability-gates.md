@@ -221,18 +221,18 @@ Completion evidence:
 
 ## Gate 8: Streaming
 
-Status: planned
+Status: completed
 
 Acceptance criteria:
 
-- Can consume ordered JSONL stream events.
-- Can verify events against registry.
-- Can handle partial documents.
-- Can render progressive verified UI.
-- Can buffer unresolved child references.
-- Can reject duplicate sequence numbers.
-- Can recover from invalid events.
-- Can finalize document on done.
+- [x] Can consume ordered JSONL stream events.
+- [x] Can verify events against registry.
+- [x] Can handle partial documents.
+- [x] Can render progressive verified UI.
+- [x] Can buffer unresolved child references.
+- [x] Can reject duplicate sequence numbers.
+- [x] Can recover from invalid events.
+- [x] Can finalize document on done.
 
 Deliverables:
 
@@ -242,6 +242,12 @@ Deliverables:
 - `WaterStreamRenderer`
 - stream fixtures
 - stream diagnostics
+
+Completion evidence:
+
+- implementation: `packages/core/src/stream.ts`
+- renderer integration: `packages/react/src/index.ts`
+- tests: `packages/core/tests/stream.test.ts`, `packages/react/tests/renderer.test.ts`
 
 ## Gate 9: Prompt Compiler
 
