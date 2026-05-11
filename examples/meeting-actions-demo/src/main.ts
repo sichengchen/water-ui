@@ -21,9 +21,11 @@ type ChatState =
     }
   | {
       status: "thinking";
+      prompt: string;
     }
   | {
       status: "ready";
+      prompt: string;
       ui: VerifiedSchemaUI;
       renderRuntime: ReactWaterRuntime;
     }
@@ -45,7 +47,8 @@ function App(): ReactNode {
       return;
     }
 
-    setChat({ status: "thinking" });
+    const sentPrompt = prompt.trim();
+    setChat({ status: "thinking", prompt: sentPrompt });
 
     try {
       await wait(500);
@@ -67,6 +70,7 @@ function App(): ReactNode {
 
       setChat({
         status: "ready",
+        prompt: sentPrompt,
         ui: verification.ui,
         renderRuntime: runtime.renderRuntime,
       });
@@ -80,30 +84,31 @@ function App(): ReactNode {
 
   return createElement(
     "main",
-    { className: "app-shell" },
+    { className: "mx-auto min-h-screen w-full max-w-6xl p-6" },
     createElement(
       "section",
-      { className: "notebook-layout" },
+      { className: "grid gap-6 lg:grid-cols-[minmax(0,1fr)_440px]" },
       createElement(
         Card,
-        { className: "notebook-card" },
+        { className: "h-[720px] rounded-lg max-lg:h-auto" },
         createElement(
           CardHeader,
           null,
           createElement(
             "div",
-            { className: "card-title-row" },
+            { className: "flex items-start justify-between gap-3" },
             createElement(CardTitle, null, "Notebook"),
-            createElement(Badge, null, `${getNoteLineCount(note)} lines`),
+            createElement(Badge, { variant: "outline" }, `${getNoteLineCount(note)} lines`),
           ),
           createElement(CardDescription, null, "Demo meeting note"),
         ),
         createElement(
           CardContent,
-          null,
+          { className: "flex flex-1 flex-col" },
           createElement(Textarea, {
             "aria-label": "Meeting note",
-            className: "note-editor",
+            className:
+              "min-h-0 flex-1 resize-none border-0 bg-[linear-gradient(#fff_31px,#f1f5f9_32px)] bg-[length:100%_32px] leading-8 shadow-none focus-visible:ring-0 max-lg:min-h-80",
             value: note,
             onChange: (event) => setNote(event.currentTarget.value),
           }),
@@ -111,33 +116,46 @@ function App(): ReactNode {
       ),
       createElement(
         Card,
-        { className: "chat-card" },
+        { className: "h-[720px] rounded-lg max-lg:h-auto" },
         createElement(
           CardHeader,
           null,
           createElement(
             "div",
-            { className: "card-title-row" },
+            { className: "flex items-start justify-between gap-3" },
             createElement(CardTitle, null, "Assistant"),
-            createElement(Badge, null, chat.status === "ready" ? "Water UI" : "Demo"),
+            createElement(
+              Badge,
+              { variant: chat.status === "ready" ? "default" : "outline" },
+              chat.status === "ready" ? "Water UI" : "Demo",
+            ),
           ),
           createElement(CardDescription, null, "Ask the agent to transform the note"),
         ),
         createElement(
           CardContent,
-          null,
+          { className: "flex min-h-0 flex-1 flex-col gap-4" },
           createElement(
             "div",
-            { className: "chat-thread", "aria-live": "polite" },
-            renderUserMessage(prompt),
+            {
+              className:
+                "flex min-h-0 flex-1 flex-col gap-3 overflow-auto rounded-lg border bg-muted/30 p-3 max-lg:min-h-80",
+              "aria-live": "polite",
+            },
+            chat.status === "thinking" || chat.status === "ready"
+              ? renderUserMessage(chat.prompt)
+              : null,
             renderAssistantMessage(chat),
           ),
           createElement(
             "div",
-            { className: "chat-composer" },
+            {
+              className:
+                "grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 border-t pt-4 max-sm:grid-cols-1",
+            },
             createElement(Textarea, {
               "aria-label": "Chat message",
-              className: "chat-input",
+              className: "min-h-20 resize-none",
               value: prompt,
               onChange: (event) => setPrompt(event.currentTarget.value),
               onKeyDown: (event) => {
@@ -164,7 +182,10 @@ function App(): ReactNode {
 function renderUserMessage(prompt: string): ReactNode {
   return createElement(
     "div",
-    { className: "chat-message user-message" },
+    {
+      className:
+        "ml-auto max-w-[86%] rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground",
+    },
     createElement("p", null, prompt || defaultPrompt),
   );
 }
@@ -173,22 +194,30 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
   if (chat.status === "idle") {
     return createElement(
       "div",
-      { className: "chat-message assistant-message muted-message" },
-      createElement(
-        "p",
-        null,
-        "The generated todo list will appear here after you send the prompt.",
-      ),
+      {
+        className:
+          "mr-auto max-w-[88%] rounded-lg border bg-background px-3 py-2 text-sm text-muted-foreground",
+      },
+      createElement("p", null, "Send the prompt to generate a Water UI todo list from the note."),
     );
   }
 
   if (chat.status === "thinking") {
     return createElement(
       "div",
-      { className: "chat-message assistant-message thinking-message" },
-      createElement("span", { className: "thinking-dot" }),
-      createElement("span", { className: "thinking-dot" }),
-      createElement("span", { className: "thinking-dot" }),
+      {
+        className:
+          "mr-auto inline-flex items-center gap-2 rounded-lg border bg-background px-3 py-2 text-sm text-muted-foreground",
+      },
+      createElement("span", {
+        className: "size-1.5 animate-pulse rounded-full bg-muted-foreground",
+      }),
+      createElement("span", {
+        className: "size-1.5 animate-pulse rounded-full bg-muted-foreground",
+      }),
+      createElement("span", {
+        className: "size-1.5 animate-pulse rounded-full bg-muted-foreground",
+      }),
       createElement("p", null, "Thinking..."),
     );
   }
@@ -196,14 +225,17 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
   if (chat.status === "error") {
     return createElement(
       "div",
-      { className: "chat-message assistant-message error-message" },
+      {
+        className:
+          "mr-auto max-w-[88%] rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive",
+      },
       createElement("p", null, chat.message),
     );
   }
 
   return createElement(
     "div",
-    { className: "chat-message assistant-message water-response" },
+    { className: "mr-auto w-full max-w-full" },
     createElement(
       WaterRuntimeProvider,
       {

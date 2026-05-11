@@ -28,13 +28,7 @@ export async function mockMeetingActionsAgent(): Promise<SchemaUIDocument> {
           title: "Todo list",
           description: "Action items extracted from the meeting note.",
         },
-        children: ["meeting_summary", "task_list", "create_tasks"],
-      },
-      meeting_summary: {
-        type: "SummaryCard",
-        props: {
-          dataRef: MEETING_SUMMARY_DATA_REF,
-        },
+        children: ["task_list", "create_tasks"],
       },
       task_list: {
         type: "TaskList",

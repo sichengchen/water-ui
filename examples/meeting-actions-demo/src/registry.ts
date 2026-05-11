@@ -42,7 +42,7 @@ export const meetingActionsRegistry = createWaterRegistry({
       propsSchema: meetingPagePropsSchema,
       children: {
         kind: "nodes",
-        min: 3,
+        min: 2,
         max: 3,
       },
       prompt: {
@@ -57,22 +57,29 @@ export const meetingActionsRegistry = createWaterRegistry({
             description: "Brief page description.",
           },
         ],
-        notes: ["Use exactly three children: SummaryCard, TaskList, then ActionButton."],
+        notes: [
+          "Use TaskList and ActionButton. Include SummaryCard only when the user asks for a summary.",
+        ],
       },
       render: (({ props, children }) =>
         createElement(
           "section",
           {
             "aria-label": props.title,
+            className: "flex flex-col gap-3",
             "data-demo": "meeting-actions",
           },
           createElement(
             "header",
-            null,
+            { className: "sr-only" },
             createElement("h2", null, props.title),
             props.description ? createElement("p", null, props.description) : null,
           ),
-          createElement("div", { "data-slot": "meeting-panel" }, children),
+          createElement(
+            "div",
+            { className: "flex flex-col gap-3", "data-slot": "meeting-panel" },
+            children,
+          ),
         )) satisfies WaterRenderBinding<MeetingPageProps>,
     }),
     SummaryCard: defineWaterComponent<DataBackedProps>({
@@ -137,38 +144,60 @@ export const meetingActionsRegistry = createWaterRegistry({
 
         return createElement(
           Card,
-          null,
+          { className: "gap-3 py-4" },
           createElement(
             CardHeader,
-            null,
+            { className: "px-4" },
             createElement(CardTitle, null, "Todo list"),
             createElement(CardDescription, null, `${summary.tasks.length} tasks extracted`),
           ),
           createElement(
             CardContent,
-            null,
+            { className: "px-4" },
             createElement(
               "ul",
-              { "aria-label": "Todo list", className: "todo-list" },
+              { "aria-label": "Todo list", className: "flex flex-col gap-2" },
               summary.tasks.map((task) =>
                 createElement(
                   "li",
-                  { key: task.id, className: "task-row" },
+                  {
+                    key: task.id,
+                    className:
+                      "grid grid-cols-[1rem_minmax(0,1fr)] gap-3 rounded-md border bg-background p-3",
+                  },
                   createElement("input", {
                     "aria-label": task.title,
-                    className: "todo-checkbox",
+                    className: "mt-0.5 size-4 accent-primary",
                     type: "checkbox",
                   }),
                   createElement(
                     "div",
-                    { className: "todo-content" },
-                    createElement("strong", null, task.title),
+                    { className: "flex min-w-0 flex-col gap-1" },
+                    createElement(
+                      "strong",
+                      { className: "text-sm font-medium leading-5" },
+                      task.title,
+                    ),
                     createElement(
                       "div",
-                      { className: "todo-meta" },
-                      createElement("span", null, task.owner),
-                      createElement("span", null, task.due),
-                      createElement(Badge, null, task.priority),
+                      { className: "flex flex-wrap gap-1.5" },
+                      createElement(
+                        "span",
+                        {
+                          className:
+                            "rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground",
+                        },
+                        task.owner,
+                      ),
+                      createElement(
+                        "span",
+                        {
+                          className:
+                            "rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground",
+                        },
+                        task.due,
+                      ),
+                      createElement(Badge, { variant: "secondary" }, task.priority),
                     ),
                   ),
                 ),
@@ -230,7 +259,7 @@ export const meetingActionsRegistry = createWaterRegistry({
           Button,
           {
             "aria-label": props.label,
-            className: "create-tasks-button",
+            className: "w-full",
             "data-action-id": props.actionId,
             onClick,
           },
