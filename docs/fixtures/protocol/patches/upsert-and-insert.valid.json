@@ -1,0 +1,23 @@
+{
+  "kind": "water.ui.patch",
+  "version": "water.ui.v1",
+  "target": "page",
+  "ops": [
+    {
+      "op": "upsertNode",
+      "id": "status_filter",
+      "node": {
+        "type": "StatusFilter",
+        "props": {
+          "stateKey": "filters.status"
+        }
+      }
+    },
+    {
+      "op": "insertChildBefore",
+      "parent": "page",
+      "before": "table",
+      "child": "status_filter"
+    }
+  ]
+}

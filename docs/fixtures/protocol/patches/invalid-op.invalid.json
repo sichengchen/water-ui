@@ -1,0 +1,11 @@
+{
+  "kind": "water.ui.patch",
+  "version": "water.ui.v1",
+  "target": "page",
+  "ops": [
+    {
+      "op": "teleportNode",
+      "id": "table"
+    }
+  ]
+}

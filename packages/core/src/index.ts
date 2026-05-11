@@ -409,3 +409,5 @@ function matchesProfile(
 
   return entryProfile.includes(requestedProfile);
 }
+
+export * from "./protocol.js";

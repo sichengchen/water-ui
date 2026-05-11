@@ -1,0 +1,10 @@
+{
+  "kind": "water.ui.document",
+  "version": "water.ui.v2",
+  "root": "page",
+  "nodes": {
+    "page": {
+      "type": "AdminPage"
+    }
+  }
+}

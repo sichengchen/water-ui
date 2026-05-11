@@ -1,0 +1,32 @@
+{
+  "kind": "water.ui.document",
+  "version": "water.ui.v1",
+  "root": "page",
+  "nodes": {
+    "table": {
+      "type": "CustomerTable",
+      "props": {
+        "dataRef": "queries.customers.data"
+      }
+    },
+    "page": {
+      "type": "AdminPage",
+      "props": {
+        "title": "Customers"
+      },
+      "children": ["table"],
+      "slots": {
+        "toolbar": "export"
+      }
+    },
+    "export": {
+      "type": "ExportButton",
+      "props": {
+        "actionId": "exportCustomers"
+      }
+    }
+  },
+  "meta": {
+    "intent": "customer dashboard"
+  }
+}

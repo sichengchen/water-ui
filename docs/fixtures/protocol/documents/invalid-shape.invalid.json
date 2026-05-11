@@ -1,0 +1,11 @@
+{
+  "kind": "water.ui.document",
+  "version": "water.ui.v1",
+  "root": "",
+  "nodes": {
+    "page": {
+      "type": "",
+      "children": "table"
+    }
+  }
+}

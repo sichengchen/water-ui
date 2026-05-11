@@ -1,0 +1,4 @@
+{"seq":1,"kind":"node.upsert","id":"page","type":"AdminPage","props":{"title":"Customers"}}
+{"seq":2,"kind":"node.upsert","id":"table","type":"CustomerTable","props":{"dataRef":"queries.customers.data"}}
+{"seq":3,"kind":"child.append","parent":"page","child":"table"}
+{"seq":4,"kind":"done"}
