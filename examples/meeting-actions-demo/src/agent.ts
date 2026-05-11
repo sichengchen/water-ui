@@ -25,8 +25,8 @@ export async function mockMeetingActionsAgent(): Promise<SchemaUIDocument> {
       meeting_page: {
         type: "MeetingPage",
         props: {
-          title: "Meeting actions",
-          description: "Review the summary, then create the follow-up tasks.",
+          title: "Todo list",
+          description: "Action items extracted from the meeting note.",
         },
         children: ["meeting_summary", "task_list", "create_tasks"],
       },

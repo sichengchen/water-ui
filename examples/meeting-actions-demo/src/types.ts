@@ -83,3 +83,59 @@ export const exampleMeetingSummary: MeetingSummary = {
     },
   ],
 };
+
+export function createMeetingSummaryFromNote(note: string): MeetingSummary {
+  const lines = note
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const title = lines[0]?.replace(/[.:]$/, "") || "Meeting note";
+  const taskLines = lines.slice(1).filter((line) => /\b(will|needs?|must|to|by)\b/i.test(line));
+  const tasks = (taskLines.length > 0 ? taskLines : lines.slice(1, 4)).map((line, index) =>
+    createTaskFromLine(line, index),
+  );
+
+  return {
+    title,
+    date: "Today",
+    attendees: inferAttendees(lines),
+    summary: lines.length > 1 ? lines.slice(1).join(" ") : "No meeting details were provided.",
+    decisions: ["Review extracted action items before creating tasks."],
+    tasks: tasks.length > 0 ? tasks : exampleMeetingSummary.tasks,
+  };
+}
+
+function inferAttendees(lines: readonly string[]): string[] {
+  const names = new Set<string>();
+
+  for (const line of lines) {
+    for (const match of line.matchAll(/\b[A-Z][a-z]+\b/g)) {
+      const name = match[0];
+      if (!["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Today"].includes(name)) {
+        names.add(name);
+      }
+    }
+  }
+
+  return names.size > 0 ? [...names].slice(0, 4) : ["Team"];
+}
+
+function createTaskFromLine(line: string, index: number): MeetingTask {
+  const owner = line.match(/^([A-Z][a-z]+)\b/)?.[1] ?? "Team";
+  const due = line.match(/\bby\s+([^,.]+)|\bbefore\s+([^,.]+)|\bfor\s+([^,.]+)/i);
+  const title = line
+    .replace(/^([A-Z][a-z]+)\s+(will|needs? to|must|to)\s+/i, "")
+    .replace(/\s+by\s+[^,.]+/i, "")
+    .replace(/\s+before\s+[^,.]+/i, "")
+    .replace(/\s+for\s+[^,.]+/i, "")
+    .replace(/[.]$/, "")
+    .trim();
+
+  return {
+    id: `task-${index + 1}`,
+    title: title || line,
+    owner,
+    due: due?.[1] ?? due?.[2] ?? due?.[3] ?? "Next",
+    priority: index === 0 ? "high" : "medium",
+  };
+}

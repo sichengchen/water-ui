@@ -1,15 +1,9 @@
 import { createWaterRegistry, defineWaterComponent } from "@water-ui/core";
 import { createElement } from "react";
 import { z } from "zod";
-import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./shadcn.js";
+import { Badge } from "./components/ui/badge.js";
+import { Button } from "./components/ui/button.js";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card.js";
 import { CREATE_TASKS_ACTION_ID, MEETING_SUMMARY_DATA_REF, meetingSummarySchema } from "./types.js";
 import type { WaterRenderBinding } from "@water-ui/react";
 import type { MeetingSummary } from "./types.js";
@@ -67,7 +61,7 @@ export const meetingActionsRegistry = createWaterRegistry({
       },
       render: (({ props, children }) =>
         createElement(
-          "main",
+          "section",
           {
             "aria-label": props.title,
             "data-demo": "meeting-actions",
@@ -75,7 +69,7 @@ export const meetingActionsRegistry = createWaterRegistry({
           createElement(
             "header",
             null,
-            createElement("h1", null, props.title),
+            createElement("h2", null, props.title),
             props.description ? createElement("p", null, props.description) : null,
           ),
           createElement("div", { "data-slot": "meeting-panel" }, children),
@@ -117,7 +111,7 @@ export const meetingActionsRegistry = createWaterRegistry({
             createElement("p", null, summary.summary),
             createElement(
               "ul",
-              { "aria-label": "Decisions" },
+              { "aria-label": "Decisions", className: "decision-list" },
               summary.decisions.map((decision) => createElement("li", { key: decision }, decision)),
             ),
           ),
@@ -147,23 +141,36 @@ export const meetingActionsRegistry = createWaterRegistry({
           createElement(
             CardHeader,
             null,
-            createElement(CardTitle, null, "Action items"),
-            createElement(CardDescription, null, `${summary.tasks.length} tasks ready to create`),
+            createElement(CardTitle, null, "Todo list"),
+            createElement(CardDescription, null, `${summary.tasks.length} tasks extracted`),
           ),
           createElement(
             CardContent,
             null,
             createElement(
               "ul",
-              { "aria-label": "Action items" },
+              { "aria-label": "Todo list", className: "todo-list" },
               summary.tasks.map((task) =>
                 createElement(
                   "li",
-                  { key: task.id },
-                  createElement("strong", null, task.title),
-                  createElement("span", null, ` Owner: ${task.owner}`),
-                  createElement("span", null, ` Due: ${task.due}`),
-                  createElement(Badge, null, task.priority),
+                  { key: task.id, className: "task-row" },
+                  createElement("input", {
+                    "aria-label": task.title,
+                    className: "todo-checkbox",
+                    type: "checkbox",
+                  }),
+                  createElement(
+                    "div",
+                    { className: "todo-content" },
+                    createElement("strong", null, task.title),
+                    createElement(
+                      "div",
+                      { className: "todo-meta" },
+                      createElement("span", null, task.owner),
+                      createElement("span", null, task.due),
+                      createElement(Badge, null, task.priority),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -223,6 +230,7 @@ export const meetingActionsRegistry = createWaterRegistry({
           Button,
           {
             "aria-label": props.label,
+            className: "create-tasks-button",
             "data-action-id": props.actionId,
             onClick,
           },

@@ -58,9 +58,9 @@ test("renders the verified panel and action creates tasks", async () => {
     ),
   );
 
-  expect(html).toContain("Meeting actions");
+  expect(html).toContain("Todo list");
   expect(html).toContain("Launch review");
-  expect(html).toContain("Action items");
+  expect(html).toContain("Todo list");
   expect(html).toContain("Create tasks");
 
   await expect(

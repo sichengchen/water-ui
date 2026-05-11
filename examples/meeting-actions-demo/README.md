@@ -15,5 +15,5 @@ The generated page is intentionally simple: meeting summary at the top, task lis
 ```sh
 vp install
 cd examples/meeting-actions-demo
-vp test
+vp dev
 ```

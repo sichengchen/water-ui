@@ -4,6 +4,7 @@ import {
   MEETING_SUMMARY_DATA_REF,
   createTasksInputSchema,
   createTasksOutputSchema,
+  createMeetingSummaryFromNote,
   exampleMeetingSummary,
   meetingSummarySchema,
 } from "./types.js";
@@ -42,7 +43,7 @@ export function createMeetingRuntime(
     inputSchema: createTasksInputSchema,
     outputSchema: createTasksOutputSchema,
     handler: (input) => {
-      createdTasks.push(...input.tasks);
+      createdTasks.splice(0, createdTasks.length, ...input.tasks);
       return {
         created: input.tasks.length,
       };
@@ -59,4 +60,8 @@ export function createMeetingRuntime(
     renderRuntime,
     getCreatedTasks: () => Object.freeze([...createdTasks]),
   };
+}
+
+export function createMeetingRuntimeFromNote(note: string): MeetingRuntime {
+  return createMeetingRuntime(createMeetingSummaryFromNote(note));
 }
