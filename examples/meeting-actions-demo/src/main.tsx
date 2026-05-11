@@ -127,6 +127,7 @@ function App(): ReactNode {
               className="w-full"
               disabled={!canSend}
               onClick={() => void sendMessage()}
+              variant="outline"
             >
               {chat.status === "thinking" ? "Thinking..." : defaultPrompt}
             </Button>
