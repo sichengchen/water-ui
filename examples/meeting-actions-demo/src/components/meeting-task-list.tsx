@@ -1,3 +1,4 @@
+import { UsersIcon } from "lucide-react";
 import { Badge } from "./ui/badge.js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card.js";
 import { Checkbox } from "./ui/checkbox.js";
@@ -33,7 +34,10 @@ export function MeetingTaskList({ tasks }: MeetingTaskListProps): ReactNode {
                       </Badge>
                     ))}
                   </div>
-                  <p className="text-xs text-muted-foreground">People: {task.people.join(", ")}</p>
+                  <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <UsersIcon aria-hidden="true" className="size-3" />
+                    <span>{task.people.join(", ")}</span>
+                  </p>
                 </div>
               </label>
             </li>
