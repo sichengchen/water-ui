@@ -3,10 +3,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { expect, test } from "vite-plus/test";
 import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/react";
 import {
-  CREATE_TASKS_ACTION_ID,
   compileMeetingActionsPrompt,
   createMeetingRuntime,
-  exampleMeetingSummary,
   meetingActionsRegistry,
   mockMeetingActionsAgent,
   runMeetingActionsDemo,
@@ -23,7 +21,7 @@ test("mock agent output verifies against app components and runtime capabilities
 
   expect(verification.ok).toBe(true);
   expect(runtime.capabilityRuntime.describe()).toEqual({
-    actions: [CREATE_TASKS_ACTION_ID],
+    actions: [],
     dataRefs: [],
     stateKeys: [],
   });
@@ -43,10 +41,10 @@ test("compiled prompt exposes only registered app components and runtime ids", (
   expect(prompt).not.toContain("MeetingPage");
   expect(prompt).not.toContain("SummaryCard");
   expect(prompt).not.toContain("ActionButton");
-  expect(prompt).not.toContain(CREATE_TASKS_ACTION_ID);
+  expect(prompt).not.toContain("actions.createTasks");
 });
 
-test("renders the verified panel and action creates tasks", async () => {
+test("renders the verified todo list", async () => {
   const result = await runMeetingActionsDemo();
 
   const html = renderToStaticMarkup(
@@ -63,13 +61,4 @@ test("renders the verified panel and action creates tasks", async () => {
   expect(html).toContain("Todo list");
   expect(html).toContain("Todo list");
   expect(html).not.toContain("Create tasks");
-
-  await expect(
-    result.runtime.capabilityRuntime.runAction(CREATE_TASKS_ACTION_ID, {
-      tasks: exampleMeetingSummary.tasks,
-    }),
-  ).resolves.toEqual({
-    created: exampleMeetingSummary.tasks.length,
-  });
-  expect(result.runtime.getCreatedTasks()).toEqual(exampleMeetingSummary.tasks);
 });

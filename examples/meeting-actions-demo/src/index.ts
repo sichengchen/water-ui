@@ -15,16 +15,11 @@ export {
   type MeetingRuntime,
 } from "./runtime.js";
 export {
-  CREATE_TASKS_ACTION_ID,
-  createTasksInputSchema,
-  createTasksOutputSchema,
   createMeetingSummaryFromNote,
   exampleMeetingNote,
   exampleMeetingSummary,
   meetingSummarySchema,
   meetingTaskSchema,
-  type CreateTasksInput,
-  type CreateTasksOutput,
   type MeetingSummary,
   type MeetingTask,
 } from "./types.js";

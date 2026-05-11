@@ -21,24 +21,8 @@ export const meetingSummarySchema = z
   })
   .strict();
 
-export const createTasksInputSchema = z
-  .object({
-    tasks: z.array(meetingTaskSchema),
-  })
-  .strict();
-
-export const createTasksOutputSchema = z
-  .object({
-    created: z.number().int().nonnegative(),
-  })
-  .strict();
-
 export type MeetingTask = z.infer<typeof meetingTaskSchema>;
 export type MeetingSummary = z.infer<typeof meetingSummarySchema>;
-export type CreateTasksInput = z.infer<typeof createTasksInputSchema>;
-export type CreateTasksOutput = z.infer<typeof createTasksOutputSchema>;
-
-export const CREATE_TASKS_ACTION_ID = "actions.createTasks";
 
 export const exampleMeetingNote = [
   "Launch review, Monday 10:00.",

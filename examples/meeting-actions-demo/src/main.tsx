@@ -9,11 +9,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./com
 import { Textarea } from "./components/ui/textarea.js";
 import { meetingActionsRegistry } from "./registry.js";
 import { createMeetingRuntimeFromNote } from "./runtime.js";
-import { CREATE_TASKS_ACTION_ID, exampleMeetingNote, meetingTaskSchema } from "./types.js";
+import { exampleMeetingNote } from "./types.js";
 import "./styles.css";
 import type { VerifiedSchemaUI } from "@water-ui/core";
 import type { MeetingRuntime } from "./runtime.js";
-import type { MeetingTask } from "./types.js";
 import type { ReactNode } from "react";
 
 type ChatState =
@@ -28,7 +27,6 @@ type ChatState =
       status: "ready";
       prompt: string;
       ui: VerifiedSchemaUI;
-      tasks: readonly MeetingTask[];
       meetingRuntime: MeetingRuntime;
     }
   | {
@@ -72,7 +70,6 @@ function App(): ReactNode {
         status: "ready",
         prompt: defaultPrompt,
         ui: verification.ui,
-        tasks: getGeneratedTasks(verification.ui),
         meetingRuntime: runtime,
       });
     } catch (error) {
@@ -125,7 +122,6 @@ function App(): ReactNode {
                 : null}
               {renderAssistantMessage(chat)}
             </div>
-            {renderCreateTasksButton(chat)}
             <Button
               aria-label={defaultPrompt}
               className="w-full"
@@ -189,37 +185,10 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
   );
 }
 
-function renderCreateTasksButton(chat: ChatState): ReactNode {
-  if (chat.status !== "ready") {
-    return null;
-  }
-
-  return (
-    <Button
-      aria-label="Create tasks"
-      className="w-full"
-      data-action-id={CREATE_TASKS_ACTION_ID}
-      onClick={() => {
-        void chat.meetingRuntime.capabilityRuntime.runAction(CREATE_TASKS_ACTION_ID, {
-          tasks: chat.tasks,
-        });
-      }}
-    >
-      Create tasks
-    </Button>
-  );
-}
-
 function wait(ms: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
-}
-
-function getGeneratedTasks(ui: VerifiedSchemaUI): readonly MeetingTask[] {
-  const rootNode = ui.nodes[ui.root];
-
-  return meetingTaskSchema.array().parse(rootNode?.props?.tasks);
 }
 
 const root = document.getElementById("root");
