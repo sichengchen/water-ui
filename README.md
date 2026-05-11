@@ -36,6 +36,7 @@ Completed gates:
 - Gate 7: Semantic Patch
 - Gate 8: Streaming
 - Gate 9: Prompt Compiler
+- Gate 10: DevTools
 
 Implemented now:
 
@@ -72,7 +73,9 @@ Implemented now:
 - registry/runtime prompt compiler
 - document, patch, stream, and repair prompt modes
 - prompt golden fixtures
+- DevTools inspection panels
+- debug event protocol
 
 Intentionally not implemented yet:
 
-- DevTools
+- eval harness

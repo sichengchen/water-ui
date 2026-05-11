@@ -14,6 +14,14 @@ Required panels:
 - Prompt Viewer
 - Render Viewer
 
+Gate 10 implementation:
+
+- `createDevToolsInspection` produces a serializable panel map for all required
+  panels.
+- Individual `inspect*` functions support embedding one panel at a time.
+- `createDebugEventBus` provides the debug event protocol.
+- Inspectors are read-only and do not mutate runtime state.
+
 DevTools must answer:
 
 - Why was this node accepted?

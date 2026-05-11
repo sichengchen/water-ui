@@ -16,11 +16,18 @@
   },
   "scripts": {
     "build": "vp pack",
-    "check": "vp check"
+    "check": "vp check",
+    "test": "vp test"
+  },
+  "dependencies": {
+    "@water-ui/core": "workspace:*",
+    "@water-ui/prompt": "workspace:*",
+    "@water-ui/runtime": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "typescript": "catalog:",
-    "vite-plus": "catalog:"
+    "vite-plus": "catalog:",
+    "zod": "catalog:"
   }
 }

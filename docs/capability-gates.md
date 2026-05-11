@@ -281,19 +281,19 @@ Completion evidence:
 
 ## Gate 10: DevTools
 
-Status: planned
+Status: completed
 
 Acceptance criteria:
 
-- Can inspect registry.
-- Can inspect raw Schema UI.
-- Can inspect VerifiedSchemaUI.
-- Can inspect validation errors.
-- Can inspect patches.
-- Can inspect stream events.
-- Can inspect runtime events.
-- Can inspect compiled prompts.
-- Can inspect render bindings.
+- [x] Can inspect registry.
+- [x] Can inspect raw Schema UI.
+- [x] Can inspect VerifiedSchemaUI.
+- [x] Can inspect validation errors.
+- [x] Can inspect patches.
+- [x] Can inspect stream events.
+- [x] Can inspect runtime events.
+- [x] Can inspect compiled prompts.
+- [x] Can inspect render bindings.
 
 Deliverables:
 
@@ -302,3 +302,8 @@ Deliverables:
 - debug event protocol
 - inspection API
 - example integration
+
+Completion evidence:
+
+- implementation: `packages/devtools/src/index.ts`
+- tests: `packages/devtools/tests/devtools.test.ts`
