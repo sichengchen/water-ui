@@ -1,5 +1,11 @@
 import { normalizeSchemaUIDocument } from "./protocol.js";
-import type { DiagnosticSeverity, WaterComponentEntry, WaterRegistry } from "./index.js";
+import type {
+  DiagnosticSeverity,
+  RegistryDiagnostic,
+  RegistryDiagnosticCode,
+  WaterComponentEntry,
+  WaterRegistry,
+} from "./index.js";
 import type { SchemaUIDiagnostic, SchemaUIDocument, SchemaUINode } from "./protocol.js";
 
 const verifiedSchemaUIBrand: unique symbol = Symbol("VerifiedSchemaUI");
@@ -18,6 +24,7 @@ export type RuntimeCapabilityDescription = {
 
 export type VerificationDiagnosticCode =
   | SchemaUIDiagnostic["code"]
+  | RegistryDiagnosticCode
   | "invalid_document_root_reference"
   | "invalid_node_reference"
   | "unreachable_node"
@@ -78,6 +85,10 @@ export function verifyDocument(input: unknown, options: VerifyDocumentOptions): 
   const parsed = normalizeSchemaUIDocument(input);
   if (!parsed.ok) {
     return fail(parsed.diagnostics);
+  }
+
+  if (!options.registry.ok) {
+    return fail(options.registry.diagnostics);
   }
 
   const document = parsed.value;
@@ -437,7 +448,7 @@ function verifyProps(
   diagnostics: VerificationDiagnostic[],
 ): PropsVerificationResult {
   if (!entry.propsSchema) {
-    return { ok: true, props: node.props };
+    return { ok: true, props: node.props ? freezeRecordDeep(node.props) : undefined };
   }
 
   const propsPath = `$.nodes.${toPathKey(nodeId)}.props`;
@@ -458,7 +469,7 @@ function verifyProps(
       return { ok: false };
     }
 
-    return { ok: true, props: Object.freeze({ ...result.data }) };
+    return { ok: true, props: freezeRecordDeep(result.data) };
   }
 
   for (const issue of result.error.issues) {
@@ -597,10 +608,49 @@ function cloneNodeMap(nodes: Record<string, SchemaUINode>): Record<string, Schem
 function freezeNode(node: SchemaUINode): SchemaUINode {
   return Object.freeze({
     type: node.type,
-    ...(node.props ? { props: Object.freeze({ ...node.props }) } : {}),
+    ...(node.props ? { props: freezeRecordDeep(node.props) } : {}),
     ...(node.children ? { children: Object.freeze([...node.children]) } : {}),
     ...(node.slots ? { slots: freezeSlots(node.slots) } : {}),
   }) as SchemaUINode;
+}
+
+function freezeRecordDeep(
+  value: Record<string, unknown>,
+  seen: WeakMap<object, unknown> = new WeakMap(),
+): Record<string, unknown> {
+  const cached = seen.get(value);
+  if (cached) {
+    return cached as Record<string, unknown>;
+  }
+
+  const cloned: Record<string, unknown> = Object.create(null);
+  seen.set(value, cloned);
+
+  for (const [key, child] of Object.entries(value)) {
+    cloned[key] = freezeJsonLike(child, seen);
+  }
+
+  return Object.freeze(cloned);
+}
+
+function freezeJsonLike(value: unknown, seen: WeakMap<object, unknown>): unknown {
+  if (Array.isArray(value)) {
+    const cached = seen.get(value);
+    if (cached) {
+      return cached;
+    }
+
+    const cloned: unknown[] = [];
+    seen.set(value, cloned);
+    cloned.push(...value.map((item) => freezeJsonLike(item, seen)));
+    return Object.freeze(cloned);
+  }
+
+  if (isRecord(value)) {
+    return freezeRecordDeep(value, seen);
+  }
+
+  return value;
 }
 
 function freezeSlots(slots: Record<string, string | string[]>): Record<string, string | string[]> {
@@ -639,15 +689,15 @@ function isRuntimeReferenceKey(key: string): boolean {
 }
 
 function getRuntimeReferenceKind(key: string): "action" | "dataRef" | "stateKey" | undefined {
-  if (key === "actionId" || key.endsWith("ActionId")) {
+  if (key === "actionId") {
     return "action";
   }
 
-  if (key === "dataRef" || key.endsWith("DataRef")) {
+  if (key === "dataRef") {
     return "dataRef";
   }
 
-  if (key === "stateKey" || key.endsWith("StateKey")) {
+  if (key === "stateKey") {
     return "stateKey";
   }
 
@@ -709,7 +759,7 @@ function diagnostic(
 }
 
 function fail(
-  diagnostics: readonly (VerificationDiagnostic | SchemaUIDiagnostic)[],
+  diagnostics: readonly (VerificationDiagnostic | SchemaUIDiagnostic | RegistryDiagnostic)[],
 ): VerificationResult {
   return Object.freeze({
     ok: false,

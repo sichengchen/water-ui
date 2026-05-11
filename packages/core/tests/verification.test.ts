@@ -7,7 +7,11 @@ import {
   isVerifiedSchemaUI,
   verifyDocument,
 } from "../src/index.ts";
-import type { RuntimeCapabilityDescription, VerificationResult } from "../src/index.ts";
+import type {
+  RuntimeCapabilityDescription,
+  VerificationResult,
+  WaterRegistryInput,
+} from "../src/index.ts";
 
 const fixtureRoot = new URL("../../../docs/fixtures/verification/", import.meta.url);
 
@@ -207,6 +211,125 @@ test("stores Zod-parsed props in VerifiedSchemaUI", () => {
   expect(ui.nodes.settings?.props).toEqual({
     pageSize: 25,
   });
+});
+
+test("deep-freezes verified props without freezing source input", () => {
+  const source = {
+    kind: "water.ui.document",
+    version: "water.ui.v1",
+    root: "settings",
+    nodes: {
+      settings: {
+        type: "DisplaySettings",
+        props: {
+          pageSize: "25",
+          nested: {
+            items: ["source"],
+          },
+        },
+      },
+    },
+  };
+  const localRegistry = createWaterRegistry({
+    components: {
+      DisplaySettings: {
+        description: "Stores nested display settings.",
+        children: "none",
+        propsSchema: z
+          .object({
+            pageSize: z.coerce.number().int().positive(),
+            nested: z.object({
+              items: z.array(z.string()),
+            }),
+          })
+          .strict(),
+      },
+    },
+  });
+  const result = verifyDocument(source, { registry: localRegistry, runtime });
+  const ui = expectVerified(result);
+  const props = ui.nodes.settings?.props as {
+    nested: {
+      items: string[];
+    };
+  };
+
+  expect(Object.isFrozen(props)).toBe(true);
+  expect(Object.isFrozen(props.nested)).toBe(true);
+  expect(Object.isFrozen(props.nested.items)).toBe(true);
+  expect(Object.isFrozen(source.nodes.settings.props.nested.items)).toBe(false);
+});
+
+test("rejects verification when the registry has diagnostics", () => {
+  const invalidRegistry = createWaterRegistry({
+    components: {
+      DisplaySettings: {
+        description: "Valid component retained in an invalid registry.",
+      },
+      MissingDescription: {},
+    } as unknown as WaterRegistryInput,
+  });
+
+  const result = verifyDocument(
+    {
+      kind: "water.ui.document",
+      version: "water.ui.v1",
+      root: "settings",
+      nodes: {
+        settings: {
+          type: "DisplaySettings",
+        },
+      },
+    },
+    { registry: invalidRegistry, runtime },
+  );
+
+  expect(result.ok).toBe(false);
+  expect(result.diagnostics).toEqual([
+    expect.objectContaining({
+      code: "missing_component_description",
+      path: "$.components.MissingDescription.description",
+    }),
+  ]);
+});
+
+test("does not treat every ActionId/DataRef/StateKey suffix as a runtime capability", () => {
+  const localRegistry = createWaterRegistry({
+    components: {
+      CommandPalette: {
+        description: "Uses local identifiers that are not runtime capability references.",
+        children: "none",
+        propsSchema: z
+          .object({
+            primaryActionId: z.string(),
+            cachedDataRef: z.string(),
+            defaultStateKey: z.string(),
+          })
+          .strict(),
+      },
+    },
+  });
+
+  const result = verifyDocument(
+    {
+      kind: "water.ui.document",
+      version: "water.ui.v1",
+      root: "palette",
+      nodes: {
+        palette: {
+          type: "CommandPalette",
+          props: {
+            primaryActionId: "local-action",
+            cachedDataRef: "local-data",
+            defaultStateKey: "local-state",
+          },
+        },
+      },
+    },
+    { registry: localRegistry, runtime },
+  );
+
+  expect(result.ok).toBe(true);
 });
 
 test("validates action IDs, data refs, and state keys against runtime capabilities", () => {

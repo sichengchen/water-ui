@@ -122,6 +122,31 @@ test("rejects invalid semantic patch operations", () => {
   ]);
 });
 
+test("uses patch diagnostics for invalid patch props", () => {
+  const result = parseSchemaUIPatch({
+    kind: "water.ui.patch",
+    version: "water.ui.v1",
+    target: "page",
+    ops: [
+      {
+        op: "updateProps",
+        id: "table",
+        props: [],
+      },
+    ],
+  });
+
+  expect(result.ok).toBe(false);
+  expect(result.diagnostics).toEqual([
+    {
+      code: "invalid_patch_operation",
+      severity: "error",
+      path: "$.ops[0].props",
+      message: "Expected an object.",
+    },
+  ]);
+});
+
 test("parses JSONL stream event fixtures", () => {
   const results = readJsonlFixture("streams/basic.valid.jsonl").map((line) =>
     parseSchemaUIStreamEvent(line),
@@ -157,6 +182,25 @@ test("rejects invalid stream events with stable diagnostics", () => {
       severity: "error",
       path: "$.kind",
       message: "Unsupported stream event kind 'unknown.event'.",
+    },
+  ]);
+});
+
+test("uses stream diagnostics for invalid stream props", () => {
+  const result = parseSchemaUIStreamEvent({
+    seq: 0,
+    kind: "node.props.update",
+    id: "table",
+    props: [],
+  });
+
+  expect(result.ok).toBe(false);
+  expect(result.diagnostics).toEqual([
+    {
+      code: "invalid_stream_event",
+      severity: "error",
+      path: "$.props",
+      message: "Expected an object.",
     },
   ]);
 });

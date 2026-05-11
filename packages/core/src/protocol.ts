@@ -162,7 +162,9 @@ export function parseSchemaUIDocument(input: unknown): SchemaUIParseResult<Schem
   const root = parseNodeId(raw.root, "$.root", "invalid_document_root", diagnostics);
   const nodes = parseNodeMap(raw.nodes, "$.nodes", diagnostics);
   const meta =
-    raw.meta === undefined ? undefined : parseOptionalRecord(raw.meta, "$.meta", diagnostics);
+    raw.meta === undefined
+      ? undefined
+      : parseOptionalRecord(raw.meta, "$.meta", "invalid_protocol_input", diagnostics);
 
   if (hasErrors(diagnostics) || root === undefined || nodes === undefined) {
     return fail(diagnostics);
@@ -225,7 +227,9 @@ export function parseSchemaUIPatch(input: unknown): SchemaUIParseResult<SchemaUI
   const target = parseNodeId(raw.target, "$.target", "invalid_patch_target", diagnostics);
   const ops = parsePatchOperations(raw.ops, "$.ops", diagnostics);
   const meta =
-    raw.meta === undefined ? undefined : parseOptionalRecord(raw.meta, "$.meta", diagnostics);
+    raw.meta === undefined
+      ? undefined
+      : parseOptionalRecord(raw.meta, "$.meta", "invalid_protocol_input", diagnostics);
 
   if (hasErrors(diagnostics) || target === undefined || ops === undefined) {
     return fail(diagnostics);
@@ -348,7 +352,7 @@ function parseNode(
   const props =
     input.props === undefined
       ? undefined
-      : parseOptionalRecord(input.props, `${path}.props`, diagnostics);
+      : parseOptionalRecord(input.props, `${path}.props`, "invalid_node_props", diagnostics);
   const children =
     input.children === undefined
       ? undefined
@@ -472,7 +476,12 @@ function parsePatchOperation(
 
     case "updateProps": {
       const id = parsePatchNodeId(input.id, `${path}.id`, diagnostics);
-      const props = parseOptionalRecord(input.props, `${path}.props`, diagnostics);
+      const props = parseOptionalRecord(
+        input.props,
+        `${path}.props`,
+        "invalid_patch_operation",
+        diagnostics,
+      );
       return id && props
         ? Object.freeze({ op, id, props: Object.freeze({ ...props }) })
         : undefined;
@@ -599,7 +608,7 @@ function parseStreamEventByKind(
       const props =
         raw.props === undefined
           ? undefined
-          : parseOptionalRecord(raw.props, `${path}.props`, diagnostics);
+          : parseOptionalRecord(raw.props, `${path}.props`, "invalid_stream_event", diagnostics);
       const children =
         raw.children === undefined
           ? undefined
@@ -641,7 +650,12 @@ function parseStreamEventByKind(
 
     case "node.props.update": {
       const id = parseStreamNodeId(raw.id, `${path}.id`, diagnostics);
-      const props = parseOptionalRecord(raw.props, `${path}.props`, diagnostics);
+      const props = parseOptionalRecord(
+        raw.props,
+        `${path}.props`,
+        "invalid_stream_event",
+        diagnostics,
+      );
       return id && props ? { seq, kind, id, props: Object.freeze({ ...props }) } : undefined;
     }
 
@@ -826,10 +840,11 @@ function parseSlotValue(
 function parseOptionalRecord(
   value: unknown,
   path: string,
+  code: SchemaUIDiagnosticCode,
   diagnostics: SchemaUIDiagnostic[],
 ): Record<string, unknown> | undefined {
   if (!isRecord(value)) {
-    diagnostics.push(diagnostic("invalid_node_props", path, "Expected an object."));
+    diagnostics.push(diagnostic(code, path, "Expected an object."));
     return undefined;
   }
 
