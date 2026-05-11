@@ -36,12 +36,11 @@ test("compiled prompt exposes only registered app components and runtime ids", (
     runtime: runtime.capabilityRuntime.describe(),
   });
 
-  expect(prompt).toContain("MeetingPage");
-  expect(prompt).toContain("SummaryCard");
   expect(prompt).toContain("TaskList");
-  expect(prompt).toContain("ActionButton");
   expect(prompt).toContain(MEETING_SUMMARY_DATA_REF);
-  expect(prompt).toContain(CREATE_TASKS_ACTION_ID);
+  expect(prompt).not.toContain("MeetingPage");
+  expect(prompt).not.toContain("SummaryCard");
+  expect(prompt).not.toContain("ActionButton");
 });
 
 test("renders the verified panel and action creates tasks", async () => {
@@ -60,7 +59,7 @@ test("renders the verified panel and action creates tasks", async () => {
 
   expect(html).toContain("Todo list");
   expect(html).toContain("Todo list");
-  expect(html).toContain("Create tasks");
+  expect(html).not.toContain("Create tasks");
 
   await expect(
     result.runtime.capabilityRuntime.runAction(CREATE_TASKS_ACTION_ID, {

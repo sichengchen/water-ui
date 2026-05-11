@@ -13,6 +13,7 @@ import type { WaterRuntime } from "@water-ui/runtime";
 import type { CreateTasksInput, CreateTasksOutput, MeetingSummary, MeetingTask } from "./types.js";
 
 export type MeetingRuntime = {
+  summary: MeetingSummary;
   capabilityRuntime: WaterRuntime;
   renderRuntime: ReactWaterRuntime;
   getCreatedTasks: () => readonly MeetingTask[];
@@ -56,6 +57,7 @@ export function createMeetingRuntime(
   };
 
   return {
+    summary,
     capabilityRuntime,
     renderRuntime,
     getCreatedTasks: () => Object.freeze([...createdTasks]),

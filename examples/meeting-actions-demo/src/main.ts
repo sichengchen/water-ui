@@ -9,10 +9,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./com
 import { Textarea } from "./components/ui/textarea.js";
 import { meetingActionsRegistry } from "./registry.js";
 import { createMeetingRuntimeFromNote } from "./runtime.js";
-import { exampleMeetingNote } from "./types.js";
+import { CREATE_TASKS_ACTION_ID, MEETING_SUMMARY_DATA_REF, exampleMeetingNote } from "./types.js";
 import "./styles.css";
 import type { VerifiedSchemaUI } from "@water-ui/core";
-import type { WaterRuntime as ReactWaterRuntime } from "@water-ui/react";
+import type { MeetingRuntime } from "./runtime.js";
 import type { ReactNode } from "react";
 
 type ChatState =
@@ -27,7 +27,7 @@ type ChatState =
       status: "ready";
       prompt: string;
       ui: VerifiedSchemaUI;
-      renderRuntime: ReactWaterRuntime;
+      meetingRuntime: MeetingRuntime;
     }
   | {
       status: "error";
@@ -72,7 +72,7 @@ function App(): ReactNode {
         status: "ready",
         prompt: sentPrompt,
         ui: verification.ui,
-        renderRuntime: runtime.renderRuntime,
+        meetingRuntime: runtime,
       });
     } catch (error) {
       setChat({
@@ -147,6 +147,7 @@ function App(): ReactNode {
               : null,
             renderAssistantMessage(chat),
           ),
+          renderCreateTasksButton(chat),
           createElement(
             "div",
             {
@@ -243,10 +244,32 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
       WaterRuntimeProvider,
       {
         registry: meetingActionsRegistry,
-        runtime: chat.renderRuntime,
+        runtime: chat.meetingRuntime.renderRuntime,
       },
       createElement(WaterRenderer, { ui: chat.ui }),
     ),
+  );
+}
+
+function renderCreateTasksButton(chat: ChatState): ReactNode {
+  if (chat.status !== "ready") {
+    return null;
+  }
+
+  return createElement(
+    Button,
+    {
+      "aria-label": "Create tasks",
+      className: "w-full",
+      "data-action-id": CREATE_TASKS_ACTION_ID,
+      onClick: () => {
+        void chat.meetingRuntime.capabilityRuntime.runAction(CREATE_TASKS_ACTION_ID, {
+          dataRef: MEETING_SUMMARY_DATA_REF,
+          tasks: chat.meetingRuntime.summary.tasks,
+        });
+      },
+    },
+    "Create tasks",
   );
 }
 
