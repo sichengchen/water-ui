@@ -163,19 +163,19 @@ Completion evidence:
 
 ## Gate 6: Runtime
 
-Status: planned
+Status: completed
 
 Acceptance criteria:
 
-- Can register state.
-- Can register queries.
-- Can register actions.
-- Can register mutations.
-- Can enforce permission guard.
-- Can resolve dataRef.
-- Can run actionId safely.
-- Can log runtime events.
-- Can block unknown capabilities.
+- [x] Can register state.
+- [x] Can register queries.
+- [x] Can register actions.
+- [x] Can register mutations.
+- [x] Can enforce permission guard.
+- [x] Can resolve dataRef.
+- [x] Can run actionId safely.
+- [x] Can log runtime events.
+- [x] Can block unknown capabilities.
 
 Deliverables:
 
@@ -184,6 +184,11 @@ Deliverables:
 - state/query/action/mutation registries
 - permission model
 - runtime tests
+
+Completion evidence:
+
+- implementation: `packages/runtime/src/index.ts`
+- tests: `packages/runtime/tests/runtime.test.ts`
 
 ## Gate 7: Semantic Patch
 

@@ -32,6 +32,7 @@ Completed gates:
 - Gate 3: Verification
 - Gate 4: React Renderer
 - Gate 5: shadcn Registry Adapter
+- Gate 6: Runtime
 
 Implemented now:
 
@@ -57,10 +58,12 @@ Implemented now:
 - shadcn render binding factory
 - shadcn prompt examples
 - shadcn project-local import alias helpers
+- runtime state, query, action, and mutation registries
+- runtime permission guard and event log
+- safe data/action/mutation execution boundary
 
 Intentionally not implemented yet:
 
-- runtime capability execution
 - semantic patch application
 - streaming state application
 - DevTools

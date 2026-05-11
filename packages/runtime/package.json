@@ -16,7 +16,12 @@
   },
   "scripts": {
     "build": "vp pack",
-    "check": "vp check"
+    "check": "vp check",
+    "test": "vp test"
+  },
+  "dependencies": {
+    "@water-ui/core": "workspace:*",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",

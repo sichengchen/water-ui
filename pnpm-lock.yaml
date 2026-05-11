@@ -158,6 +158,13 @@ importers:
         version: 0.1.20(@types/node@24.12.3)(typescript@5.9.3)(vite@8.0.11(@types/node@24.12.3))
 
   packages/runtime:
+    dependencies:
+      '@water-ui/core':
+        specifier: workspace:*
+        version: link:../core
+      zod:
+        specifier: 'catalog:'
+        version: 4.4.3
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
