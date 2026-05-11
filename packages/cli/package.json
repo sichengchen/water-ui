@@ -1,0 +1,29 @@
+{
+  "name": "@water-ui/cli",
+  "version": "0.0.0",
+  "description": "Command-line tools for Water UI.",
+  "license": "MIT",
+  "bin": {
+    "water-ui": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "check": "vp check"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}
