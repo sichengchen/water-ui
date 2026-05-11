@@ -149,8 +149,8 @@ export const meetingActionsRegistry = createWaterRegistry({
           createElement(
             CardHeader,
             { className: "px-0" },
-            createElement(CardTitle, null, "Todo list"),
-            createElement(CardDescription, null, `${summary.tasks.length} tasks extracted`),
+            createElement(CardTitle, { className: "text-base" }, "Todo list"),
+            createElement(CardDescription, null, `${summary.tasks.length} extracted tasks`),
           ),
           createElement(
             CardContent,
@@ -163,12 +163,11 @@ export const meetingActionsRegistry = createWaterRegistry({
                   "li",
                   {
                     key: task.id,
-                    className:
-                      "rounded-md border bg-background transition-colors hover:bg-muted/40",
+                    className: "rounded-md bg-muted/40 transition-colors hover:bg-muted/70",
                   },
                   createElement(
                     "label",
-                    { className: "grid cursor-pointer grid-cols-[1rem_minmax(0,1fr)] gap-3 p-2.5" },
+                    { className: "grid cursor-pointer grid-cols-[1rem_minmax(0,1fr)] gap-3 p-2" },
                     createElement(Checkbox, {
                       "aria-label": task.title,
                       className: "mt-0.5",
@@ -188,7 +187,7 @@ export const meetingActionsRegistry = createWaterRegistry({
                           "span",
                           {
                             className:
-                              "rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground",
+                              "rounded-md bg-background px-2 py-0.5 text-xs text-muted-foreground",
                           },
                           task.owner,
                         ),
@@ -196,7 +195,7 @@ export const meetingActionsRegistry = createWaterRegistry({
                           "span",
                           {
                             className:
-                              "rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground",
+                              "rounded-md bg-background px-2 py-0.5 text-xs text-muted-foreground",
                           },
                           task.due,
                         ),

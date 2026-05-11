@@ -98,7 +98,6 @@ function App(): ReactNode {
             "div",
             { className: "flex items-start justify-between gap-3" },
             createElement(CardTitle, null, "Notebook"),
-            createElement(Badge, { variant: "outline" }, `${getNoteLineCount(note)} lines`),
           ),
           createElement(CardDescription, null, "Demo meeting note"),
         ),
@@ -136,12 +135,12 @@ function App(): ReactNode {
         ),
         createElement(
           CardContent,
-          { className: "flex min-h-0 flex-1 flex-col gap-4" },
+          { className: "flex min-h-0 flex-1 flex-col gap-3" },
           createElement(
             "div",
             {
               className:
-                "flex min-h-64 flex-col gap-3 overflow-auto rounded-lg bg-muted/30 p-3 max-lg:min-h-80",
+                "flex min-h-0 flex-col gap-3 overflow-auto rounded-lg bg-muted/30 p-3 empty:hidden",
               "aria-live": "polite",
             },
             chat.status === "thinking" || chat.status === "ready"
@@ -153,12 +152,12 @@ function App(): ReactNode {
             "div",
             {
               className:
-                "grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 border-t pt-4 max-sm:grid-cols-1",
+                "grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 pt-2 max-sm:grid-cols-1",
             },
             createElement(Textarea, {
               "aria-label": "Chat message",
               autoComplete: "off",
-              className: "min-h-20 resize-none",
+              className: "min-h-16 resize-none",
               name: "chat-message",
               value: prompt,
               onChange: (event) => setPrompt(event.currentTarget.value),
@@ -242,7 +241,7 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
 
   return createElement(
     "div",
-    { className: "mr-auto w-full max-w-full" },
+    { className: "mr-auto max-w-[92%] rounded-lg border bg-background p-3 shadow-xs" },
     createElement(
       WaterRuntimeProvider,
       {
@@ -252,10 +251,6 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
       createElement(WaterRenderer, { ui: chat.ui }),
     ),
   );
-}
-
-function getNoteLineCount(note: string): number {
-  return note.split(/\r?\n/).filter((line) => line.trim().length > 0).length;
 }
 
 function wait(ms: number): Promise<void> {
