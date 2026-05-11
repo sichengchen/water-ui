@@ -31,6 +31,7 @@ Completed gates:
 - Gate 2: Schema UI Protocol
 - Gate 3: Verification
 - Gate 4: React Renderer
+- Gate 5: shadcn Registry Adapter
 
 Implemented now:
 
@@ -52,10 +53,13 @@ Implemented now:
 - registry render bindings
 - runtime data/action binding helpers
 - render diagnostics and safe fallbacks
+- optional shadcn registry entries
+- shadcn render binding factory
+- shadcn prompt examples
+- shadcn project-local import alias helpers
 
 Intentionally not implemented yet:
 
-- shadcn adapter
 - runtime capability execution
 - semantic patch application
 - streaming state application

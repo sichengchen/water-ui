@@ -1,6 +1,6 @@
 # Use the shadcn Adapter
 
-Status: planned for Gate 5.
+Status: available in Gate 5.
 
 The shadcn adapter provides optional registry entries and render bindings.
 
@@ -25,3 +25,36 @@ Rules:
 - User entries live in the application registry.
 - Water core does not import shadcn.
 - Prompt summaries are generated from the merged registry.
+
+To use project-local shadcn source components, pass them to the binding factory:
+
+```ts
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { createShadcnComponents } from "@water-ui/adapter-shadcn";
+
+const shadcnComponents = createShadcnComponents({
+  components: {
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+  },
+});
+```
+
+The adapter also exposes import alias helpers for tools that need to describe
+where project-local shadcn modules live:
+
+```ts
+import { createShadcnAdapterConfig, getShadcnImportPath } from "@water-ui/adapter-shadcn";
+
+const config = createShadcnAdapterConfig({
+  aliases: {
+    ui: "@/components/ui",
+  },
+});
+
+getShadcnImportPath(config, "button"); // "@/components/ui/button"
+```

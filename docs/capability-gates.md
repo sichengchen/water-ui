@@ -135,17 +135,17 @@ Completion evidence:
 
 ## Gate 5: shadcn Registry Adapter
 
-Status: planned
+Status: completed
 
 Acceptance criteria:
 
-- Can provide shadcn registry entries.
-- Can render shadcn-backed nodes.
-- Can validate shadcn entry props.
-- Can generate prompt summaries for shadcn entries.
-- Can merge shadcn entries with user entries.
-- Can support project-local import aliases.
-- Can avoid leaking shadcn as Water core identity.
+- [x] Can provide shadcn registry entries.
+- [x] Can render shadcn-backed nodes.
+- [x] Can validate shadcn entry props.
+- [x] Can generate prompt summaries for shadcn entries.
+- [x] Can merge shadcn entries with user entries.
+- [x] Can support project-local import aliases.
+- [x] Can avoid leaking shadcn as Water core identity.
 
 Deliverables:
 
@@ -155,6 +155,11 @@ Deliverables:
 - shadcn prompt examples
 - shadcn registry fixtures
 - example app
+
+Completion evidence:
+
+- implementation: `packages/adapter-shadcn/src/index.ts`
+- tests: `packages/adapter-shadcn/tests/adapter.test.ts`
 
 ## Gate 6: Runtime
 
