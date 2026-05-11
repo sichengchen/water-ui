@@ -90,7 +90,7 @@ function App(): ReactNode {
       { className: "grid gap-6 lg:grid-cols-[minmax(0,1fr)_440px]" },
       createElement(
         Card,
-        { className: "h-[720px] rounded-lg max-lg:h-auto" },
+        { className: "rounded-lg" },
         createElement(
           CardHeader,
           null,
@@ -107,8 +107,10 @@ function App(): ReactNode {
           { className: "flex flex-1 flex-col" },
           createElement(Textarea, {
             "aria-label": "Meeting note",
+            autoComplete: "off",
             className:
-              "min-h-0 flex-1 resize-none border-0 bg-[linear-gradient(#fff_31px,#f1f5f9_32px)] bg-[length:100%_32px] leading-8 shadow-none focus-visible:ring-0 max-lg:min-h-80",
+              "min-h-[420px] resize-none border-0 bg-[linear-gradient(#fff_31px,#f1f5f9_32px)] bg-[length:100%_32px] leading-8 shadow-none focus-visible:ring-0 max-lg:min-h-80",
+            name: "meeting-note",
             value: note,
             onChange: (event) => setNote(event.currentTarget.value),
           }),
@@ -116,7 +118,7 @@ function App(): ReactNode {
       ),
       createElement(
         Card,
-        { className: "h-[720px] rounded-lg max-lg:h-auto" },
+        { className: "rounded-lg" },
         createElement(
           CardHeader,
           null,
@@ -139,7 +141,7 @@ function App(): ReactNode {
             "div",
             {
               className:
-                "flex min-h-0 flex-1 flex-col gap-3 overflow-auto rounded-lg border bg-muted/30 p-3 max-lg:min-h-80",
+                "flex min-h-64 flex-col gap-3 overflow-auto rounded-lg bg-muted/30 p-3 max-lg:min-h-80",
               "aria-live": "polite",
             },
             chat.status === "thinking" || chat.status === "ready"
@@ -155,7 +157,9 @@ function App(): ReactNode {
             },
             createElement(Textarea, {
               "aria-label": "Chat message",
+              autoComplete: "off",
               className: "min-h-20 resize-none",
+              name: "chat-message",
               value: prompt,
               onChange: (event) => setPrompt(event.currentTarget.value),
               onKeyDown: (event) => {
@@ -196,7 +200,7 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
       "div",
       {
         className:
-          "mr-auto max-w-[88%] rounded-lg border bg-background px-3 py-2 text-sm text-muted-foreground",
+          "mr-auto max-w-[88%] rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground",
       },
       createElement("p", null, "Send the prompt to generate a Water UI todo list from the note."),
     );
@@ -207,16 +211,19 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
       "div",
       {
         className:
-          "mr-auto inline-flex items-center gap-2 rounded-lg border bg-background px-3 py-2 text-sm text-muted-foreground",
+          "mr-auto inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground",
       },
       createElement("span", {
-        className: "size-1.5 animate-pulse rounded-full bg-muted-foreground",
+        className:
+          "size-1.5 animate-pulse rounded-full bg-muted-foreground motion-reduce:animate-none",
       }),
       createElement("span", {
-        className: "size-1.5 animate-pulse rounded-full bg-muted-foreground",
+        className:
+          "size-1.5 animate-pulse rounded-full bg-muted-foreground motion-reduce:animate-none",
       }),
       createElement("span", {
-        className: "size-1.5 animate-pulse rounded-full bg-muted-foreground",
+        className:
+          "size-1.5 animate-pulse rounded-full bg-muted-foreground motion-reduce:animate-none",
       }),
       createElement("p", null, "Thinking..."),
     );

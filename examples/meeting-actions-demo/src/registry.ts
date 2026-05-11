@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Badge } from "./components/ui/badge.js";
 import { Button } from "./components/ui/button.js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card.js";
+import { Checkbox } from "./components/ui/checkbox.js";
 import { CREATE_TASKS_ACTION_ID, MEETING_SUMMARY_DATA_REF, meetingSummarySchema } from "./types.js";
 import type { WaterRenderBinding } from "@water-ui/react";
 import type { MeetingSummary } from "./types.js";
@@ -144,16 +145,16 @@ export const meetingActionsRegistry = createWaterRegistry({
 
         return createElement(
           Card,
-          { className: "gap-3 py-4" },
+          { className: "gap-3 border-0 bg-transparent py-0 shadow-none" },
           createElement(
             CardHeader,
-            { className: "px-4" },
+            { className: "px-0" },
             createElement(CardTitle, null, "Todo list"),
             createElement(CardDescription, null, `${summary.tasks.length} tasks extracted`),
           ),
           createElement(
             CardContent,
-            { className: "px-4" },
+            { className: "px-0" },
             createElement(
               "ul",
               { "aria-label": "Todo list", className: "flex flex-col gap-2" },
@@ -163,41 +164,44 @@ export const meetingActionsRegistry = createWaterRegistry({
                   {
                     key: task.id,
                     className:
-                      "grid grid-cols-[1rem_minmax(0,1fr)] gap-3 rounded-md border bg-background p-3",
+                      "rounded-md border bg-background transition-colors hover:bg-muted/40",
                   },
-                  createElement("input", {
-                    "aria-label": task.title,
-                    className: "mt-0.5 size-4 accent-primary",
-                    type: "checkbox",
-                  }),
                   createElement(
-                    "div",
-                    { className: "flex min-w-0 flex-col gap-1" },
-                    createElement(
-                      "strong",
-                      { className: "text-sm font-medium leading-5" },
-                      task.title,
-                    ),
+                    "label",
+                    { className: "grid cursor-pointer grid-cols-[1rem_minmax(0,1fr)] gap-3 p-2.5" },
+                    createElement(Checkbox, {
+                      "aria-label": task.title,
+                      className: "mt-0.5",
+                    }),
                     createElement(
                       "div",
-                      { className: "flex flex-wrap gap-1.5" },
+                      { className: "flex min-w-0 flex-col gap-1" },
                       createElement(
-                        "span",
-                        {
-                          className:
-                            "rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground",
-                        },
-                        task.owner,
+                        "strong",
+                        { className: "text-sm font-medium leading-5" },
+                        task.title,
                       ),
                       createElement(
-                        "span",
-                        {
-                          className:
-                            "rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground",
-                        },
-                        task.due,
+                        "div",
+                        { className: "flex flex-wrap gap-1.5" },
+                        createElement(
+                          "span",
+                          {
+                            className:
+                              "rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground",
+                          },
+                          task.owner,
+                        ),
+                        createElement(
+                          "span",
+                          {
+                            className:
+                              "rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground",
+                          },
+                          task.due,
+                        ),
+                        createElement(Badge, { variant: "secondary" }, task.priority),
                       ),
-                      createElement(Badge, { variant: "secondary" }, task.priority),
                     ),
                   ),
                 ),

@@ -14,6 +14,7 @@
     "build": "vp pack"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "catalog:",
     "@radix-ui/react-slot": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@water-ui/core": "workspace:*",
