@@ -37,3 +37,17 @@ vp install
 cd examples/meeting-note-vue
 vp dev
 ```
+
+## Meeting Note Svelte
+
+Path: [`examples/meeting-note-svelte`](./meeting-note-svelte)
+
+A Svelte demo that uses the same meeting note flow and renders the streamed Water UI todo list with `@water-ui/svelte`.
+
+Run:
+
+```sh
+vp install
+cd examples/meeting-note-svelte
+vp dev
+```

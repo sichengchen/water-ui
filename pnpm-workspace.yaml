@@ -18,6 +18,7 @@ catalog:
   "@types/react-dom": ^19.2.3
   "@tailwindcss/vite": ^4.3.0
   "@vitejs/plugin-vue": ^6.0.6
+  "@sveltejs/vite-plugin-svelte": ^7.1.2
   "@vue/server-renderer": ^3.5.26
   svelte: ^5.55.5
   tailwindcss: ^4.3.0

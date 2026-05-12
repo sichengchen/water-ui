@@ -1,0 +1,36 @@
+{
+  "name": "@water-ui/example-meeting-note-svelte",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "dev": "vp dev",
+    "check": "vp check",
+    "test": "vp test",
+    "build": "vp build"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "catalog:",
+    "@water-ui/core": "workspace:*",
+    "@water-ui/prompt": "workspace:*",
+    "@water-ui/runtime": "workspace:*",
+    "@water-ui/svelte": "workspace:*",
+    "class-variance-authority": "catalog:",
+    "clsx": "catalog:",
+    "svelte": "catalog:",
+    "tailwind-merge": "catalog:",
+    "tailwindcss": "catalog:",
+    "tw-animate-css": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "types": ["node", "svelte"]
+  },
+  "include": ["src", "tests", "vite.config.ts"]
+}
