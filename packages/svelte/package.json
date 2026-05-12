@@ -1,0 +1,34 @@
+{
+  "name": "@water-ui/svelte",
+  "version": "0.0.0",
+  "description": "Svelte renderer package for Water UI.",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "check": "vp check",
+    "test": "vp test"
+  },
+  "dependencies": {
+    "@water-ui/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "svelte": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "peerDependencies": {
+    "svelte": "catalog:"
+  }
+}

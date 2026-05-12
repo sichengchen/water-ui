@@ -16,6 +16,18 @@ import { h } from "vue";
 h(WaterRuntimeProvider, { runtime, registry }, () => h(WaterRenderer, { ui: verifiedUi }));
 ```
 
+Svelte API target:
+
+```svelte
+<script lang="ts">
+  import { createWaterRenderer } from "@water-ui/svelte";
+
+  const renderer = createWaterRenderer({ ui: verifiedUi, runtime, registry });
+</script>
+
+{@render renderer()}
+```
+
 Renderer components:
 
 - `WaterRenderer`
@@ -23,6 +35,19 @@ Renderer components:
 - `WaterRuntimeProvider`
 - `NodeRenderer`
 - `SlotRenderer`
+
+Svelte renderer helpers:
+
+- `createWaterRenderer`
+- `createWaterStreamRenderer`
+- `createNodeRenderer`
+- `createSlotRenderer`
+- `renderWaterToHtml`
+- `renderWaterStreamToHtml`
+- `renderWaterNodeToHtml`
+- `renderWaterSlotToHtml`
+- `waterElement`
+- `waterRawHtml`
 
 Renderer input is VerifiedSchemaUI.
 

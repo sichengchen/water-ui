@@ -17,3 +17,4 @@ Architecture notes and design rationale.
 - [013: DevTools](./013-devtools.md)
 - [014: Evaluation](./014-evaluation.md)
 - [015: Vue Renderer](./015-vue-renderer.md)
+- [016: Svelte Renderer](./016-svelte-renderer.md)

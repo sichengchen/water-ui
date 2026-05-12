@@ -14,6 +14,8 @@ render verified UI, apply patches, and consume streaming UI updates.
   safe fallbacks, and stream rendering.
 - `@water-ui/vue`: Vue rendering for `VerifiedSchemaUI`, runtime binding, safe
   fallbacks, and stream rendering.
+- `@water-ui/svelte`: Svelte snippet and HTML rendering for
+  `VerifiedSchemaUI`, runtime binding, safe fallbacks, and stream rendering.
 - `@water-ui/runtime`: state, query, action, mutation, permission, and runtime
   event registries.
 - `@water-ui/prompt`: prompt compilers for document, patch, stream, and repair
@@ -32,7 +34,8 @@ render verified UI, apply patches, and consume streaming UI updates.
 3. Compile prompts from the same registry and runtime capabilities.
 4. Parse model output as a Water document, patch, or JSONL stream.
 5. Verify the output against the registry and runtime description.
-6. Render `VerifiedSchemaUI` with React, Vue, or inspect it with DevTools.
+6. Render `VerifiedSchemaUI` with React, Vue, Svelte, or inspect it with
+   DevTools.
 
 Raw model output is always untrusted. Rendering starts only after verification
 returns a `VerifiedSchemaUI`.
@@ -114,6 +117,18 @@ import { h } from "vue";
 import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/vue";
 
 h(WaterRuntimeProvider, { runtime, registry }, () => h(WaterRenderer, { ui: verifiedUi }));
+```
+
+Svelte rendering exposes snippets and server HTML helpers:
+
+```svelte
+<script lang="ts">
+  import { createWaterRenderer } from "@water-ui/svelte";
+
+  const renderer = createWaterRenderer({ ui: verifiedUi, runtime, registry });
+</script>
+
+{@render renderer()}
 ```
 
 ## Documentation
