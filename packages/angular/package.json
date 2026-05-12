@@ -1,0 +1,43 @@
+{
+  "name": "@water-ui/angular",
+  "version": "0.0.0",
+  "description": "Angular renderer package for Water UI.",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "check": "vp check",
+    "test": "vp test"
+  },
+  "dependencies": {
+    "@water-ui/core": "workspace:*",
+    "tslib": "catalog:"
+  },
+  "devDependencies": {
+    "@analogjs/vite-plugin-angular": "catalog:",
+    "@angular/build": "catalog:",
+    "@angular/common": "catalog:",
+    "@angular/compiler": "catalog:",
+    "@angular/compiler-cli": "catalog:",
+    "@angular/core": "catalog:",
+    "@angular/platform-browser": "catalog:",
+    "@angular/platform-server": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "peerDependencies": {
+    "@angular/common": "catalog:",
+    "@angular/core": "catalog:"
+  }
+}

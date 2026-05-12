@@ -19,6 +19,15 @@ catalog:
   "@tailwindcss/vite": ^4.3.0
   "@vitejs/plugin-vue": ^6.0.6
   "@sveltejs/vite-plugin-svelte": ^7.1.2
+  "@analogjs/vite-plugin-angular": ^2.5.0
+  "@angular/build": ^21.2.10
+  "@angular/common": ^21.2.12
+  "@angular/compiler": ^21.2.12
+  "@angular/compiler-cli": ^21.2.12
+  "@angular/core": ^21.2.12
+  "@angular/forms": ^21.2.12
+  "@angular/platform-browser": ^21.2.12
+  "@angular/platform-server": ^21.2.12
   "@vue/server-renderer": ^3.5.26
   svelte: ^5.55.5
   tailwindcss: ^4.3.0
@@ -42,3 +51,8 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
     vitest: "*"
+allowBuilds:
+  "@parcel/watcher": false
+  esbuild: false
+  lmdb: false
+  msgpackr-extract: false

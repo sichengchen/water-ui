@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "experimentalDecorators": true,
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "types": ["node"],
+    "useDefineForClassFields": false
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  },
+  "include": ["src", "tests", "vite.config.ts"]
+}

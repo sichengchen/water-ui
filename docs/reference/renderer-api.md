@@ -28,13 +28,37 @@ Svelte API target:
 {@render renderer()}
 ```
 
-Renderer components:
+Angular API target:
+
+```ts
+import { provideWaterRuntime } from "@water-ui/angular";
+
+bootstrapApplication(AppComponent, {
+  providers: [provideWaterRuntime({ runtime, registry })],
+});
+```
+
+```html
+<water-renderer [ui]="verifiedUi" />
+```
+
+React and Vue renderer components:
 
 - `WaterRenderer`
 - `WaterStreamRenderer`
 - `WaterRuntimeProvider`
 - `NodeRenderer`
 - `SlotRenderer`
+
+Angular renderer components and helpers:
+
+- `WaterRendererComponent`
+- `WaterStreamRendererComponent`
+- `NodeRendererComponent`
+- `SlotRendererComponent`
+- `WaterOutletComponent`
+- `provideWaterRuntime`
+- `waterComponent`
 
 Svelte renderer helpers:
 
