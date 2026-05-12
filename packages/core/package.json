@@ -1,12 +1,32 @@
 {
   "name": "@wasser-ui/core",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "description": "Registry-first core protocol and verification primitives for Wasser UI.",
+  "keywords": [
+    "agent-ui",
+    "core",
+    "generative-ui",
+    "registry",
+    "renderer",
+    "schema-ui",
+    "wasser-ui"
+  ],
+  "homepage": "https://github.com/sichengchen/water-ui#readme",
+  "bugs": {
+    "url": "https://github.com/sichengchen/water-ui/issues"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sichengchen/water-ui.git",
+    "directory": "packages/core"
+  },
   "files": [
     "dist"
   ],
   "type": "module",
+  "sideEffects": false,
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
@@ -19,7 +39,7 @@
     "dev": "vp pack --watch",
     "test": "vp test",
     "check": "vp check",
-    "prepublishOnly": "vp run build"
+    "prepublishOnly": "vp pack"
   },
   "dependencies": {
     "zod": "catalog:"

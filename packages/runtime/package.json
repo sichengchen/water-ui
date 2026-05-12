@@ -1,12 +1,32 @@
 {
   "name": "@wasser-ui/runtime",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "description": "Runtime capability boundary for Wasser UI.",
+  "keywords": [
+    "agent-ui",
+    "generative-ui",
+    "registry",
+    "renderer",
+    "runtime",
+    "schema-ui",
+    "wasser-ui"
+  ],
+  "homepage": "https://github.com/sichengchen/water-ui#readme",
+  "bugs": {
+    "url": "https://github.com/sichengchen/water-ui/issues"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sichengchen/water-ui.git",
+    "directory": "packages/runtime"
+  },
   "files": [
     "dist"
   ],
   "type": "module",
+  "sideEffects": false,
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
@@ -17,7 +37,8 @@
   "scripts": {
     "build": "vp pack",
     "check": "vp check",
-    "test": "vp test"
+    "test": "vp test",
+    "prepublishOnly": "vp pack"
   },
   "dependencies": {
     "@wasser-ui/core": "workspace:*",

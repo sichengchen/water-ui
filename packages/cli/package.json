@@ -1,8 +1,26 @@
 {
   "name": "@wasser-ui/cli",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "description": "Command-line tools for Wasser UI.",
+  "keywords": [
+    "agent-ui",
+    "cli",
+    "generative-ui",
+    "registry",
+    "renderer",
+    "schema-ui",
+    "wasser-ui"
+  ],
+  "homepage": "https://github.com/sichengchen/water-ui#readme",
+  "bugs": {
+    "url": "https://github.com/sichengchen/water-ui/issues"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sichengchen/water-ui.git",
+    "directory": "packages/cli"
+  },
   "bin": {
     "wasser-ui": "./dist/index.mjs"
   },
@@ -10,6 +28,8 @@
     "dist"
   ],
   "type": "module",
+  "sideEffects": false,
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
@@ -19,7 +39,8 @@
   },
   "scripts": {
     "build": "vp pack",
-    "check": "vp check"
+    "check": "vp check",
+    "prepublishOnly": "vp pack"
   },
   "devDependencies": {
     "@types/node": "catalog:",
