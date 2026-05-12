@@ -27,7 +27,6 @@ render verified UI, apply patches, and consume streaming UI updates.
 - `@wasser-ui/devtools`: serializable inspection models for registries, Schema
   UI, verification, patches, streams, runtime events, prompts, and render
   bindings.
-- `@wasser-ui/cli`: command-line package entry point.
 
 ## How It Works
 

@@ -31,8 +31,9 @@ Publish the first alpha packages:
 vp run publish:alpha
 ```
 
-The alpha command publishes only `packages/*` with the `alpha` dist tag. Private
-example workspaces and the private root workspace are excluded.
+The alpha command publishes only publishable `packages/*` workspaces with the
+`alpha` dist tag. Private example workspaces and the private root workspace are
+excluded.
 
 ## Package Contents
 
