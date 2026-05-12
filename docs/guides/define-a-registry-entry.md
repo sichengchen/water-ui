@@ -22,7 +22,7 @@ Entry fields may include:
 ## Minimal Entry
 
 ```ts
-import { defineWaterComponent } from "@water-ui/core";
+import { defineWasserComponent } from "@wasser-ui/core";
 import { z } from "zod";
 
 const CustomerTablePropsSchema = z
@@ -37,7 +37,7 @@ const CustomerTablePropsSchema = z
   })
   .strict();
 
-const CustomerTable = defineWaterComponent({
+const CustomerTable = defineWasserComponent({
   description: "Displays customers with status, revenue, and account owner.",
   propsSchema: CustomerTablePropsSchema,
   children: "none",
@@ -80,19 +80,19 @@ React render bindings belong in application code or adapter packages. They
 receive verified props, runtime bindings, children, and slots:
 
 ```tsx
-import type { WaterRenderBinding } from "@water-ui/react";
+import type { WasserRenderBinding } from "@wasser-ui/react";
 
 const renderCustomerTable = (({ props, bindings }) => {
   const rows = customerRowsSchema.parse(bindings.data[props.dataRef]);
 
   return <CustomerTableView columns={props.columns} rows={rows} />;
-}) satisfies WaterRenderBinding<z.infer<typeof CustomerTablePropsSchema>>;
+}) satisfies WasserRenderBinding<z.infer<typeof CustomerTablePropsSchema>>;
 ```
 
 Then attach the binding to the entry:
 
 ```tsx
-const CustomerTable = defineWaterComponent({
+const CustomerTable = defineWasserComponent({
   description: "Displays customers with status, revenue, and account owner.",
   propsSchema: CustomerTablePropsSchema,
   children: "none",
@@ -126,7 +126,7 @@ Use `children: "none"` for leaf components. Use node children when the agent
 should compose a subtree:
 
 ```ts
-const AdminPage = defineWaterComponent({
+const AdminPage = defineWasserComponent({
   description: "Admin page shell with a title and content sections.",
   propsSchema: z.object({ title: z.string() }).strict(),
   children: { kind: "nodes", min: 1 },
@@ -136,7 +136,7 @@ const AdminPage = defineWaterComponent({
 Use named slots when layout regions have distinct meaning:
 
 ```ts
-const DashboardLayout = defineWaterComponent({
+const DashboardLayout = defineWasserComponent({
   description: "Dashboard layout with filters, main content, and sidebar.",
   propsSchema: z.object({ title: z.string() }).strict(),
   children: "none",

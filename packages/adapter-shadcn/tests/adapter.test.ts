@@ -1,8 +1,8 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, test } from "vite-plus/test";
-import { createWaterRegistry, summarizeWaterRegistry, verifyDocument } from "@water-ui/core";
-import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/react";
+import { createWasserRegistry, summarizeWasserRegistry, verifyDocument } from "@wasser-ui/core";
+import { WasserRenderer, WasserRuntimeProvider } from "@wasser-ui/react";
 import {
   createShadcnAdapterConfig,
   createShadcnComponents,
@@ -14,11 +14,11 @@ import {
   shadcnComponentCatalog,
   shadcnComponents,
 } from "../src/index.ts";
-import type { WaterRenderDiagnostic } from "@water-ui/react";
+import type { WasserRenderDiagnostic } from "@wasser-ui/react";
 import type { ShadcnGenericRenderProps } from "../src/index.ts";
 
 test("merges shadcn entries with user registry entries", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       ...shadcnComponents,
       CustomerTable: {
@@ -41,11 +41,11 @@ test("merges shadcn entries with user registry entries", () => {
 });
 
 test("validates shadcn component props", () => {
-  const registry = createWaterRegistry({ components: shadcnComponents });
+  const registry = createWasserRegistry({ components: shadcnComponents });
   const result = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "button",
       nodes: {
         button: {
@@ -91,12 +91,12 @@ test("renders shadcn-backed nodes through project component bindings", () => {
         createElement("div", { "data-card-content": "true" }, children),
     },
   });
-  const registry = createWaterRegistry({ components });
+  const registry = createWasserRegistry({ components });
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "card",
         nodes: {
           card: {
@@ -124,18 +124,18 @@ test("renders shadcn-backed nodes through project component bindings", () => {
       },
     ),
   );
-  const diagnostics: Array<readonly WaterRenderDiagnostic[]> = [];
+  const diagnostics: Array<readonly WasserRenderDiagnostic[]> = [];
 
   const html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       {
         registry,
         runtime: {
           runAction: () => "done",
         },
       },
-      createElement(WaterRenderer, {
+      createElement(WasserRenderer, {
         ui,
         onDiagnostics: (next) => diagnostics.push(next),
       }),
@@ -163,12 +163,12 @@ test("renders generic shadcn catalog entries through project component bindings"
       Badge: ({ children }) => createElement("span", null, children),
     },
   });
-  const registry = createWaterRegistry({ components });
+  const registry = createWasserRegistry({ components });
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "accordion",
         nodes: {
           accordion: {
@@ -194,9 +194,9 @@ test("renders generic shadcn catalog entries through project component bindings"
 
   const html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { registry, runtime: {} },
-      createElement(WaterRenderer, { ui }),
+      createElement(WasserRenderer, { ui }),
     ),
   );
 
@@ -206,8 +206,8 @@ test("renders generic shadcn catalog entries through project component bindings"
 });
 
 test("generates prompt summaries for shadcn entries", () => {
-  const registry = createWaterRegistry({ components: shadcnComponents });
-  const summary = summarizeWaterRegistry(registry);
+  const registry = createWasserRegistry({ components: shadcnComponents });
+  const summary = summarizeWasserRegistry(registry);
 
   expect(summary.componentCount).toBe(shadcnComponentCatalog.length);
   expect(summary.components).toEqual(
@@ -287,16 +287,16 @@ test("defines shadcn registry item and index metadata", () => {
     categories: ["customers"],
   });
   const index = createShadcnRegistryIndex({
-    name: "water-ui",
-    homepage: "https://water-ui.test",
+    name: "wasser-ui",
+    homepage: "https://wasser-ui.test",
     items: [item],
   });
 
   expect(Object.isFrozen(item.registryDependencies)).toBe(true);
   expect(index).toEqual({
     $schema: "https://ui.shadcn.com/schema/registry.json",
-    name: "water-ui",
-    homepage: "https://water-ui.test",
+    name: "wasser-ui",
+    homepage: "https://wasser-ui.test",
     items: [item],
   });
   expect(getShadcnCatalogEntry("DataTable")).toEqual(

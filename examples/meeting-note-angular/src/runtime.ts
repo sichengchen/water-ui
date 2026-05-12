@@ -1,25 +1,25 @@
-import { createWaterRuntime } from "@water-ui/runtime";
+import { createWasserRuntime } from "@wasser-ui/runtime";
 import { createMeetingSummaryFromNote, exampleMeetingSummary } from "./types.js";
-import type { WaterRuntime as AngularWaterRuntime } from "@water-ui/angular";
-import type { WaterRuntime } from "@water-ui/runtime";
+import type { WasserRuntime as AngularWasserRuntime } from "@wasser-ui/angular";
+import type { WasserRuntime } from "@wasser-ui/runtime";
 import type { MeetingSummary } from "./types.js";
 
 export type MeetingRuntime = {
   summary: MeetingSummary;
-  capabilityRuntime: WaterRuntime;
-  renderRuntime: AngularWaterRuntime;
+  capabilityRuntime: WasserRuntime;
+  renderRuntime: AngularWasserRuntime;
 };
 
 export function createMeetingRuntime(
   summary: MeetingSummary = exampleMeetingSummary,
 ): MeetingRuntime {
-  const capabilityRuntime = createWaterRuntime({
+  const capabilityRuntime = createWasserRuntime({
     permissions: {
       canRunAction: ({ risk }) => risk !== "destructive",
     },
   });
 
-  const renderRuntime: AngularWaterRuntime = {};
+  const renderRuntime: AngularWasserRuntime = {};
 
   return {
     summary,

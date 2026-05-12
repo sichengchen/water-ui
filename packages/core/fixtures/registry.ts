@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { defineWaterComponent } from "../src/index.ts";
-import type { WaterRegistryInput } from "../src/index.ts";
+import { defineWasserComponent } from "../src/index.ts";
+import type { WasserRegistryInput } from "../src/index.ts";
 
-export const CustomerTable = defineWaterComponent({
+export const CustomerTable = defineWasserComponent({
   description: "Displays customers with status, revenue, and account owner.",
   propsSchema: z
     .object({
@@ -45,13 +45,13 @@ export const CustomerTable = defineWaterComponent({
   ],
 });
 
-export const RevenueChart = defineWaterComponent({
+export const RevenueChart = defineWasserComponent({
   description: "Shows revenue over time for the selected customer segment.",
   children: "none",
   profile: ["admin", "analyst"],
 });
 
-export const ExportButton = defineWaterComponent({
+export const ExportButton = defineWasserComponent({
   description: "Runs a registered export action.",
   children: "none",
   risk: "low",
@@ -68,12 +68,12 @@ export const ExportButton = defineWaterComponent({
   render: () => "render bindings are not prompt-safe",
 });
 
-export const customAdminRegistryInput: WaterRegistryInput = {
+export const customAdminRegistryInput: WasserRegistryInput = {
   CustomerTable,
   RevenueChart,
 };
 
-export const adapterPresetRegistryInput: WaterRegistryInput = [
+export const adapterPresetRegistryInput: WasserRegistryInput = [
   {
     type: "ExportButton",
     description: "Adapter-provided action button.",
@@ -81,7 +81,7 @@ export const adapterPresetRegistryInput: WaterRegistryInput = [
   },
 ];
 
-export const duplicateRegistryInput: WaterRegistryInput = [
+export const duplicateRegistryInput: WasserRegistryInput = [
   {
     type: "CustomerTable",
     description: "Duplicate table from another preset.",

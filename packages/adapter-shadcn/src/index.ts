@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { z } from "zod";
-import type { WaterComponentDefinition, WaterComponentExample } from "@water-ui/core";
-import type { WaterRenderBinding } from "@water-ui/react";
+import type { WasserComponentDefinition, WasserComponentExample } from "@wasser-ui/core";
+import type { WasserRenderBinding } from "@wasser-ui/react";
 import type { ComponentType, ReactNode } from "react";
 
 export const shadcnRegistryItemTypes = Object.freeze([
@@ -617,7 +617,7 @@ export type CreateShadcnComponentsOptions = {
   components?: ShadcnComponentBindings;
 };
 
-export type ShadcnRegistryComponents = Readonly<Record<string, WaterComponentDefinition>>;
+export type ShadcnRegistryComponents = Readonly<Record<string, WasserComponentDefinition>>;
 
 export type ShadcnImportAliases = {
   ui: string;
@@ -676,7 +676,7 @@ const badgeSchema = z
   })
   .strict();
 
-export const shadcnPromptExamples: Readonly<Record<string, readonly WaterComponentExample[]>> =
+export const shadcnPromptExamples: Readonly<Record<string, readonly WasserComponentExample[]>> =
   Object.freeze({
     Button: [
       {
@@ -782,7 +782,7 @@ export function createShadcnComponents(
       entry.type,
       createGenericShadcnDefinition(entry, components),
     ]),
-  ) as Record<ShadcnComponentType, WaterComponentDefinition>;
+  ) as Record<ShadcnComponentType, WasserComponentDefinition>;
 
   return Object.freeze({
     ...definitions,
@@ -878,8 +878,8 @@ export function getShadcnCatalogEntry(componentType: string): ShadcnCatalogEntry
 function createGenericShadcnDefinition(
   entry: ShadcnCatalogEntry,
   components: ResolvedShadcnComponentBindings,
-): WaterComponentDefinition<ShadcnGenericRenderProps> {
-  const render: WaterRenderBinding<ShadcnGenericRenderProps> = ({ props, children }) => {
+): WasserComponentDefinition<ShadcnGenericRenderProps> {
+  const render: WasserRenderBinding<ShadcnGenericRenderProps> = ({ props, children }) => {
     const Component =
       (components[entry.type] as ComponentType<ShadcnGenericRenderProps> | undefined) ??
       GenericShadcnFallback;
@@ -924,8 +924,8 @@ function GenericShadcnFallback({ children, ...props }: ShadcnGenericRenderProps)
 
 function createButtonDefinition(
   components: ResolvedShadcnComponentBindings,
-): WaterComponentDefinition<ShadcnButtonProps> {
-  const render: WaterRenderBinding<ShadcnButtonProps> = ({ props, bindings }) => {
+): WasserComponentDefinition<ShadcnButtonProps> {
+  const render: WasserRenderBinding<ShadcnButtonProps> = ({ props, bindings }) => {
     const actionId = props.actionId;
     const onClick = actionId
       ? () => bindings.actions[actionId]?.({ source: "shadcn.Button" })
@@ -970,7 +970,7 @@ function createButtonDefinition(
           description: "Registered runtime action ID to invoke.",
         },
       ],
-      notes: ["Do not invent action IDs. Use only actions registered in the Water runtime."],
+      notes: ["Do not invent action IDs. Use only actions registered in the Wasser runtime."],
     },
     examples: shadcnPromptExamples.Button,
     render,
@@ -979,8 +979,8 @@ function createButtonDefinition(
 
 function createCardDefinition(
   components: ResolvedShadcnComponentBindings,
-): WaterComponentDefinition<ShadcnCardProps> {
-  const render: WaterRenderBinding<ShadcnCardProps> = ({ props, children, slots }) => {
+): WasserComponentDefinition<ShadcnCardProps> {
+  const render: WasserRenderBinding<ShadcnCardProps> = ({ props, children, slots }) => {
     const header =
       slots.header ??
       (props.title || props.description
@@ -1034,8 +1034,8 @@ function createCardDefinition(
 
 function createAlertDefinition(
   components: ResolvedShadcnComponentBindings,
-): WaterComponentDefinition<ShadcnAlertProps> {
-  const render: WaterRenderBinding<ShadcnAlertProps> = ({ props, children }) =>
+): WasserComponentDefinition<ShadcnAlertProps> {
+  const render: WasserRenderBinding<ShadcnAlertProps> = ({ props, children }) =>
     createElement(
       components.Alert,
       { variant: props.variant },
@@ -1074,8 +1074,8 @@ function createAlertDefinition(
 
 function createInputDefinition(
   components: ResolvedShadcnComponentBindings,
-): WaterComponentDefinition<ShadcnInputProps> {
-  const render: WaterRenderBinding<ShadcnInputProps> = ({ props }) =>
+): WasserComponentDefinition<ShadcnInputProps> {
+  const render: WasserRenderBinding<ShadcnInputProps> = ({ props }) =>
     createElement(components.Input, {
       disabled: props.disabled,
       placeholder: props.placeholder,
@@ -1085,7 +1085,7 @@ function createInputDefinition(
     });
 
   return {
-    description: "shadcn Input display bound to registered Water state.",
+    description: "shadcn Input display bound to registered Wasser state.",
     propsSchema: inputSchema,
     children: "none",
     prompt: {
@@ -1101,7 +1101,7 @@ function createInputDefinition(
         },
         {
           name: "stateKey",
-          description: "Registered Water runtime state key.",
+          description: "Registered Wasser runtime state key.",
         },
       ],
       notes: ["Input is rendered as read-only unless the host app binds state updates."],
@@ -1113,8 +1113,8 @@ function createInputDefinition(
 
 function createBadgeDefinition(
   components: ResolvedShadcnComponentBindings,
-): WaterComponentDefinition<ShadcnBadgeProps> {
-  const render: WaterRenderBinding<ShadcnBadgeProps> = ({ props }) =>
+): WasserComponentDefinition<ShadcnBadgeProps> {
+  const render: WasserRenderBinding<ShadcnBadgeProps> = ({ props }) =>
     createElement(components.Badge, { variant: props.variant }, props.label);
 
   return {

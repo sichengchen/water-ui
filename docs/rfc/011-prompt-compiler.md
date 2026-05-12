@@ -32,7 +32,7 @@ Output forms:
 
 The generated system prompt tells the agent:
 
-- Only output Water Schema UI.
+- Only output Wasser Schema UI.
 - Do not output JSX.
 - Do not output JavaScript.
 - Do not invent component types.

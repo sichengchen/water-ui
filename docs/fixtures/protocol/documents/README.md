@@ -2,7 +2,7 @@
 
 Document protocol fixtures cover:
 
-- valid `water.ui.document` inputs parse
+- valid `wasser.ui.document` inputs parse
 - invalid versions are rejected
 - missing roots are rejected
 - missing node references are rejected

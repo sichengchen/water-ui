@@ -1,14 +1,14 @@
 # Getting Started: React + shadcn
 
 This guide shows the React renderer with the optional shadcn adapter. shadcn
-entries live outside Water core so the core package remains component-library
+entries live outside Wasser core so the core package remains component-library
 neutral.
 
 ## Install
 
 ```sh
-vp add @water-ui/core @water-ui/react @water-ui/runtime @water-ui/prompt
-vp add @water-ui/adapter-shadcn
+vp add @wasser-ui/core @wasser-ui/react @wasser-ui/runtime @wasser-ui/prompt
+vp add @wasser-ui/adapter-shadcn
 ```
 
 Use the package manager and workspace tooling for your application. In this
@@ -16,20 +16,20 @@ repo, use `vp`.
 
 ## Flow
 
-1. Define application components as Water registry entries.
-2. Add optional shadcn entries from `@water-ui/adapter-shadcn`.
+1. Define application components as Wasser registry entries.
+2. Add optional shadcn entries from `@wasser-ui/adapter-shadcn`.
 3. Compile a prompt from the merged registry.
 4. Verify generated Schema UI.
-5. Render VerifiedSchemaUI with `@water-ui/react`.
+5. Render VerifiedSchemaUI with `@wasser-ui/react`.
 
 ## Create a Registry
 
 ```ts
-import { createWaterRegistry, defineWaterComponent } from "@water-ui/core";
-import { shadcnComponents } from "@water-ui/adapter-shadcn";
+import { createWasserRegistry, defineWasserComponent } from "@wasser-ui/core";
+import { shadcnComponents } from "@wasser-ui/adapter-shadcn";
 import { z } from "zod";
 
-const CustomerSummary = defineWaterComponent({
+const CustomerSummary = defineWasserComponent({
   description: "Shows customer count, active accounts, and revenue summary.",
   propsSchema: z
     .object({
@@ -40,7 +40,7 @@ const CustomerSummary = defineWaterComponent({
   children: "none",
 });
 
-export const registry = createWaterRegistry({
+export const registry = createWasserRegistry({
   components: {
     ...shadcnComponents,
     CustomerSummary,
@@ -48,19 +48,19 @@ export const registry = createWaterRegistry({
 });
 ```
 
-The shadcn adapter owns shadcn entries. Water core does not define `Button`,
+The shadcn adapter owns shadcn entries. Wasser core does not define `Button`,
 `Card`, `Table`, `Dialog`, `Form`, or any visual component.
 
 ## Render Verified UI
 
 ```tsx
-import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/react";
+import { WasserRenderer, WasserRuntimeProvider } from "@wasser-ui/react";
 
 export function GeneratedPanel({ ui, runtime }) {
   return (
-    <WaterRuntimeProvider registry={registry} runtime={runtime}>
-      <WaterRenderer ui={ui} />
-    </WaterRuntimeProvider>
+    <WasserRuntimeProvider registry={registry} runtime={runtime}>
+      <WasserRenderer ui={ui} />
+    </WasserRuntimeProvider>
   );
 }
 ```
@@ -73,7 +73,7 @@ through the adapter factory:
 ```ts
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { createShadcnComponents } from "@water-ui/adapter-shadcn";
+import { createShadcnComponents } from "@wasser-ui/adapter-shadcn";
 
 const shadcnComponents = createShadcnComponents({
   components: {
@@ -89,7 +89,7 @@ const shadcnComponents = createShadcnComponents({
 ## Practical Starting Point
 
 Start with one product-specific component and one generated flow. For example,
-the meeting actions example exposes a `TaskList` component and lets Water
+the meeting actions example exposes a `TaskList` component and lets Wasser
 generate only the todo list. The notebook and assistant shell are normal React
 UI; the generated output stays focused and easy to verify.
 

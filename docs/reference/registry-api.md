@@ -1,16 +1,16 @@
 # Registry API Reference
 
-Package: `@water-ui/core`
+Package: `@wasser-ui/core`
 
 Public exports:
 
-- `defineWaterComponent`
-- `createWaterRegistry`
-- `mergeWaterRegistries`
-- `getWaterComponent`
-- `listWaterComponents`
-- `selectWaterRegistryEntries`
-- `summarizeWaterRegistry`
+- `defineWasserComponent`
+- `createWasserRegistry`
+- `mergeWasserRegistries`
+- `getWasserComponent`
+- `listWasserComponents`
+- `selectWasserRegistryEntries`
+- `summarizeWasserRegistry`
 - `serializePromptSafeRegistryDescription`
 
 Registry contract:
@@ -25,7 +25,7 @@ Registry contract:
 - Registry summaries exclude render bindings and raw schema objects.
 - Registry summaries may include prompt-safe prop hints, notes, examples, and
   anti-examples.
-- Empty registries are valid and prove core has no Water-owned visual
+- Empty registries are valid and prove core has no Wasser-owned visual
   components.
 
 Registry diagnostic codes:

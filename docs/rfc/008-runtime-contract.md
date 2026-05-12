@@ -8,7 +8,7 @@ The model may reference runtime capabilities. The model may not define them.
 Runtime shape:
 
 ```ts
-type WaterRuntime = {
+type WasserRuntime = {
   state: StateRegistry;
   queries: QueryRegistry;
   mutations: MutationRegistry;
@@ -35,5 +35,5 @@ Hard rule:
 ```txt
 Agent output references capabilities.
 Application code implements capabilities.
-Water verifies and guards references.
+Wasser verifies and guards references.
 ```

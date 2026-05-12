@@ -33,7 +33,7 @@ duplicates and reports diagnostics.
 ## Core API
 
 ```ts
-import { applyStreamEvent, createStreamState, finalizeStreamState } from "@water-ui/core";
+import { applyStreamEvent, createStreamState, finalizeStreamState } from "@wasser-ui/core";
 
 let stream = createStreamState();
 
@@ -59,24 +59,24 @@ const final = finalizeStreamState(stream, {
 React:
 
 ```tsx
-<WaterStreamRenderer stream={stream} registry={registry} />
+<WasserStreamRenderer stream={stream} registry={registry} />
 ```
 
-Water buffers unresolved relationship events, rejects duplicate sequence numbers,
+Wasser buffers unresolved relationship events, rejects duplicate sequence numbers,
 rejects invalid component events, and exposes only verified partial UI snapshots.
 The `done` event triggers full-document verification.
 
 ## React Rendering
 
 ```tsx
-import { WaterRuntimeProvider, WaterStreamRenderer } from "@water-ui/react";
+import { WasserRuntimeProvider, WasserStreamRenderer } from "@wasser-ui/react";
 
-<WaterRuntimeProvider registry={registry} runtime={runtime}>
-  <WaterStreamRenderer stream={stream} fallback={null} />
-</WaterRuntimeProvider>;
+<WasserRuntimeProvider registry={registry} runtime={runtime}>
+  <WasserStreamRenderer stream={stream} fallback={null} />
+</WasserRuntimeProvider>;
 ```
 
-`WaterStreamRenderer` renders `stream.ui` when the current partial state verifies.
+`WasserStreamRenderer` renders `stream.ui` when the current partial state verifies.
 If the stream has not produced a valid reachable root yet, it renders the
 fallback.
 
@@ -85,7 +85,7 @@ fallback.
 Use the stream prompt compiler for streaming agents:
 
 ```ts
-import { compileStreamPrompt } from "@water-ui/prompt";
+import { compileStreamPrompt } from "@wasser-ui/prompt";
 
 const prompt = compileStreamPrompt({
   registry,

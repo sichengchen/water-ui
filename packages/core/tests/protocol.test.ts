@@ -10,7 +10,7 @@ import type { SchemaUIParseResult } from "../src/index.ts";
 
 const fixtureRoot = new URL("../../../docs/fixtures/protocol/", import.meta.url);
 
-test("accepts valid water.ui.v1 documents from fixtures", () => {
+test("accepts valid wasser.ui.v1 documents from fixtures", () => {
   const result = parseSchemaUIDocument(readFixture("documents/basic.valid.json"));
   const document = expectOk(result);
 
@@ -32,7 +32,7 @@ test("rejects invalid document protocol versions with stable diagnostics", () =>
       code: "invalid_protocol_version",
       severity: "error",
       path: "$.version",
-      message: "Protocol version must be 'water.ui.v1'.",
+      message: "Protocol version must be 'wasser.ui.v1'.",
     },
   ]);
 });
@@ -50,8 +50,8 @@ test("rejects invalid document shapes without throwing", () => {
 
 test("normalizes document node order and trims protocol strings", () => {
   const result = normalizeSchemaUIDocument({
-    kind: "water.ui.document",
-    version: "water.ui.v1",
+    kind: "wasser.ui.document",
+    version: "wasser.ui.v1",
     root: " page ",
     nodes: {
       " table ": {
@@ -74,8 +74,8 @@ test("normalizes document node order and trims protocol strings", () => {
 
 test("does not verify registry component existence while parsing documents", () => {
   const result = parseSchemaUIDocument({
-    kind: "water.ui.document",
-    version: "water.ui.v1",
+    kind: "wasser.ui.document",
+    version: "wasser.ui.v1",
     root: "root",
     nodes: {
       root: {
@@ -124,8 +124,8 @@ test("rejects invalid semantic patch operations", () => {
 
 test("uses patch diagnostics for invalid patch props", () => {
   const result = parseSchemaUIPatch({
-    kind: "water.ui.patch",
-    version: "water.ui.v1",
+    kind: "wasser.ui.patch",
+    version: "wasser.ui.v1",
     target: "page",
     ops: [
       {

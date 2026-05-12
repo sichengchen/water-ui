@@ -1,12 +1,12 @@
-# @water-ui/core
+# @wasser-ui/core
 
 Core registry, protocol, verification, patch, streaming, and safety primitives.
 
 Core includes:
 
-- `defineWaterComponent`
-- `createWaterRegistry`
-- `mergeWaterRegistries`
+- `defineWasserComponent`
+- `createWasserRegistry`
+- `mergeWasserRegistries`
 - registry lookup, listing, profile selection, diagnostics, and prompt-safe
   summaries
 - `parseSchemaUIDocument`
@@ -23,5 +23,5 @@ Core includes:
 - `applyStreamEvent`
 - `finalizeStreamState`
 
-Core must not contain Water-owned visual component definitions. Component
+Core must not contain Wasser-owned visual component definitions. Component
 definitions belong in application registries or adapter packages.

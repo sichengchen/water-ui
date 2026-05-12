@@ -1,7 +1,7 @@
 {
-  "name": "@water-ui/core",
+  "name": "@wasser-ui/core",
   "version": "0.0.0",
-  "description": "Registry-first core protocol and verification primitives for Water UI.",
+  "description": "Registry-first core protocol and verification primitives for Wasser UI.",
   "license": "MIT",
   "files": [
     "dist"

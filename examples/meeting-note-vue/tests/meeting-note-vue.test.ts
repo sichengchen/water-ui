@@ -1,7 +1,7 @@
 import { renderToString } from "@vue/server-renderer";
 import { createSSRApp, h } from "vue";
 import { expect, test } from "vite-plus/test";
-import { WaterRenderer, WaterRuntimeProvider, WaterStreamRenderer } from "@water-ui/vue";
+import { WasserRenderer, WasserRuntimeProvider, WasserStreamRenderer } from "@wasser-ui/vue";
 import {
   compileMeetingActionsPrompt,
   createMockMeetingActionsStreamEvents,
@@ -10,8 +10,8 @@ import {
   mockMeetingActionsAgent,
   runMeetingActionsDemo,
 } from "../src/index.ts";
-import { applyStreamEvent, createStreamState, verifyDocument } from "@water-ui/core";
-import type { WaterRuntime } from "@water-ui/vue";
+import { applyStreamEvent, createStreamState, verifyDocument } from "@wasser-ui/core";
+import type { WasserRuntime } from "@wasser-ui/vue";
 
 test("mock agent output verifies against app components and runtime capabilities", async () => {
   const runtime = createMeetingRuntime();
@@ -46,7 +46,7 @@ test("compiled prompt exposes only registered app components and runtime ids", (
 test("renders the verified todo list", async () => {
   const result = await runMeetingActionsDemo();
 
-  const html = await renderWater(h(WaterRenderer, { ui: result.ui }), {
+  const html = await renderWasser(h(WasserRenderer, { ui: result.ui }), {
     registry: meetingActionsRegistry,
     runtime: result.runtime.renderRuntime,
   });
@@ -72,7 +72,7 @@ test("streams the todo list one task at a time", async () => {
     runtime: runtime.capabilityRuntime.describe(),
   }).state;
 
-  let html = await renderWater(h(WaterStreamRenderer, { stream }), {
+  let html = await renderWasser(h(WasserStreamRenderer, { stream }), {
     registry: meetingActionsRegistry,
     runtime: runtime.renderRuntime,
   });
@@ -86,7 +86,7 @@ test("streams the todo list one task at a time", async () => {
     runtime: runtime.capabilityRuntime.describe(),
   }).state;
 
-  html = await renderWater(h(WaterStreamRenderer, { stream }), {
+  html = await renderWasser(h(WasserStreamRenderer, { stream }), {
     registry: meetingActionsRegistry,
     runtime: runtime.renderRuntime,
   });
@@ -96,14 +96,14 @@ test("streams the todo list one task at a time", async () => {
   expect(html).not.toContain("Confirm support coverage");
 });
 
-function renderWater(
+function renderWasser(
   child: ReturnType<typeof h>,
-  options: { registry: typeof meetingActionsRegistry; runtime: WaterRuntime },
+  options: { registry: typeof meetingActionsRegistry; runtime: WasserRuntime },
 ): Promise<string> {
   const app = createSSRApp({
     render: () =>
       h(
-        WaterRuntimeProvider,
+        WasserRuntimeProvider,
         {
           runtime: options.runtime,
           registry: options.registry,

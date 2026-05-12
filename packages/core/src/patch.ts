@@ -12,7 +12,7 @@ import {
   type SchemaUINode,
   type SchemaUIPatch,
 } from "./protocol.js";
-import type { WaterRegistry } from "./index.js";
+import type { WasserRegistry } from "./index.js";
 
 export type PatchDiagnosticCode =
   | "invalid_patch_input"
@@ -34,7 +34,7 @@ export type PatchDiagnostic = {
 };
 
 export type ApplyPatchOptions = {
-  registry: WaterRegistry;
+  registry: WasserRegistry;
   runtime?: RuntimeCapabilityDescription;
 };
 
@@ -510,7 +510,7 @@ function removeNodeReferences(draft: DraftDocument, nodeId: string): void {
 
 function cloneDocument(ui: VerifiedSchemaUI): DraftDocument {
   return {
-    kind: "water.ui.document",
+    kind: "wasser.ui.document",
     version: ui.version,
     root: ui.root,
     nodes: Object.fromEntries(

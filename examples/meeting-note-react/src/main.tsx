@@ -1,5 +1,5 @@
-import { applyStreamEvent, createStreamState } from "@water-ui/core";
-import { WaterRuntimeProvider, WaterStreamRenderer } from "@water-ui/react";
+import { applyStreamEvent, createStreamState } from "@wasser-ui/core";
+import { WasserRuntimeProvider, WasserStreamRenderer } from "@wasser-ui/react";
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -23,7 +23,7 @@ import { meetingActionsRegistry } from "./registry.js";
 import { createMeetingRuntimeFromNote } from "./runtime.js";
 import { exampleMeetingNote } from "./types.js";
 import "./styles.css";
-import type { StreamState } from "@water-ui/core";
+import type { StreamState } from "@wasser-ui/core";
 import type { MeetingRuntime } from "./runtime.js";
 import type { ReactNode } from "react";
 
@@ -162,7 +162,7 @@ function App(): ReactNode {
             <div className="flex items-start justify-between gap-3">
               <CardTitle>Assistant</CardTitle>
               <Badge variant={chat.status === "idle" ? "outline" : "default"}>
-                {chat.status === "idle" ? "Demo" : "Water UI"}
+                {chat.status === "idle" ? "Demo" : "Wasser UI"}
               </Badge>
             </div>
             <CardDescription>Ask the agent to transform the note</CardDescription>
@@ -197,7 +197,7 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
   if (chat.status === "idle") {
     return (
       <div className="mr-auto max-w-[88%] text-sm text-muted-foreground">
-        <p>Click the prompt to generate a Water UI todo list from the note.</p>
+        <p>Click the prompt to generate a Wasser UI todo list from the note.</p>
       </div>
     );
   }
@@ -212,12 +212,12 @@ function renderAssistantMessage(chat: ChatState): ReactNode {
 
   return (
     <div className="mr-auto w-full max-w-[92%]">
-      <WaterRuntimeProvider
+      <WasserRuntimeProvider
         registry={meetingActionsRegistry}
         runtime={chat.meetingRuntime.renderRuntime}
       >
-        <WaterStreamRenderer stream={chat.stream} />
-      </WaterRuntimeProvider>
+        <WasserStreamRenderer stream={chat.stream} />
+      </WasserRuntimeProvider>
     </div>
   );
 }
@@ -256,7 +256,7 @@ function PromptResponseDialog({ details }: { details: PromptResponseDetails }): 
         <DialogHeader>
           <DialogTitle>Prompt &amp; Response</DialogTitle>
           <DialogDescription>
-            The Water UI stream prompt and the mocked JSONL events returned by the demo agent.
+            The Wasser UI stream prompt and the mocked JSONL events returned by the demo agent.
           </DialogDescription>
         </DialogHeader>
         <div className="grid min-h-0 gap-4 md:grid-cols-2">

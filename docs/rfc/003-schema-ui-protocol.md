@@ -13,8 +13,8 @@ Document shape:
 
 ```ts
 type SchemaUIDocument = {
-  kind: "water.ui.document";
-  version: "water.ui.v1";
+  kind: "wasser.ui.document";
+  version: "wasser.ui.v1";
   root: NodeId;
   nodes: Record<NodeId, SchemaUINode>;
   meta?: DocumentMeta;
@@ -28,7 +28,7 @@ type SchemaUINode = {
 };
 ```
 
-The critical rule is that `node.type` is a key into the active registry. Water
+The critical rule is that `node.type` is a key into the active registry. Wasser
 does not need global knowledge of what a component means. It only verifies that
 the active registry permits that component, props, children, slots, and runtime
 references.

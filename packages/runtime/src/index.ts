@@ -1,7 +1,7 @@
 import type { z } from "zod";
-import type { RuntimeCapabilityDescription } from "@water-ui/core";
+import type { RuntimeCapabilityDescription } from "@wasser-ui/core";
 
-export type WaterRuntimeRisk = "low" | "medium" | "high" | "destructive";
+export type WasserRuntimeRisk = "low" | "medium" | "high" | "destructive";
 
 export type MaybePromise<T> = T | Promise<T>;
 
@@ -9,7 +9,7 @@ export type RuntimeCapabilitySummary = {
   id: string;
   label?: string;
   description?: string;
-  risk?: WaterRuntimeRisk;
+  risk?: WasserRuntimeRisk;
 };
 
 export type StateDefinition<Value = unknown> = {
@@ -34,7 +34,7 @@ export type ActionDefinition<Input = unknown, Output = unknown> = {
   id: string;
   label?: string;
   description?: string;
-  risk?: WaterRuntimeRisk;
+  risk?: WasserRuntimeRisk;
   inputSchema?: z.ZodType<Input>;
   outputSchema?: z.ZodType<Output>;
   handler: (input: Input, context: ActionContext) => MaybePromise<Output>;
@@ -44,7 +44,7 @@ export type MutationDefinition<Input = unknown, Output = unknown> = {
   id: string;
   label?: string;
   description?: string;
-  risk?: WaterRuntimeRisk;
+  risk?: WasserRuntimeRisk;
   inputSchema?: z.ZodType<Input>;
   outputSchema?: z.ZodType<Output>;
   handler: (input: Input, context: MutationContext) => MaybePromise<Output>;
@@ -57,12 +57,12 @@ export type QueryContext = {
 
 export type ActionContext = {
   actionId: string;
-  risk: WaterRuntimeRisk;
+  risk: WasserRuntimeRisk;
 };
 
 export type MutationContext = {
   mutationId: string;
-  risk: WaterRuntimeRisk;
+  risk: WasserRuntimeRisk;
 };
 
 export type PermissionDecision = {
@@ -79,12 +79,12 @@ export type PermissionDecisionInput =
   | {
       kind: "action";
       id: string;
-      risk: WaterRuntimeRisk;
+      risk: WasserRuntimeRisk;
     }
   | {
       kind: "mutation";
       id: string;
-      risk: WaterRuntimeRisk;
+      risk: WasserRuntimeRisk;
     }
   | {
       kind: "state.set";
@@ -220,7 +220,7 @@ export type RuntimeEventBus = {
   clear(): void;
 };
 
-export type WaterRuntime = {
+export type WasserRuntime = {
   state: StateRegistry;
   queries: QueryRegistry;
   actions: ActionRegistry;
@@ -233,24 +233,24 @@ export type WaterRuntime = {
   canRender(input: { permission: string }): boolean;
 };
 
-export type CreateWaterRuntimeOptions = {
+export type CreateWasserRuntimeOptions = {
   permissions?: PermissionGuard;
   telemetry?: RuntimeEventListener;
 };
 
-export class WaterRuntimeError extends Error {
+export class WasserRuntimeError extends Error {
   readonly code: RuntimeErrorCode;
   readonly id: string;
 
   constructor(code: RuntimeErrorCode, id: string, message: string) {
     super(message);
-    this.name = "WaterRuntimeError";
+    this.name = "WasserRuntimeError";
     this.code = code;
     this.id = id;
   }
 }
 
-export function createWaterRuntime(options: CreateWaterRuntimeOptions = {}): WaterRuntime {
+export function createWasserRuntime(options: CreateWasserRuntimeOptions = {}): WasserRuntime {
   const events = createRuntimeEventBus(options.telemetry);
   const permissionGuard = options.permissions;
 
@@ -261,7 +261,7 @@ export function createWaterRuntime(options: CreateWaterRuntimeOptions = {}): Wat
   const actionDefinitions = new Map<string, ActionDefinition>();
   const mutationDefinitions = new Map<string, MutationDefinition>();
 
-  const runtime: WaterRuntime = {
+  const runtime: WasserRuntime = {
     state: {
       register<Value>(definition: StateDefinition<Value>) {
         const key = normalizeId(definition.key, "state key");
@@ -632,7 +632,7 @@ function parseWithSchema<T>(schema: z.ZodType<T> | undefined, value: unknown, id
 
   const result = schema.safeParse(value);
   if (!result.success) {
-    throw new WaterRuntimeError(
+    throw new WasserRuntimeError(
       "invalid_input",
       id,
       `Runtime value for '${id}' failed schema validation: ${result.error.issues[0]?.message ?? "Invalid value"}.`,
@@ -655,7 +655,7 @@ function decideSync(
 ): PermissionDecision {
   const result = callGuard(guard, input);
   if (result instanceof Promise) {
-    throw new WaterRuntimeError(
+    throw new WasserRuntimeError(
       "permission_denied",
       input.kind,
       "Synchronous permission checks cannot use an async permission guard.",
@@ -750,12 +750,12 @@ function block(
   id: string,
   message: string,
   events: RuntimeEventBus,
-): WaterRuntimeError {
+): WasserRuntimeError {
   events.emit({
     kind: "runtime.block",
     code,
     id,
     reason: message,
   });
-  return new WaterRuntimeError(code, id, message);
+  return new WasserRuntimeError(code, id, message);
 }

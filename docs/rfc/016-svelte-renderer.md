@@ -1,14 +1,14 @@
 # RFC 016: Svelte Renderer
 
-Svelte is a renderer target for Water.
+Svelte is a renderer target for Wasser.
 
 The Svelte renderer renders only VerifiedSchemaUI:
 
 ```svelte
 <script lang="ts">
-  import { createWaterRenderer } from "@water-ui/svelte";
+  import { createWasserRenderer } from "@wasser-ui/svelte";
 
-  const renderer = createWaterRenderer({ ui: verifiedUi, runtime, registry });
+  const renderer = createWasserRenderer({ ui: verifiedUi, runtime, registry });
 </script>
 
 {@render renderer()}
@@ -17,9 +17,9 @@ The Svelte renderer renders only VerifiedSchemaUI:
 Server rendering can use the same contract directly:
 
 ```ts
-import { renderWaterToHtml } from "@water-ui/svelte";
+import { renderWasserToHtml } from "@wasser-ui/svelte";
 
-const html = renderWaterToHtml({ ui: verifiedUi, runtime, registry });
+const html = renderWasserToHtml({ ui: verifiedUi, runtime, registry });
 ```
 
 Renderer responsibilities:
@@ -28,7 +28,7 @@ Renderer responsibilities:
 - Resolve the root node.
 - Look up the registry entry for each node.
 - Render through registry render functions or adapter bindings.
-- Support app-owned Svelte components returned through `waterComponent`.
+- Support app-owned Svelte components returned through `wasserComponent`.
 - Render children recursively.
 - Render named slots.
 - Resolve runtime data refs.

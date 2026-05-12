@@ -1,11 +1,11 @@
-import { summarizeWaterRegistry } from "@water-ui/core";
+import { summarizeWasserRegistry } from "@wasser-ui/core";
 import type {
   RegistryComponentSummary,
   RuntimeCapabilityDescription,
   RuntimeCapabilitySet,
   VerificationDiagnostic,
-  WaterRegistry,
-} from "@water-ui/core";
+  WasserRegistry,
+} from "@wasser-ui/core";
 
 export type PromptMode = "document" | "patch" | "stream" | "repair";
 
@@ -14,7 +14,7 @@ export type PromptRuntimeDescription = RuntimeCapabilityDescription & {
 };
 
 export type CompilePromptOptions = {
-  registry: WaterRegistry;
+  registry: WasserRegistry;
   runtime?: PromptRuntimeDescription;
   profile?: string;
   currentDocument?: unknown;
@@ -50,7 +50,7 @@ export type CompiledPromptSections = {
 };
 
 const forbiddenRules = Object.freeze([
-  "Only output Water Schema UI.",
+  "Only output Wasser Schema UI.",
   "Do not output JSX.",
   "Do not output JavaScript.",
   "Do not invent component types.",
@@ -99,7 +99,7 @@ export function compileRepairPrompt(options: CompileRepairPromptOptions): string
     ...sections,
     output: [
       `Repair the invalid ${targetMode} output.`,
-      "Return only corrected Water protocol output.",
+      "Return only corrected Wasser protocol output.",
       "Do not explain the repair.",
       ...outputInstructions(targetMode),
     ],
@@ -127,12 +127,12 @@ function buildBaseSections(
   mode: PromptMode,
   options: CompilePromptOptions,
 ): CompiledPromptSections {
-  const summary = summarizeWaterRegistry(options.registry, {
+  const summary = summarizeWasserRegistry(options.registry, {
     profile: options.profile,
   });
 
   return Object.freeze({
-    header: `Water UI Prompt\nMode: ${mode}${options.profile ? `\nProfile: ${options.profile}` : ""}`,
+    header: `Wasser UI Prompt\nMode: ${mode}${options.profile ? `\nProfile: ${options.profile}` : ""}`,
     rules: forbiddenRules,
     components: summary.components.flatMap(formatComponent),
     runtime: formatRuntime(options.runtime),
@@ -145,14 +145,14 @@ function outputInstructions(mode: PromptMode): readonly string[] {
   switch (mode) {
     case "document":
       return Object.freeze([
-        'Return exactly one JSON object with kind "water.ui.document".',
-        'Use version "water.ui.v1".',
+        'Return exactly one JSON object with kind "wasser.ui.document".',
+        'Use version "wasser.ui.v1".',
         "Include root and nodes.",
       ]);
     case "patch":
       return Object.freeze([
-        'Return exactly one JSON object with kind "water.ui.patch".',
-        'Use version "water.ui.v1".',
+        'Return exactly one JSON object with kind "wasser.ui.patch".',
+        'Use version "wasser.ui.v1".',
         "Use semantic operations instead of regenerating the full document.",
       ]);
     case "stream":
@@ -163,7 +163,7 @@ function outputInstructions(mode: PromptMode): readonly string[] {
       ]);
     case "repair":
       return Object.freeze([
-        "Return only corrected Water protocol output.",
+        "Return only corrected Wasser protocol output.",
         "Fix every diagnostic using registered components and runtime capabilities.",
       ]);
   }

@@ -1,10 +1,10 @@
 import { expect, test } from "vite-plus/test";
 import { z } from "zod";
-import { createWaterRuntime, WaterRuntimeError } from "../src/index.ts";
+import { createWasserRuntime, WasserRuntimeError } from "../src/index.ts";
 import type { RuntimeEventRecord } from "../src/index.ts";
 
 test("registers capabilities and exposes verification descriptions", () => {
-  const runtime = createWaterRuntime();
+  const runtime = createWasserRuntime();
 
   runtime.state.register({
     key: "filters.status",
@@ -37,7 +37,7 @@ test("registers capabilities and exposes verification descriptions", () => {
 });
 
 test("resolves known data refs through registered queries", async () => {
-  const runtime = createWaterRuntime();
+  const runtime = createWasserRuntime();
 
   runtime.queries.register({
     id: "customers",
@@ -57,7 +57,7 @@ test("resolves known data refs through registered queries", async () => {
 
 test("runs known action IDs safely with permission guard and schema validation", async () => {
   const events: RuntimeEventRecord[] = [];
-  const runtime = createWaterRuntime({
+  const runtime = createWasserRuntime({
     telemetry: (event) => events.push(event),
     permissions: {
       canRunAction: ({ risk }) => risk !== "destructive",
@@ -89,9 +89,9 @@ test("runs known action IDs safely with permission guard and schema validation",
 });
 
 test("blocks unknown capabilities instead of running them", async () => {
-  const runtime = createWaterRuntime();
+  const runtime = createWasserRuntime();
 
-  await expect(runtime.runAction("missingAction")).rejects.toBeInstanceOf(WaterRuntimeError);
+  await expect(runtime.runAction("missingAction")).rejects.toBeInstanceOf(WasserRuntimeError);
   await expect(runtime.resolveData("queries.missing.data")).rejects.toMatchObject({
     code: "unknown_query",
     id: "queries.missing.data",
@@ -111,7 +111,7 @@ test("blocks unknown capabilities instead of running them", async () => {
 });
 
 test("guards state and mutation operations and logs runtime events", async () => {
-  const runtime = createWaterRuntime({
+  const runtime = createWasserRuntime({
     permissions: (input) => {
       if (input.kind === "mutation" && input.risk === "destructive") {
         return {

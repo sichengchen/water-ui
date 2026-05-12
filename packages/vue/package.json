@@ -1,7 +1,7 @@
 {
-  "name": "@water-ui/vue",
+  "name": "@wasser-ui/vue",
   "version": "0.0.0",
-  "description": "Vue renderer package for Water UI.",
+  "description": "Vue renderer package for Wasser UI.",
   "license": "MIT",
   "files": [
     "dist"
@@ -20,7 +20,7 @@
     "test": "vp test"
   },
   "dependencies": {
-    "@water-ui/core": "workspace:*"
+    "@wasser-ui/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { applyStreamEvent, createStreamState } from "@water-ui/core";
-import { WaterStreamRendererComponent } from "@water-ui/angular";
+import { applyStreamEvent, createStreamState } from "@wasser-ui/core";
+import { WasserStreamRendererComponent } from "@wasser-ui/angular";
 import {
   compileMeetingActionsPrompt,
   formatMockMeetingActionsStreamOutput,
@@ -10,7 +10,7 @@ import {
 import { meetingActionsRegistry } from "./registry.js";
 import { createMeetingRuntimeFromNote } from "./runtime.js";
 import { exampleMeetingNote } from "./types.js";
-import type { StreamState } from "@water-ui/core";
+import type { StreamState } from "@wasser-ui/core";
 import type { MeetingRuntime } from "./runtime.js";
 
 type ChatStatus = "idle" | "streaming" | "ready" | "error";
@@ -25,7 +25,7 @@ const defaultPrompt = "Turn this meeting note into a todo list.";
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [FormsModule, WaterStreamRendererComponent],
+  imports: [FormsModule, WasserStreamRendererComponent],
   template: `
     <main class="mx-auto h-dvh w-full max-w-6xl overflow-hidden p-6">
       <section class="grid h-full min-h-0 gap-6 lg:grid-cols-[minmax(0,1fr)_440px]">
@@ -62,7 +62,7 @@ const defaultPrompt = "Turn this meeting note into a todo list.";
                 [class.bg-primary]="status !== 'idle'"
                 [class.text-primary-foreground]="status !== 'idle'"
               >
-                {{ status === "idle" ? "Demo" : "Water UI" }}
+                {{ status === "idle" ? "Demo" : "Wasser UI" }}
               </span>
             </div>
             <p class="text-muted-foreground text-sm">Ask the agent to transform the note</p>
@@ -82,7 +82,7 @@ const defaultPrompt = "Turn this meeting note into a todo list.";
 
               @if (status === "idle") {
                 <div class="text-muted-foreground mr-auto max-w-[88%] text-sm">
-                  <p>Click the prompt to generate a Water UI todo list from the note.</p>
+                  <p>Click the prompt to generate a Wasser UI todo list from the note.</p>
                 </div>
               } @else if (status === "error") {
                 <div
@@ -92,7 +92,7 @@ const defaultPrompt = "Turn this meeting note into a todo list.";
                 </div>
               } @else if (stream && meetingRuntime) {
                 <div class="mr-auto w-full max-w-[92%]">
-                  <water-stream-renderer
+                  <wasser-stream-renderer
                     [registry]="meetingActionsRegistry"
                     [runtime]="meetingRuntime.renderRuntime"
                     [stream]="stream"
@@ -140,7 +140,7 @@ const defaultPrompt = "Turn this meeting note into a todo list.";
             <header class="flex flex-col gap-2 text-center sm:text-left">
               <h2 class="text-lg leading-none font-semibold">Prompt &amp; Response</h2>
               <p class="text-muted-foreground text-sm">
-                The Water UI stream prompt and the mocked JSONL events returned by the demo agent.
+                The Wasser UI stream prompt and the mocked JSONL events returned by the demo agent.
               </p>
             </header>
             <button

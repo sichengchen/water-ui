@@ -2,8 +2,8 @@ import { Component } from "@angular/core";
 import {
   NodeRendererComponent,
   SlotRendererComponent,
-  WaterRendererComponent,
-  WaterStreamRendererComponent,
+  WasserRendererComponent,
+  WasserStreamRendererComponent,
 } from "./index.js";
 
 let renderRequest: any;
@@ -18,13 +18,13 @@ export function setRenderRequest(request: unknown): void {
   imports: [
     NodeRendererComponent,
     SlotRendererComponent,
-    WaterRendererComponent,
-    WaterStreamRendererComponent,
+    WasserRendererComponent,
+    WasserStreamRendererComponent,
   ],
   template: `
     @switch (request.kind) {
       @case ("node") {
-        <water-node-renderer
+        <wasser-node-renderer
           [ui]="request.ui"
           [registry]="request.registry"
           [runtime]="request.runtime"
@@ -33,7 +33,7 @@ export function setRenderRequest(request: unknown): void {
         />
       }
       @case ("slot") {
-        <water-slot-renderer
+        <wasser-slot-renderer
           [ui]="request.ui"
           [registry]="request.registry"
           [runtime]="request.runtime"
@@ -43,7 +43,7 @@ export function setRenderRequest(request: unknown): void {
         />
       }
       @case ("stream") {
-        <water-stream-renderer
+        <wasser-stream-renderer
           [ui]="request.ui"
           [stream]="request.stream"
           [registry]="request.registry"
@@ -52,7 +52,7 @@ export function setRenderRequest(request: unknown): void {
         />
       }
       @default {
-        <water-renderer
+        <wasser-renderer
           [ui]="request.ui"
           [registry]="request.registry"
           [runtime]="request.runtime"

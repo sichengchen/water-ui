@@ -1,10 +1,10 @@
 {
-  "name": "@water-ui/cli",
+  "name": "@wasser-ui/cli",
   "version": "0.0.0",
-  "description": "Command-line tools for Water UI.",
+  "description": "Command-line tools for Wasser UI.",
   "license": "MIT",
   "bin": {
-    "water-ui": "./dist/index.mjs"
+    "wasser-ui": "./dist/index.mjs"
   },
   "files": [
     "dist"

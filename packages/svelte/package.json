@@ -1,7 +1,7 @@
 {
-  "name": "@water-ui/svelte",
+  "name": "@wasser-ui/svelte",
   "version": "0.0.0",
-  "description": "Svelte renderer package for Water UI.",
+  "description": "Svelte renderer package for Wasser UI.",
   "license": "MIT",
   "files": [
     "dist"
@@ -20,7 +20,7 @@
     "test": "vp test"
   },
   "dependencies": {
-    "@water-ui/core": "workspace:*"
+    "@wasser-ui/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

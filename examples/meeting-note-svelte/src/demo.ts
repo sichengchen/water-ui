@@ -1,8 +1,8 @@
-import { verifyDocument } from "@water-ui/core";
+import { verifyDocument } from "@wasser-ui/core";
 import { mockMeetingActionsAgent, compileMeetingActionsPrompt } from "./agent.js";
 import { meetingActionsRegistry } from "./registry.js";
 import { createMeetingRuntime, createMeetingRuntimeFromNote } from "./runtime.js";
-import type { VerifiedSchemaUI, VerificationDiagnostic } from "@water-ui/core";
+import type { VerifiedSchemaUI, VerificationDiagnostic } from "@wasser-ui/core";
 import type { MeetingRuntime } from "./runtime.js";
 
 export type MeetingActionsDemoResult = {

@@ -1,7 +1,7 @@
 # Meeting Note Angular
 
 An Angular demo that uses the same meeting note flow and renders the streamed
-Water UI todo list with `@water-ui/angular`.
+Wasser UI todo list with `@wasser-ui/angular`.
 
 Run:
 

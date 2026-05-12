@@ -1,15 +1,15 @@
-import { assertVerifiedSchemaUI, getWaterComponent, isVerifiedSchemaUI } from "@water-ui/core";
+import { assertVerifiedSchemaUI, getWasserComponent, isVerifiedSchemaUI } from "@wasser-ui/core";
 import { createRawSnippet, mount, unmount } from "svelte";
 import type {
   SchemaUINode,
   StreamState,
   VerifiedSchemaUI,
-  WaterComponentEntry,
-  WaterRegistry,
-} from "@water-ui/core";
+  WasserComponentEntry,
+  WasserRegistry,
+} from "@wasser-ui/core";
 import type { Component, Snippet } from "svelte";
 
-export type WaterRenderDiagnosticCode =
+export type WasserRenderDiagnosticCode =
   | "invalid_renderer_input"
   | "missing_registry"
   | "missing_node"
@@ -21,8 +21,8 @@ export type WaterRenderDiagnosticCode =
   | "runtime_action_missing"
   | "render_binding_error";
 
-export type WaterRenderDiagnostic = {
-  code: WaterRenderDiagnosticCode;
+export type WasserRenderDiagnostic = {
+  code: WasserRenderDiagnosticCode;
   severity: "error" | "warning";
   path: string;
   message: string;
@@ -30,7 +30,7 @@ export type WaterRenderDiagnostic = {
   componentType?: string;
 };
 
-export type WaterRuntimeEvent =
+export type WasserRuntimeEvent =
   | {
       kind: "renderer.node.render";
       nodeId: string;
@@ -40,7 +40,7 @@ export type WaterRuntimeEvent =
       kind: "renderer.node.fallback";
       nodeId?: string;
       componentType?: string;
-      code: WaterRenderDiagnosticCode;
+      code: WasserRenderDiagnosticCode;
     }
   | {
       kind: "runtime.action.invoke";
@@ -49,164 +49,164 @@ export type WaterRuntimeEvent =
       componentType: string;
     };
 
-export type WaterPermissionContext = {
+export type WasserPermissionContext = {
   permission: string;
   nodeId: string;
   node: SchemaUINode;
-  component: WaterComponentEntry;
+  component: WasserComponentEntry;
 };
 
-export type WaterActionContext = {
+export type WasserActionContext = {
   actionId: string;
   nodeId: string;
   node: SchemaUINode;
-  component: WaterComponentEntry;
+  component: WasserComponentEntry;
 };
 
-export type WaterDataContext = {
+export type WasserDataContext = {
   dataRef: string;
   nodeId: string;
   node: SchemaUINode;
-  component: WaterComponentEntry;
+  component: WasserComponentEntry;
 };
 
-export type WaterPermissionGuard =
-  | ((context: WaterPermissionContext) => boolean)
+export type WasserPermissionGuard =
+  | ((context: WasserPermissionContext) => boolean)
   | {
-      canRender?: (context: WaterPermissionContext) => boolean;
-      has?: (permission: string, context: WaterPermissionContext) => boolean;
+      canRender?: (context: WasserPermissionContext) => boolean;
+      has?: (permission: string, context: WasserPermissionContext) => boolean;
     };
 
-export type WaterTelemetrySink =
-  | ((event: WaterRuntimeEvent) => void)
+export type WasserTelemetrySink =
+  | ((event: WasserRuntimeEvent) => void)
   | {
-      emit: (event: WaterRuntimeEvent) => void;
+      emit: (event: WasserRuntimeEvent) => void;
     };
 
-export type WaterSvelteComponentRenderer = (
+export type WasserSvelteComponentRenderer = (
   component: Component<Record<string, unknown>>,
-  props: WaterSvelteComponentProps,
+  props: WasserSvelteComponentProps,
 ) => string;
 
-export type WaterRuntime = {
-  registry?: WaterRegistry;
-  resolveData?: (dataRef: string, context: WaterDataContext) => unknown;
-  runAction?: (actionId: string, payload: unknown, context: WaterActionContext) => unknown;
-  canRender?: (context: WaterPermissionContext) => boolean;
-  permissions?: WaterPermissionGuard;
-  telemetry?: WaterTelemetrySink;
-  renderComponent?: WaterSvelteComponentRenderer;
+export type WasserRuntime = {
+  registry?: WasserRegistry;
+  resolveData?: (dataRef: string, context: WasserDataContext) => unknown;
+  runAction?: (actionId: string, payload: unknown, context: WasserActionContext) => unknown;
+  canRender?: (context: WasserPermissionContext) => boolean;
+  permissions?: WasserPermissionGuard;
+  telemetry?: WasserTelemetrySink;
+  renderComponent?: WasserSvelteComponentRenderer;
 };
 
-export type WaterBoundAction = (payload?: unknown) => unknown;
+export type WasserBoundAction = (payload?: unknown) => unknown;
 
-export type WaterRenderBindings = {
+export type WasserRenderBindings = {
   data: Readonly<Record<string, unknown>>;
-  actions: Readonly<Record<string, WaterBoundAction>>;
+  actions: Readonly<Record<string, WasserBoundAction>>;
 };
 
-export type WaterSveltePrimitive = string | number | boolean | null | undefined;
+export type WasserSveltePrimitive = string | number | boolean | null | undefined;
 
-export type WaterSvelteChild =
-  | WaterSveltePrimitive
-  | WaterSvelteElement
-  | WaterSvelteComponent
-  | WaterSvelteRawHtml
-  | readonly WaterSvelteChild[];
+export type WasserSvelteChild =
+  | WasserSveltePrimitive
+  | WasserSvelteElement
+  | WasserSvelteComponent
+  | WasserSvelteRawHtml
+  | readonly WasserSvelteChild[];
 
-export type WaterSvelteElementProps = Readonly<Record<string, unknown>>;
+export type WasserSvelteElementProps = Readonly<Record<string, unknown>>;
 
-export type WaterSvelteElement = Readonly<{
-  kind: "water.svelte.element";
+export type WasserSvelteElement = Readonly<{
+  kind: "wasser.svelte.element";
   tag: string;
-  props?: WaterSvelteElementProps;
-  children?: WaterSvelteChild;
+  props?: WasserSvelteElementProps;
+  children?: WasserSvelteChild;
 }>;
 
-export type WaterSvelteRawHtml = Readonly<{
-  kind: "water.svelte.raw-html";
+export type WasserSvelteRawHtml = Readonly<{
+  kind: "wasser.svelte.raw-html";
   html: string;
 }>;
 
-export type WaterSvelteComponentProps = Readonly<Record<string, unknown>>;
+export type WasserSvelteComponentProps = Readonly<Record<string, unknown>>;
 
-export type WaterSvelteComponent = Readonly<{
-  kind: "water.svelte.component";
+export type WasserSvelteComponent = Readonly<{
+  kind: "wasser.svelte.component";
   component: Component<Record<string, unknown>>;
-  props?: WaterSvelteComponentProps;
+  props?: WasserSvelteComponentProps;
 }>;
 
-export type WaterRenderContext<Props = Record<string, unknown>> = {
+export type WasserRenderContext<Props = Record<string, unknown>> = {
   props: Props;
   nodeId: string;
   node: SchemaUINode;
-  component: WaterComponentEntry<Props>;
-  runtime: WaterRuntime;
-  bindings: WaterRenderBindings;
-  children: readonly WaterSvelteChild[];
-  slots: Readonly<Record<string, WaterSvelteChild>>;
-  renderNode: (nodeId: string) => WaterSvelteChild;
-  renderSlot: (nodeId: string, slotName: string) => WaterSvelteChild;
+  component: WasserComponentEntry<Props>;
+  runtime: WasserRuntime;
+  bindings: WasserRenderBindings;
+  children: readonly WasserSvelteChild[];
+  slots: Readonly<Record<string, WasserSvelteChild>>;
+  renderNode: (nodeId: string) => WasserSvelteChild;
+  renderSlot: (nodeId: string, slotName: string) => WasserSvelteChild;
 };
 
-export type WaterRenderBinding<Props = Record<string, unknown>> = (
-  context: WaterRenderContext<Props>,
-) => WaterSvelteChild;
+export type WasserRenderBinding<Props = Record<string, unknown>> = (
+  context: WasserRenderContext<Props>,
+) => WasserSvelteChild;
 
-export type WaterRuntimeProviderProps = {
-  runtime: WaterRuntime;
-  registry?: WaterRegistry;
+export type WasserRuntimeProviderProps = {
+  runtime: WasserRuntime;
+  registry?: WasserRegistry;
 };
 
-export type WaterRendererProps = {
+export type WasserRendererProps = {
   ui: VerifiedSchemaUI;
-  runtime?: WaterRuntime;
-  registry?: WaterRegistry;
-  fallback?: WaterSvelteChild;
-  onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
+  runtime?: WasserRuntime;
+  registry?: WasserRegistry;
+  fallback?: WasserSvelteChild;
+  onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
 };
 
-export type WaterStreamRendererProps = Omit<WaterRendererProps, "ui"> & {
+export type WasserStreamRendererProps = Omit<WasserRendererProps, "ui"> & {
   ui?: VerifiedSchemaUI;
   stream?: StreamState;
 };
 
 export type NodeRendererProps = {
   ui?: VerifiedSchemaUI;
-  runtime?: WaterRuntime;
-  registry?: WaterRegistry;
+  runtime?: WasserRuntime;
+  registry?: WasserRegistry;
   nodeId: string;
-  fallback?: WaterSvelteChild;
-  onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
+  fallback?: WasserSvelteChild;
+  onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
 };
 
 export type SlotRendererProps = {
   ui?: VerifiedSchemaUI;
-  runtime?: WaterRuntime;
-  registry?: WaterRegistry;
+  runtime?: WasserRuntime;
+  registry?: WasserRegistry;
   nodeId: string;
   name: string;
-  fallback?: WaterSvelteChild;
-  onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
+  fallback?: WasserSvelteChild;
+  onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
 };
 
-export type WaterRuntimeContextValue = {
-  runtime: WaterRuntime;
-  registry?: WaterRegistry;
+export type WasserRuntimeContextValue = {
+  runtime: WasserRuntime;
+  registry?: WasserRegistry;
 };
 
 type RenderSession = {
   ui: VerifiedSchemaUI;
-  registry?: WaterRegistry;
-  runtime: WaterRuntime;
-  diagnostics: WaterRenderDiagnostic[];
-  fallback?: WaterSvelteChild;
+  registry?: WasserRegistry;
+  runtime: WasserRuntime;
+  diagnostics: WasserRenderDiagnostic[];
+  fallback?: WasserSvelteChild;
 };
 
 type PendingSvelteMount = {
   id: string;
   component: Component<Record<string, unknown>>;
-  props: WaterSvelteComponentProps;
+  props: WasserSvelteComponentProps;
 };
 
 type RenderHtmlResult = {
@@ -215,134 +215,134 @@ type RenderHtmlResult = {
 };
 
 type RenderHtmlOptions = {
-  runtime: WaterRuntime;
+  runtime: WasserRuntime;
   mounts: PendingSvelteMount[];
 };
 
 const emptyRuntime = Object.freeze({});
 
-export function createWaterRuntime({
+export function createWasserRuntime({
   runtime,
   registry,
-}: WaterRuntimeProviderProps): WaterRuntimeContextValue {
+}: WasserRuntimeProviderProps): WasserRuntimeContextValue {
   return Object.freeze({
     runtime,
     registry: registry ?? runtime.registry,
   });
 }
 
-export function waterElement(
+export function wasserElement(
   tag: string,
-  props?: WaterSvelteElementProps,
-  children?: WaterSvelteChild,
-): WaterSvelteElement {
+  props?: WasserSvelteElementProps,
+  children?: WasserSvelteChild,
+): WasserSvelteElement {
   return Object.freeze({
-    kind: "water.svelte.element",
+    kind: "wasser.svelte.element",
     tag,
     ...(props ? { props } : {}),
     ...(children !== undefined ? { children } : {}),
   });
 }
 
-export function waterRawHtml(html: string): WaterSvelteRawHtml {
+export function wasserRawHtml(html: string): WasserSvelteRawHtml {
   return Object.freeze({
-    kind: "water.svelte.raw-html",
+    kind: "wasser.svelte.raw-html",
     html,
   });
 }
 
-export function waterComponent<Props extends Record<string, unknown>>(
+export function wasserComponent<Props extends Record<string, unknown>>(
   component: Component<Props>,
   props?: Readonly<Props>,
-): WaterSvelteComponent {
+): WasserSvelteComponent {
   return Object.freeze({
-    kind: "water.svelte.component",
+    kind: "wasser.svelte.component",
     component: component as Component<Record<string, unknown>>,
     ...(props ? { props } : {}),
   });
 }
 
-export function createWaterRenderer(
-  props: WaterRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+export function createWasserRenderer(
+  props: WasserRendererProps,
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: props.runtime ?? emptyRuntime,
     registry: props.registry,
   }),
 ): Snippet {
-  return createWaterSnippet(() => renderWaterToResult(props, context));
+  return createWasserSnippet(() => renderWasserToResult(props, context));
 }
 
-export function createWaterStreamRenderer(
-  props: WaterStreamRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+export function createWasserStreamRenderer(
+  props: WasserStreamRendererProps,
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: props.runtime ?? emptyRuntime,
     registry: props.registry,
   }),
 ): Snippet {
-  return createWaterSnippet(() => renderWaterStreamToResult(props, context));
+  return createWasserSnippet(() => renderWasserStreamToResult(props, context));
 }
 
 export function createNodeRenderer(
   props: NodeRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: props.runtime ?? emptyRuntime,
     registry: props.registry,
   }),
 ): Snippet {
-  return createWaterSnippet(() => renderWaterNodeToResult(props, context));
+  return createWasserSnippet(() => renderWasserNodeToResult(props, context));
 }
 
 export function createSlotRenderer(
   props: SlotRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: props.runtime ?? emptyRuntime,
     registry: props.registry,
   }),
 ): Snippet {
-  return createWaterSnippet(() => renderWaterSlotToResult(props, context));
+  return createWasserSnippet(() => renderWasserSlotToResult(props, context));
 }
 
-export function renderWaterToHtml(
-  props: WaterRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+export function renderWasserToHtml(
+  props: WasserRendererProps,
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: props.runtime ?? emptyRuntime,
     registry: props.registry,
   }),
 ): string {
-  return renderWaterToResult(props, context).html;
+  return renderWasserToResult(props, context).html;
 }
 
-export function renderWaterStreamToHtml(
-  props: WaterStreamRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+export function renderWasserStreamToHtml(
+  props: WasserStreamRendererProps,
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: props.runtime ?? emptyRuntime,
     registry: props.registry,
   }),
 ): string {
-  return renderWaterStreamToResult(props, context).html;
+  return renderWasserStreamToResult(props, context).html;
 }
 
-export function renderWaterNodeToHtml(
+export function renderWasserNodeToHtml(
   props: NodeRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: props.runtime ?? emptyRuntime,
     registry: props.registry,
   }),
 ): string {
-  return renderWaterNodeToResult(props, context).html;
+  return renderWasserNodeToResult(props, context).html;
 }
 
-export function renderWaterSlotToHtml(
+export function renderWasserSlotToHtml(
   props: SlotRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: props.runtime ?? emptyRuntime,
     registry: props.registry,
   }),
 ): string {
-  return renderWaterSlotToResult(props, context).html;
+  return renderWasserSlotToResult(props, context).html;
 }
 
-function createWaterSnippet(render: () => RenderHtmlResult): Snippet {
+function createWasserSnippet(render: () => RenderHtmlResult): Snippet {
   return createRawSnippet(() => {
     let result: RenderHtmlResult | undefined;
     const getResult = () => {
@@ -363,7 +363,7 @@ function setupSvelteMounts(element: Element, mounts: readonly PendingSvelteMount
   }
 
   const mounted = mounts.flatMap((item) => {
-    const target = element.querySelector(`[data-water-svelte-component="${item.id}"]`);
+    const target = element.querySelector(`[data-wasser-svelte-component="${item.id}"]`);
     if (!target) {
       return [];
     }
@@ -383,20 +383,20 @@ function setupSvelteMounts(element: Element, mounts: readonly PendingSvelteMount
   };
 }
 
-function renderWaterToResult(
-  { ui, registry, runtime, fallback, onDiagnostics }: WaterRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+function renderWasserToResult(
+  { ui, registry, runtime, fallback, onDiagnostics }: WasserRendererProps,
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: runtime ?? emptyRuntime,
     registry,
   }),
 ): RenderHtmlResult {
-  const diagnostics: WaterRenderDiagnostic[] = [];
+  const diagnostics: WasserRenderDiagnostic[] = [];
   const effectiveRuntime = runtime ?? context.runtime;
   const mounts: PendingSvelteMount[] = [];
 
   if (!isVerifiedSchemaUI(ui)) {
     diagnostics.push(
-      diagnostic("invalid_renderer_input", "$", "WaterRenderer accepts only VerifiedSchemaUI."),
+      diagnostic("invalid_renderer_input", "$", "WasserRenderer accepts only VerifiedSchemaUI."),
     );
     onDiagnostics?.(Object.freeze(diagnostics));
     return {
@@ -427,9 +427,9 @@ function renderWaterToResult(
   };
 }
 
-function renderWaterStreamToResult(
-  props: WaterStreamRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+function renderWasserStreamToResult(
+  props: WasserStreamRendererProps,
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: props.runtime ?? emptyRuntime,
     registry: props.registry,
   }),
@@ -447,7 +447,7 @@ function renderWaterStreamToResult(
     };
   }
 
-  return renderWaterToResult(
+  return renderWasserToResult(
     {
       ...props,
       ui: verifiedUi,
@@ -456,16 +456,16 @@ function renderWaterStreamToResult(
   );
 }
 
-function renderWaterNodeToResult(
+function renderWasserNodeToResult(
   { ui: uiProp, registry, runtime, nodeId, fallback, onDiagnostics }: NodeRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: runtime ?? emptyRuntime,
     registry,
   }),
 ): RenderHtmlResult {
   const effectiveRuntime = runtime ?? context.runtime;
   const ui = uiProp ?? getVerifiedUIFromRuntime(effectiveRuntime);
-  const diagnostics: WaterRenderDiagnostic[] = [];
+  const diagnostics: WasserRenderDiagnostic[] = [];
   const mounts: PendingSvelteMount[] = [];
 
   if (!ui) {
@@ -504,16 +504,16 @@ function renderWaterNodeToResult(
   };
 }
 
-function renderWaterSlotToResult(
+function renderWasserSlotToResult(
   { ui: uiProp, registry, runtime, nodeId, name, fallback, onDiagnostics }: SlotRendererProps,
-  context: WaterRuntimeContextValue = createWaterRuntime({
+  context: WasserRuntimeContextValue = createWasserRuntime({
     runtime: runtime ?? emptyRuntime,
     registry,
   }),
 ): RenderHtmlResult {
   const effectiveRuntime = runtime ?? context.runtime;
   const ui = uiProp ?? getVerifiedUIFromRuntime(effectiveRuntime);
-  const diagnostics: WaterRenderDiagnostic[] = [];
+  const diagnostics: WasserRenderDiagnostic[] = [];
   const mounts: PendingSvelteMount[] = [];
 
   if (!ui) {
@@ -552,7 +552,7 @@ function renderWaterSlotToResult(
   };
 }
 
-function renderNode(nodeId: string, session: RenderSession): WaterSvelteChild {
+function renderNode(nodeId: string, session: RenderSession): WasserSvelteChild {
   const node = session.ui.nodes[nodeId];
   if (!node) {
     const failure = pushDiagnostic(session, {
@@ -573,7 +573,7 @@ function renderNode(nodeId: string, session: RenderSession): WaterSvelteChild {
     const failure = pushDiagnostic(session, {
       code: "missing_registry",
       path: "$.registry",
-      message: "WaterRenderer requires a component registry.",
+      message: "WasserRenderer requires a component registry.",
       nodeId,
       componentType: node.type,
     });
@@ -586,7 +586,7 @@ function renderNode(nodeId: string, session: RenderSession): WaterSvelteChild {
     return renderFallback(session.fallback, failure);
   }
 
-  const component = getWaterComponent(session.registry, node.type);
+  const component = getWasserComponent(session.registry, node.type);
   if (!component) {
     const failure = pushDiagnostic(session, {
       code: "missing_component",
@@ -667,11 +667,11 @@ function renderNode(nodeId: string, session: RenderSession): WaterSvelteChild {
     const slotElements = renderSlots(nodeId, node, session);
     const bindings = bindRuntimeValues(nodeId, node, component, session);
 
-    return (render as WaterRenderBinding)({
+    return (render as WasserRenderBinding)({
       props: node.props ?? {},
       nodeId,
       node,
-      component: component as WaterComponentEntry<Record<string, unknown>>,
+      component: component as WasserComponentEntry<Record<string, unknown>>,
       runtime: session.runtime,
       bindings,
       children: childElements,
@@ -697,7 +697,7 @@ function renderNode(nodeId: string, session: RenderSession): WaterSvelteChild {
   }
 }
 
-function renderSlot(nodeId: string, slotName: string, session: RenderSession): WaterSvelteChild {
+function renderSlot(nodeId: string, slotName: string, session: RenderSession): WasserSvelteChild {
   const node = session.ui.nodes[nodeId];
   if (!node) {
     const failure = pushDiagnostic(session, {
@@ -726,8 +726,8 @@ function renderSlots(
   nodeId: string,
   node: SchemaUINode,
   session: RenderSession,
-): Readonly<Record<string, WaterSvelteChild>> {
-  const slots: Record<string, WaterSvelteChild> = Object.create(null);
+): Readonly<Record<string, WasserSvelteChild>> {
+  const slots: Record<string, WasserSvelteChild> = Object.create(null);
 
   for (const slotName of Object.keys(node.slots ?? {})) {
     slots[slotName] = renderSlot(nodeId, slotName, session);
@@ -739,16 +739,16 @@ function renderSlots(
 function bindRuntimeValues(
   nodeId: string,
   node: SchemaUINode,
-  component: WaterComponentEntry,
+  component: WasserComponentEntry,
   session: RenderSession,
-): WaterRenderBindings {
+): WasserRenderBindings {
   const data: Record<string, unknown> = Object.create(null);
-  const actions: Record<string, WaterBoundAction> = Object.create(null);
+  const actions: Record<string, WasserBoundAction> = Object.create(null);
 
   const propsPath = `$.nodes.${toPathKey(nodeId)}.props`;
 
   for (const [path, dataRef] of collectRuntimeRefs(node.props, "dataRef", propsPath)) {
-    const context: WaterDataContext = { dataRef, nodeId, node, component };
+    const context: WasserDataContext = { dataRef, nodeId, node, component };
     const resolved = session.runtime.resolveData?.(dataRef, context);
 
     if (resolved === undefined) {
@@ -825,17 +825,17 @@ function collectRuntimeRefs(
 }
 
 function canRenderNode(
-  runtime: WaterRuntime,
+  runtime: WasserRuntime,
   nodeId: string,
   node: SchemaUINode,
-  component: WaterComponentEntry,
+  component: WasserComponentEntry,
 ): boolean {
   const permission = getNodePermission(node);
   if (!permission) {
     return true;
   }
 
-  const context: WaterPermissionContext = {
+  const context: WasserPermissionContext = {
     permission,
     nodeId,
     node,
@@ -863,21 +863,21 @@ function getNodePermission(node: SchemaUINode): string | undefined {
 }
 
 function renderFallback(
-  fallback: WaterSvelteChild,
-  diagnostic: WaterRenderDiagnostic,
-): WaterSvelteChild {
+  fallback: WasserSvelteChild,
+  diagnostic: WasserRenderDiagnostic,
+): WasserSvelteChild {
   if (fallback !== undefined) {
     return fallback;
   }
 
-  return waterElement("span", {
-    "data-water-fallback": diagnostic.code,
-    "data-water-node-id": diagnostic.nodeId,
-    "data-water-component-type": diagnostic.componentType,
+  return wasserElement("span", {
+    "data-wasser-fallback": diagnostic.code,
+    "data-wasser-node-id": diagnostic.nodeId,
+    "data-wasser-component-type": diagnostic.componentType,
   });
 }
 
-function renderChildToHtml(child: WaterSvelteChild, options: RenderHtmlOptions): string {
+function renderChildToHtml(child: WasserSvelteChild, options: RenderHtmlOptions): string {
   if (child === null || child === undefined || typeof child === "boolean") {
     return "";
   }
@@ -907,17 +907,17 @@ function renderChildToHtml(child: WaterSvelteChild, options: RenderHtmlOptions):
       component: child.component,
       props,
     });
-    return `<span data-water-svelte-component="${id}"></span>`;
+    return `<span data-wasser-svelte-component="${id}"></span>`;
   }
 
-  if (isWaterElement(child)) {
+  if (isWasserElement(child)) {
     return renderElementToHtml(child, options);
   }
 
   return "";
 }
 
-function renderElementToHtml(element: WaterSvelteElement, options: RenderHtmlOptions): string {
+function renderElementToHtml(element: WasserSvelteElement, options: RenderHtmlOptions): string {
   if (!isSafeTagName(element.tag)) {
     return "";
   }
@@ -926,7 +926,7 @@ function renderElementToHtml(element: WaterSvelteElement, options: RenderHtmlOpt
   return `<${element.tag}${attributes}>${renderChildToHtml(element.children, options)}</${element.tag}>`;
 }
 
-function renderAttributes(props: WaterSvelteElementProps): string {
+function renderAttributes(props: WasserSvelteElementProps): string {
   const attributes: string[] = [];
 
   for (const [name, value] of Object.entries(props)) {
@@ -976,14 +976,14 @@ function serializeAttributeValue(name: string, value: unknown): string | undefin
 function pushDiagnostic(
   session: RenderSession,
   input: {
-    code: WaterRenderDiagnosticCode;
+    code: WasserRenderDiagnosticCode;
     path: string;
     message: string;
     severity?: "error" | "warning";
     nodeId?: string;
     componentType?: string;
   },
-): WaterRenderDiagnostic {
+): WasserRenderDiagnostic {
   const output = diagnostic(input.code, input.path, input.message, {
     severity: input.severity,
     nodeId: input.nodeId,
@@ -994,7 +994,7 @@ function pushDiagnostic(
 }
 
 function diagnostic(
-  code: WaterRenderDiagnosticCode,
+  code: WasserRenderDiagnosticCode,
   path: string,
   message: string,
   options: {
@@ -1002,7 +1002,7 @@ function diagnostic(
     nodeId?: string;
     componentType?: string;
   } = {},
-): WaterRenderDiagnostic {
+): WasserRenderDiagnostic {
   return Object.freeze({
     code,
     severity: options.severity ?? "error",
@@ -1013,7 +1013,7 @@ function diagnostic(
   });
 }
 
-function emitTelemetry(runtime: WaterRuntime, event: WaterRuntimeEvent): void {
+function emitTelemetry(runtime: WasserRuntime, event: WasserRuntimeEvent): void {
   if (!runtime.telemetry) {
     return;
   }
@@ -1026,8 +1026,8 @@ function emitTelemetry(runtime: WaterRuntime, event: WaterRuntimeEvent): void {
   runtime.telemetry.emit(event);
 }
 
-function getVerifiedUIFromRuntime(runtime: WaterRuntime): VerifiedSchemaUI | undefined {
-  const candidate = (runtime as WaterRuntime & { ui?: unknown }).ui;
+function getVerifiedUIFromRuntime(runtime: WasserRuntime): VerifiedSchemaUI | undefined {
+  const candidate = (runtime as WasserRuntime & { ui?: unknown }).ui;
   if (!candidate) {
     return undefined;
   }
@@ -1040,20 +1040,20 @@ function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : "Unknown error";
 }
 
-function isWaterElement(value: unknown): value is WaterSvelteElement {
-  return isRecord(value) && value.kind === "water.svelte.element" && typeof value.tag === "string";
+function isWasserElement(value: unknown): value is WasserSvelteElement {
+  return isRecord(value) && value.kind === "wasser.svelte.element" && typeof value.tag === "string";
 }
 
-function isRawHtml(value: unknown): value is WaterSvelteRawHtml {
+function isRawHtml(value: unknown): value is WasserSvelteRawHtml {
   return (
-    isRecord(value) && value.kind === "water.svelte.raw-html" && typeof value.html === "string"
+    isRecord(value) && value.kind === "wasser.svelte.raw-html" && typeof value.html === "string"
   );
 }
 
-function isSvelteComponent(value: unknown): value is WaterSvelteComponent {
+function isSvelteComponent(value: unknown): value is WasserSvelteComponent {
   return (
     isRecord(value) &&
-    value.kind === "water.svelte.component" &&
+    value.kind === "wasser.svelte.component" &&
     typeof value.component === "function"
   );
 }

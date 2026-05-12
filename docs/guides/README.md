@@ -1,6 +1,6 @@
 # Guides
 
-Task-focused guides for building with Water UI.
+Task-focused guides for building with Wasser UI.
 
 ## Core Workflow
 

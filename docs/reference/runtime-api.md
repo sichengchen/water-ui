@@ -3,7 +3,7 @@
 Runtime target:
 
 ```ts
-type WaterRuntime = {
+type WasserRuntime = {
   state: StateRegistry;
   queries: QueryRegistry;
   mutations: MutationRegistry;
@@ -20,9 +20,9 @@ runtime behavior.
 ## Create a Runtime
 
 ```ts
-import { createWaterRuntime } from "@water-ui/runtime";
+import { createWasserRuntime } from "@wasser-ui/runtime";
 
-const runtime = createWaterRuntime({
+const runtime = createWasserRuntime({
   permissions: {
     canRunAction: ({ risk }) => risk !== "destructive",
   },
@@ -78,4 +78,4 @@ Pass this to `verifyDocument` as the runtime capability description.
 
 Use `runtime.resolveData(dataRef)`, `runtime.runAction(actionId, payload)`, and
 `runtime.runMutation(mutationId, payload)`. Unknown capabilities throw
-`WaterRuntimeError` and emit `runtime.block` events.
+`WasserRuntimeError` and emit `runtime.block` events.

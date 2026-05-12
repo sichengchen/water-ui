@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, test } from "vite-plus/test";
-import { WaterRenderer, WaterRuntimeProvider, WaterStreamRenderer } from "@water-ui/react";
+import { WasserRenderer, WasserRuntimeProvider, WasserStreamRenderer } from "@wasser-ui/react";
 import {
   compileMeetingActionsPrompt,
   createMockMeetingActionsStreamEvents,
@@ -10,7 +10,7 @@ import {
   mockMeetingActionsAgent,
   runMeetingActionsDemo,
 } from "../src/index.ts";
-import { applyStreamEvent, createStreamState, verifyDocument } from "@water-ui/core";
+import { applyStreamEvent, createStreamState, verifyDocument } from "@wasser-ui/core";
 
 test("mock agent output verifies against app components and runtime capabilities", async () => {
   const runtime = createMeetingRuntime();
@@ -47,12 +47,12 @@ test("renders the verified todo list", async () => {
 
   const html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       {
         registry: meetingActionsRegistry,
         runtime: result.runtime.renderRuntime,
       },
-      createElement(WaterRenderer, { ui: result.ui }),
+      createElement(WasserRenderer, { ui: result.ui }),
     ),
   );
 
@@ -79,12 +79,12 @@ test("streams the todo list one task at a time", () => {
 
   let html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       {
         registry: meetingActionsRegistry,
         runtime: runtime.renderRuntime,
       },
-      createElement(WaterStreamRenderer, { stream }),
+      createElement(WasserStreamRenderer, { stream }),
     ),
   );
 
@@ -99,12 +99,12 @@ test("streams the todo list one task at a time", () => {
 
   html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       {
         registry: meetingActionsRegistry,
         runtime: runtime.renderRuntime,
       },
-      createElement(WaterStreamRenderer, { stream }),
+      createElement(WasserStreamRenderer, { stream }),
     ),
   );
 

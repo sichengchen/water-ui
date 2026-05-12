@@ -1,7 +1,7 @@
 {
-  "name": "@water-ui/angular",
+  "name": "@wasser-ui/angular",
   "version": "0.0.0",
-  "description": "Angular renderer package for Water UI.",
+  "description": "Angular renderer package for Wasser UI.",
   "license": "MIT",
   "files": [
     "dist"
@@ -20,7 +20,7 @@
     "test": "vp test"
   },
   "dependencies": {
-    "@water-ui/core": "workspace:*",
+    "@wasser-ui/core": "workspace:*",
     "tslib": "catalog:"
   },
   "devDependencies": {

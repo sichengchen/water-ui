@@ -9,17 +9,17 @@ import {
   inject,
   makeEnvironmentProviders,
 } from "@angular/core";
-import { assertVerifiedSchemaUI, getWaterComponent, isVerifiedSchemaUI } from "@water-ui/core";
+import { assertVerifiedSchemaUI, getWasserComponent, isVerifiedSchemaUI } from "@wasser-ui/core";
 import type { EnvironmentProviders, OnChanges, Provider, SimpleChanges, Type } from "@angular/core";
 import type {
   SchemaUINode,
   StreamState,
   VerifiedSchemaUI,
-  WaterComponentEntry,
-  WaterRegistry,
-} from "@water-ui/core";
+  WasserComponentEntry,
+  WasserRegistry,
+} from "@wasser-ui/core";
 
-export type WaterRenderDiagnosticCode =
+export type WasserRenderDiagnosticCode =
   | "invalid_renderer_input"
   | "missing_registry"
   | "missing_node"
@@ -31,8 +31,8 @@ export type WaterRenderDiagnosticCode =
   | "runtime_action_missing"
   | "render_binding_error";
 
-export type WaterRenderDiagnostic = {
-  code: WaterRenderDiagnosticCode;
+export type WasserRenderDiagnostic = {
+  code: WasserRenderDiagnosticCode;
   severity: "error" | "warning";
   path: string;
   message: string;
@@ -40,7 +40,7 @@ export type WaterRenderDiagnostic = {
   componentType?: string;
 };
 
-export type WaterRuntimeEvent =
+export type WasserRuntimeEvent =
   | {
       kind: "renderer.node.render";
       nodeId: string;
@@ -50,7 +50,7 @@ export type WaterRuntimeEvent =
       kind: "renderer.node.fallback";
       nodeId?: string;
       componentType?: string;
-      code: WaterRenderDiagnosticCode;
+      code: WasserRenderDiagnosticCode;
     }
   | {
       kind: "runtime.action.invoke";
@@ -59,163 +59,163 @@ export type WaterRuntimeEvent =
       componentType: string;
     };
 
-export type WaterPermissionContext = {
+export type WasserPermissionContext = {
   permission: string;
   nodeId: string;
   node: SchemaUINode;
-  component: WaterComponentEntry;
+  component: WasserComponentEntry;
 };
 
-export type WaterActionContext = {
+export type WasserActionContext = {
   actionId: string;
   nodeId: string;
   node: SchemaUINode;
-  component: WaterComponentEntry;
+  component: WasserComponentEntry;
 };
 
-export type WaterDataContext = {
+export type WasserDataContext = {
   dataRef: string;
   nodeId: string;
   node: SchemaUINode;
-  component: WaterComponentEntry;
+  component: WasserComponentEntry;
 };
 
-export type WaterPermissionGuard =
-  | ((context: WaterPermissionContext) => boolean)
+export type WasserPermissionGuard =
+  | ((context: WasserPermissionContext) => boolean)
   | {
-      canRender?: (context: WaterPermissionContext) => boolean;
-      has?: (permission: string, context: WaterPermissionContext) => boolean;
+      canRender?: (context: WasserPermissionContext) => boolean;
+      has?: (permission: string, context: WasserPermissionContext) => boolean;
     };
 
-export type WaterTelemetrySink =
-  | ((event: WaterRuntimeEvent) => void)
+export type WasserTelemetrySink =
+  | ((event: WasserRuntimeEvent) => void)
   | {
-      emit: (event: WaterRuntimeEvent) => void;
+      emit: (event: WasserRuntimeEvent) => void;
     };
 
-export type WaterRuntime = {
-  registry?: WaterRegistry;
-  resolveData?: (dataRef: string, context: WaterDataContext) => unknown;
-  runAction?: (actionId: string, payload: unknown, context: WaterActionContext) => unknown;
-  canRender?: (context: WaterPermissionContext) => boolean;
-  permissions?: WaterPermissionGuard;
-  telemetry?: WaterTelemetrySink;
+export type WasserRuntime = {
+  registry?: WasserRegistry;
+  resolveData?: (dataRef: string, context: WasserDataContext) => unknown;
+  runAction?: (actionId: string, payload: unknown, context: WasserActionContext) => unknown;
+  canRender?: (context: WasserPermissionContext) => boolean;
+  permissions?: WasserPermissionGuard;
+  telemetry?: WasserTelemetrySink;
 };
 
-export type WaterBoundAction = (payload?: unknown) => unknown;
+export type WasserBoundAction = (payload?: unknown) => unknown;
 
-export type WaterRenderBindings = {
+export type WasserRenderBindings = {
   data: Readonly<Record<string, unknown>>;
-  actions: Readonly<Record<string, WaterBoundAction>>;
+  actions: Readonly<Record<string, WasserBoundAction>>;
 };
 
-export type WaterAngularPrimitive = string | number | boolean | null | undefined;
+export type WasserAngularPrimitive = string | number | boolean | null | undefined;
 
-export type WaterAngularComponentInputs = Readonly<Record<string, unknown>>;
+export type WasserAngularComponentInputs = Readonly<Record<string, unknown>>;
 
-export type WaterAngularComponent = Readonly<{
-  kind: "water.angular.component";
+export type WasserAngularComponent = Readonly<{
+  kind: "wasser.angular.component";
   component: Type<unknown>;
-  inputs?: WaterAngularComponentInputs;
+  inputs?: WasserAngularComponentInputs;
 }>;
 
-export type WaterAngularChild =
-  | WaterAngularPrimitive
-  | WaterAngularComponent
-  | readonly WaterAngularChild[];
+export type WasserAngularChild =
+  | WasserAngularPrimitive
+  | WasserAngularComponent
+  | readonly WasserAngularChild[];
 
-export type WaterRenderContext<Props = Record<string, unknown>> = {
+export type WasserRenderContext<Props = Record<string, unknown>> = {
   props: Props;
   nodeId: string;
   node: SchemaUINode;
-  component: WaterComponentEntry<Props>;
-  runtime: WaterRuntime;
-  bindings: WaterRenderBindings;
-  children: readonly WaterAngularChild[];
-  slots: Readonly<Record<string, WaterAngularChild>>;
-  renderNode: (nodeId: string) => WaterAngularChild;
-  renderSlot: (nodeId: string, slotName: string) => WaterAngularChild;
+  component: WasserComponentEntry<Props>;
+  runtime: WasserRuntime;
+  bindings: WasserRenderBindings;
+  children: readonly WasserAngularChild[];
+  slots: Readonly<Record<string, WasserAngularChild>>;
+  renderNode: (nodeId: string) => WasserAngularChild;
+  renderSlot: (nodeId: string, slotName: string) => WasserAngularChild;
 };
 
-export type WaterRenderBinding<Props = Record<string, unknown>> = (
-  context: WaterRenderContext<Props>,
-) => WaterAngularChild;
+export type WasserRenderBinding<Props = Record<string, unknown>> = (
+  context: WasserRenderContext<Props>,
+) => WasserAngularChild;
 
-export type WaterRuntimeProviderOptions = {
-  runtime: WaterRuntime;
-  registry?: WaterRegistry;
+export type WasserRuntimeProviderOptions = {
+  runtime: WasserRuntime;
+  registry?: WasserRegistry;
 };
 
-export type WaterRendererInputs = {
+export type WasserRendererInputs = {
   ui: VerifiedSchemaUI;
-  registry?: WaterRegistry;
-  runtime?: WaterRuntime;
-  fallback?: WaterAngularChild;
-  onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
+  registry?: WasserRegistry;
+  runtime?: WasserRuntime;
+  fallback?: WasserAngularChild;
+  onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
 };
 
-export type WaterStreamRendererInputs = Omit<WaterRendererInputs, "ui"> & {
+export type WasserStreamRendererInputs = Omit<WasserRendererInputs, "ui"> & {
   ui?: VerifiedSchemaUI;
   stream?: StreamState;
 };
 
 export type NodeRendererInputs = {
   ui?: VerifiedSchemaUI;
-  registry?: WaterRegistry;
-  runtime?: WaterRuntime;
+  registry?: WasserRegistry;
+  runtime?: WasserRuntime;
   nodeId: string;
-  fallback?: WaterAngularChild;
-  onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
+  fallback?: WasserAngularChild;
+  onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
 };
 
 export type SlotRendererInputs = {
   ui?: VerifiedSchemaUI;
-  registry?: WaterRegistry;
-  runtime?: WaterRuntime;
+  registry?: WasserRegistry;
+  runtime?: WasserRuntime;
   nodeId: string;
   name: string;
-  fallback?: WaterAngularChild;
-  onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
+  fallback?: WasserAngularChild;
+  onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
 };
 
-type WaterRuntimeContextValue = {
-  runtime: WaterRuntime;
-  registry?: WaterRegistry;
+type WasserRuntimeContextValue = {
+  runtime: WasserRuntime;
+  registry?: WasserRegistry;
 };
 
 type RenderSession = {
   ui: VerifiedSchemaUI;
-  registry?: WaterRegistry;
-  runtime: WaterRuntime;
-  diagnostics: WaterRenderDiagnostic[];
-  fallback?: WaterAngularChild;
+  registry?: WasserRegistry;
+  runtime: WasserRuntime;
+  diagnostics: WasserRenderDiagnostic[];
+  fallback?: WasserAngularChild;
 };
 
-const emptyRuntime: WaterRuntime = Object.freeze({});
+const emptyRuntime: WasserRuntime = Object.freeze({});
 const emptyInputs = Object.freeze({});
 
-export const WATER_RUNTIME = new InjectionToken<WaterRuntime>("WATER_RUNTIME", {
+export const WASSER_RUNTIME = new InjectionToken<WasserRuntime>("WASSER_RUNTIME", {
   factory: () => emptyRuntime,
 });
 
-export const WATER_REGISTRY = new InjectionToken<WaterRegistry | undefined>("WATER_REGISTRY", {
+export const WASSER_REGISTRY = new InjectionToken<WasserRegistry | undefined>("WASSER_REGISTRY", {
   factory: () => undefined,
 });
 
-export function provideWaterRuntime({
+export function provideWasserRuntime({
   runtime,
   registry,
-}: WaterRuntimeProviderOptions): EnvironmentProviders {
+}: WasserRuntimeProviderOptions): EnvironmentProviders {
   const providers: Provider[] = [
     {
-      provide: WATER_RUNTIME,
+      provide: WASSER_RUNTIME,
       useValue: runtime,
     },
   ];
 
   if (registry) {
     providers.push({
-      provide: WATER_REGISTRY,
+      provide: WASSER_REGISTRY,
       useValue: registry,
     });
   }
@@ -223,38 +223,38 @@ export function provideWaterRuntime({
   return makeEnvironmentProviders(providers);
 }
 
-export function waterComponent(
+export function wasserComponent(
   component: Type<unknown>,
-  inputs?: WaterAngularComponentInputs,
-): WaterAngularComponent {
+  inputs?: WasserAngularComponentInputs,
+): WasserAngularComponent {
   return Object.freeze({
-    kind: "water.angular.component",
+    kind: "wasser.angular.component",
     component,
     ...(inputs ? { inputs: Object.freeze({ ...inputs }) } : {}),
   });
 }
 
 @Component({
-  selector: "water-fallback",
+  selector: "wasser-fallback",
   standalone: true,
   template:
-    '<span [attr.data-water-fallback]="code" [attr.data-water-node-id]="nodeId ?? null" [attr.data-water-component-type]="componentType ?? null"></span>',
+    '<span [attr.data-wasser-fallback]="code" [attr.data-wasser-node-id]="nodeId ?? null" [attr.data-wasser-component-type]="componentType ?? null"></span>',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WaterFallbackComponent {
-  @Input() code: WaterRenderDiagnosticCode = "render_binding_error";
+export class WasserFallbackComponent {
+  @Input() code: WasserRenderDiagnosticCode = "render_binding_error";
   @Input() nodeId?: string;
   @Input() componentType?: string;
 }
 
 @Component({
-  selector: "water-outlet",
+  selector: "wasser-outlet",
   standalone: true,
   imports: [NgComponentOutlet],
   template: `
     @if (isArray(value)) {
       @for (child of asArray(value); track $index) {
-        <water-outlet [value]="child" />
+        <wasser-outlet [value]="child" />
       }
     } @else if (isComponent(value)) {
       <ng-container *ngComponentOutlet="value.component; inputs: value.inputs ?? emptyInputs" />
@@ -264,24 +264,24 @@ export class WaterFallbackComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WaterOutletComponent {
-  @Input() value: WaterAngularChild = null;
+export class WasserOutletComponent {
+  @Input() value: WasserAngularChild = null;
 
   readonly emptyInputs = emptyInputs;
 
-  isArray(value: WaterAngularChild): value is readonly WaterAngularChild[] {
+  isArray(value: WasserAngularChild): value is readonly WasserAngularChild[] {
     return Array.isArray(value);
   }
 
-  asArray(value: WaterAngularChild): readonly WaterAngularChild[] {
+  asArray(value: WasserAngularChild): readonly WasserAngularChild[] {
     return Array.isArray(value) ? value : [];
   }
 
-  isComponent(value: WaterAngularChild): value is WaterAngularComponent {
-    return isRecord(value) && value.kind === "water.angular.component";
+  isComponent(value: WasserAngularChild): value is WasserAngularComponent {
+    return isRecord(value) && value.kind === "wasser.angular.component";
   }
 
-  stringifyPrimitive(value: WaterAngularChild): string {
+  stringifyPrimitive(value: WasserAngularChild): string {
     if (typeof value === "string" || typeof value === "number") {
       return String(value);
     }
@@ -291,30 +291,30 @@ export class WaterOutletComponent {
 }
 
 @Component({
-  selector: "water-renderer",
+  selector: "wasser-renderer",
   standalone: true,
-  imports: [WaterOutletComponent],
-  template: '<water-outlet [value]="rendered" />',
+  imports: [WasserOutletComponent],
+  template: '<wasser-outlet [value]="rendered" />',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WaterRendererComponent implements OnChanges {
+export class WasserRendererComponent implements OnChanges {
   @Input({ required: true }) ui?: VerifiedSchemaUI;
-  @Input() registry?: WaterRegistry;
-  @Input() runtime?: WaterRuntime;
-  @Input() fallback?: WaterAngularChild;
-  @Input() onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
-  @Output() diagnosticsChange = new EventEmitter<readonly WaterRenderDiagnostic[]>();
+  @Input() registry?: WasserRegistry;
+  @Input() runtime?: WasserRuntime;
+  @Input() fallback?: WasserAngularChild;
+  @Input() onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
+  @Output() diagnosticsChange = new EventEmitter<readonly WasserRenderDiagnostic[]>();
 
-  rendered: WaterAngularChild = null;
+  rendered: WasserAngularChild = null;
 
-  private readonly context = injectWaterRuntimeContext();
+  private readonly context = injectWasserRuntimeContext();
 
   ngOnChanges(_changes: SimpleChanges): void {
-    const diagnostics: WaterRenderDiagnostic[] = [];
+    const diagnostics: WasserRenderDiagnostic[] = [];
 
     if (!isVerifiedSchemaUI(this.ui)) {
       diagnostics.push(
-        diagnostic("invalid_renderer_input", "$", "WaterRenderer accepts only VerifiedSchemaUI."),
+        diagnostic("invalid_renderer_input", "$", "WasserRenderer accepts only VerifiedSchemaUI."),
       );
       this.emitDiagnostics(diagnostics);
       this.rendered = renderFallback(this.fallback, diagnostics[0]);
@@ -332,7 +332,7 @@ export class WaterRendererComponent implements OnChanges {
     this.emitDiagnostics(diagnostics);
   }
 
-  private emitDiagnostics(diagnostics: readonly WaterRenderDiagnostic[]): void {
+  private emitDiagnostics(diagnostics: readonly WasserRenderDiagnostic[]): void {
     const frozen = Object.freeze([...diagnostics]);
     this.onDiagnostics?.(frozen);
     this.diagnosticsChange.emit(frozen);
@@ -340,24 +340,24 @@ export class WaterRendererComponent implements OnChanges {
 }
 
 @Component({
-  selector: "water-stream-renderer",
+  selector: "wasser-stream-renderer",
   standalone: true,
-  imports: [WaterOutletComponent],
-  template: '<water-outlet [value]="rendered" />',
+  imports: [WasserOutletComponent],
+  template: '<wasser-outlet [value]="rendered" />',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WaterStreamRendererComponent implements OnChanges {
+export class WasserStreamRendererComponent implements OnChanges {
   @Input() ui?: VerifiedSchemaUI;
   @Input() stream?: StreamState;
-  @Input() registry?: WaterRegistry;
-  @Input() runtime?: WaterRuntime;
-  @Input() fallback?: WaterAngularChild;
-  @Input() onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
-  @Output() diagnosticsChange = new EventEmitter<readonly WaterRenderDiagnostic[]>();
+  @Input() registry?: WasserRegistry;
+  @Input() runtime?: WasserRuntime;
+  @Input() fallback?: WasserAngularChild;
+  @Input() onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
+  @Output() diagnosticsChange = new EventEmitter<readonly WasserRenderDiagnostic[]>();
 
-  rendered: WaterAngularChild = null;
+  rendered: WasserAngularChild = null;
 
-  private readonly context = injectWaterRuntimeContext();
+  private readonly context = injectWasserRuntimeContext();
 
   ngOnChanges(_changes: SimpleChanges): void {
     const verifiedUi = this.ui ?? this.stream?.ui;
@@ -367,7 +367,7 @@ export class WaterStreamRendererComponent implements OnChanges {
       return;
     }
 
-    const diagnostics: WaterRenderDiagnostic[] = [];
+    const diagnostics: WasserRenderDiagnostic[] = [];
     this.rendered = renderVerifiedUI(verifiedUi, {
       registry: this.registry,
       runtime: this.runtime,
@@ -378,7 +378,7 @@ export class WaterStreamRendererComponent implements OnChanges {
     this.emitDiagnostics(diagnostics);
   }
 
-  private emitDiagnostics(diagnostics: readonly WaterRenderDiagnostic[]): void {
+  private emitDiagnostics(diagnostics: readonly WasserRenderDiagnostic[]): void {
     const frozen = Object.freeze([...diagnostics]);
     this.onDiagnostics?.(frozen);
     this.diagnosticsChange.emit(frozen);
@@ -386,29 +386,29 @@ export class WaterStreamRendererComponent implements OnChanges {
 }
 
 @Component({
-  selector: "water-node-renderer",
+  selector: "wasser-node-renderer",
   standalone: true,
-  imports: [WaterOutletComponent],
-  template: '<water-outlet [value]="rendered" />',
+  imports: [WasserOutletComponent],
+  template: '<wasser-outlet [value]="rendered" />',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NodeRendererComponent implements OnChanges {
   @Input() ui?: VerifiedSchemaUI;
-  @Input() registry?: WaterRegistry;
-  @Input() runtime?: WaterRuntime;
+  @Input() registry?: WasserRegistry;
+  @Input() runtime?: WasserRuntime;
   @Input({ required: true }) nodeId = "";
-  @Input() fallback?: WaterAngularChild;
-  @Input() onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
-  @Output() diagnosticsChange = new EventEmitter<readonly WaterRenderDiagnostic[]>();
+  @Input() fallback?: WasserAngularChild;
+  @Input() onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
+  @Output() diagnosticsChange = new EventEmitter<readonly WasserRenderDiagnostic[]>();
 
-  rendered: WaterAngularChild = null;
+  rendered: WasserAngularChild = null;
 
-  private readonly context = injectWaterRuntimeContext();
+  private readonly context = injectWasserRuntimeContext();
 
   ngOnChanges(_changes: SimpleChanges): void {
     const activeRuntime = this.runtime ?? this.context.runtime;
     const ui = this.ui ?? getVerifiedUIFromRuntime(activeRuntime);
-    const diagnostics: WaterRenderDiagnostic[] = [];
+    const diagnostics: WasserRenderDiagnostic[] = [];
 
     if (!ui) {
       diagnostics.push(
@@ -433,7 +433,7 @@ export class NodeRendererComponent implements OnChanges {
     this.emitDiagnostics(diagnostics);
   }
 
-  private emitDiagnostics(diagnostics: readonly WaterRenderDiagnostic[]): void {
+  private emitDiagnostics(diagnostics: readonly WasserRenderDiagnostic[]): void {
     const frozen = Object.freeze([...diagnostics]);
     this.onDiagnostics?.(frozen);
     this.diagnosticsChange.emit(frozen);
@@ -441,30 +441,30 @@ export class NodeRendererComponent implements OnChanges {
 }
 
 @Component({
-  selector: "water-slot-renderer",
+  selector: "wasser-slot-renderer",
   standalone: true,
-  imports: [WaterOutletComponent],
-  template: '<water-outlet [value]="rendered" />',
+  imports: [WasserOutletComponent],
+  template: '<wasser-outlet [value]="rendered" />',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SlotRendererComponent implements OnChanges {
   @Input() ui?: VerifiedSchemaUI;
-  @Input() registry?: WaterRegistry;
-  @Input() runtime?: WaterRuntime;
+  @Input() registry?: WasserRegistry;
+  @Input() runtime?: WasserRuntime;
   @Input({ required: true }) nodeId = "";
   @Input({ required: true }) name = "";
-  @Input() fallback?: WaterAngularChild;
-  @Input() onDiagnostics?: (diagnostics: readonly WaterRenderDiagnostic[]) => void;
-  @Output() diagnosticsChange = new EventEmitter<readonly WaterRenderDiagnostic[]>();
+  @Input() fallback?: WasserAngularChild;
+  @Input() onDiagnostics?: (diagnostics: readonly WasserRenderDiagnostic[]) => void;
+  @Output() diagnosticsChange = new EventEmitter<readonly WasserRenderDiagnostic[]>();
 
-  rendered: WaterAngularChild = null;
+  rendered: WasserAngularChild = null;
 
-  private readonly context = injectWaterRuntimeContext();
+  private readonly context = injectWasserRuntimeContext();
 
   ngOnChanges(_changes: SimpleChanges): void {
     const activeRuntime = this.runtime ?? this.context.runtime;
     const ui = this.ui ?? getVerifiedUIFromRuntime(activeRuntime);
-    const diagnostics: WaterRenderDiagnostic[] = [];
+    const diagnostics: WasserRenderDiagnostic[] = [];
 
     if (!ui) {
       diagnostics.push(
@@ -489,7 +489,7 @@ export class SlotRendererComponent implements OnChanges {
     this.emitDiagnostics(diagnostics);
   }
 
-  private emitDiagnostics(diagnostics: readonly WaterRenderDiagnostic[]): void {
+  private emitDiagnostics(diagnostics: readonly WasserRenderDiagnostic[]): void {
     const frozen = Object.freeze([...diagnostics]);
     this.onDiagnostics?.(frozen);
     this.diagnosticsChange.emit(frozen);
@@ -499,18 +499,18 @@ export class SlotRendererComponent implements OnChanges {
 function renderVerifiedUI(
   ui: VerifiedSchemaUI,
   options: {
-    registry?: WaterRegistry;
-    runtime?: WaterRuntime;
-    fallback?: WaterAngularChild;
-    context: WaterRuntimeContextValue;
-    diagnostics: WaterRenderDiagnostic[];
+    registry?: WasserRegistry;
+    runtime?: WasserRuntime;
+    fallback?: WasserAngularChild;
+    context: WasserRuntimeContextValue;
+    diagnostics: WasserRenderDiagnostic[];
   },
-): WaterAngularChild {
+): WasserAngularChild {
   if (!isVerifiedSchemaUI(ui)) {
     const failure = diagnostic(
       "invalid_renderer_input",
       "$",
-      "WaterRenderer accepts only VerifiedSchemaUI.",
+      "WasserRenderer accepts only VerifiedSchemaUI.",
     );
     options.diagnostics.push(failure);
     return renderFallback(options.fallback, failure);
@@ -526,7 +526,7 @@ function renderVerifiedUI(
   });
 }
 
-function renderNode(nodeId: string, session: RenderSession): WaterAngularChild {
+function renderNode(nodeId: string, session: RenderSession): WasserAngularChild {
   const node = session.ui.nodes[nodeId];
   if (!node) {
     const failure = pushDiagnostic(session, {
@@ -547,7 +547,7 @@ function renderNode(nodeId: string, session: RenderSession): WaterAngularChild {
     const failure = pushDiagnostic(session, {
       code: "missing_registry",
       path: "$.registry",
-      message: "WaterRenderer requires a component registry.",
+      message: "WasserRenderer requires a component registry.",
       nodeId,
       componentType: node.type,
     });
@@ -560,7 +560,7 @@ function renderNode(nodeId: string, session: RenderSession): WaterAngularChild {
     return renderFallback(session.fallback, failure);
   }
 
-  const component = getWaterComponent(session.registry, node.type);
+  const component = getWasserComponent(session.registry, node.type);
   if (!component) {
     const failure = pushDiagnostic(session, {
       code: "missing_component",
@@ -641,11 +641,11 @@ function renderNode(nodeId: string, session: RenderSession): WaterAngularChild {
     const slotElements = renderSlots(nodeId, node, session);
     const bindings = bindRuntimeValues(nodeId, node, component, session);
 
-    return (render as WaterRenderBinding)({
+    return (render as WasserRenderBinding)({
       props: node.props ?? {},
       nodeId,
       node,
-      component: component as WaterComponentEntry<Record<string, unknown>>,
+      component: component as WasserComponentEntry<Record<string, unknown>>,
       runtime: session.runtime,
       bindings,
       children: childElements,
@@ -671,7 +671,7 @@ function renderNode(nodeId: string, session: RenderSession): WaterAngularChild {
   }
 }
 
-function renderSlot(nodeId: string, slotName: string, session: RenderSession): WaterAngularChild {
+function renderSlot(nodeId: string, slotName: string, session: RenderSession): WasserAngularChild {
   const node = session.ui.nodes[nodeId];
   if (!node) {
     const failure = pushDiagnostic(session, {
@@ -696,8 +696,8 @@ function renderSlots(
   nodeId: string,
   node: SchemaUINode,
   session: RenderSession,
-): Readonly<Record<string, WaterAngularChild>> {
-  const slots: Record<string, WaterAngularChild> = Object.create(null);
+): Readonly<Record<string, WasserAngularChild>> {
+  const slots: Record<string, WasserAngularChild> = Object.create(null);
 
   for (const slotName of Object.keys(node.slots ?? {})) {
     slots[slotName] = renderSlot(nodeId, slotName, session);
@@ -709,16 +709,16 @@ function renderSlots(
 function bindRuntimeValues(
   nodeId: string,
   node: SchemaUINode,
-  component: WaterComponentEntry,
+  component: WasserComponentEntry,
   session: RenderSession,
-): WaterRenderBindings {
+): WasserRenderBindings {
   const data: Record<string, unknown> = Object.create(null);
-  const actions: Record<string, WaterBoundAction> = Object.create(null);
+  const actions: Record<string, WasserBoundAction> = Object.create(null);
 
   const propsPath = `$.nodes.${toPathKey(nodeId)}.props`;
 
   for (const [path, dataRef] of collectRuntimeRefs(node.props, "dataRef", propsPath)) {
-    const context: WaterDataContext = { dataRef, nodeId, node, component };
+    const context: WasserDataContext = { dataRef, nodeId, node, component };
     const resolved = session.runtime.resolveData?.(dataRef, context);
 
     if (resolved === undefined) {
@@ -795,17 +795,17 @@ function collectRuntimeRefs(
 }
 
 function canRenderNode(
-  runtime: WaterRuntime,
+  runtime: WasserRuntime,
   nodeId: string,
   node: SchemaUINode,
-  component: WaterComponentEntry,
+  component: WasserComponentEntry,
 ): boolean {
   const permission = getNodePermission(node);
   if (!permission) {
     return true;
   }
 
-  const context: WaterPermissionContext = {
+  const context: WasserPermissionContext = {
     permission,
     nodeId,
     node,
@@ -833,14 +833,14 @@ function getNodePermission(node: SchemaUINode): string | undefined {
 }
 
 function renderFallback(
-  fallback: WaterAngularChild | undefined,
-  diagnostic: WaterRenderDiagnostic,
-): WaterAngularChild {
+  fallback: WasserAngularChild | undefined,
+  diagnostic: WasserRenderDiagnostic,
+): WasserAngularChild {
   if (fallback !== undefined) {
     return fallback;
   }
 
-  return waterComponent(WaterFallbackComponent, {
+  return wasserComponent(WasserFallbackComponent, {
     code: diagnostic.code,
     nodeId: diagnostic.nodeId,
     componentType: diagnostic.componentType,
@@ -850,14 +850,14 @@ function renderFallback(
 function pushDiagnostic(
   session: RenderSession,
   input: {
-    code: WaterRenderDiagnosticCode;
+    code: WasserRenderDiagnosticCode;
     path: string;
     message: string;
     severity?: "error" | "warning";
     nodeId?: string;
     componentType?: string;
   },
-): WaterRenderDiagnostic {
+): WasserRenderDiagnostic {
   const output = diagnostic(input.code, input.path, input.message, {
     severity: input.severity,
     nodeId: input.nodeId,
@@ -868,7 +868,7 @@ function pushDiagnostic(
 }
 
 function diagnostic(
-  code: WaterRenderDiagnosticCode,
+  code: WasserRenderDiagnosticCode,
   path: string,
   message: string,
   options: {
@@ -876,7 +876,7 @@ function diagnostic(
     nodeId?: string;
     componentType?: string;
   } = {},
-): WaterRenderDiagnostic {
+): WasserRenderDiagnostic {
   return Object.freeze({
     code,
     severity: options.severity ?? "error",
@@ -887,7 +887,7 @@ function diagnostic(
   });
 }
 
-function emitTelemetry(runtime: WaterRuntime, event: WaterRuntimeEvent): void {
+function emitTelemetry(runtime: WasserRuntime, event: WasserRuntimeEvent): void {
   if (!runtime.telemetry) {
     return;
   }
@@ -900,8 +900,8 @@ function emitTelemetry(runtime: WaterRuntime, event: WaterRuntimeEvent): void {
   runtime.telemetry.emit(event);
 }
 
-function getVerifiedUIFromRuntime(runtime: WaterRuntime): VerifiedSchemaUI | undefined {
-  const candidate = (runtime as WaterRuntime & { ui?: unknown }).ui;
+function getVerifiedUIFromRuntime(runtime: WasserRuntime): VerifiedSchemaUI | undefined {
+  const candidate = (runtime as WasserRuntime & { ui?: unknown }).ui;
   if (!candidate) {
     return undefined;
   }
@@ -922,9 +922,9 @@ function toPathKey(key: string): string {
   return /^[A-Za-z_$][\w$]*$/.test(key) ? key : JSON.stringify(key);
 }
 
-function injectWaterRuntimeContext(): WaterRuntimeContextValue {
-  const runtime = inject(WATER_RUNTIME);
-  const registry = inject(WATER_REGISTRY);
+function injectWasserRuntimeContext(): WasserRuntimeContextValue {
+  const runtime = inject(WASSER_RUNTIME);
+  const registry = inject(WASSER_REGISTRY);
 
   return {
     runtime,

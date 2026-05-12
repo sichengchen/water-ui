@@ -3,15 +3,15 @@
 The shadcn adapter provides optional registry entries and render bindings.
 
 Use it when an application wants generated UI to compose standard shadcn-backed
-components while Water core remains component-library-neutral.
+components while Wasser core remains component-library-neutral.
 
 ## Merge Adapter Entries
 
 ```ts
-import { createWaterRegistry } from "@water-ui/core";
-import { shadcnComponents } from "@water-ui/adapter-shadcn";
+import { createWasserRegistry } from "@wasser-ui/core";
+import { shadcnComponents } from "@wasser-ui/adapter-shadcn";
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     ...shadcnComponents,
     CustomerTable,
@@ -22,9 +22,9 @@ const registry = createWaterRegistry({
 
 ## Rules
 
-- shadcn entries live in `@water-ui/adapter-shadcn`.
+- shadcn entries live in `@wasser-ui/adapter-shadcn`.
 - User entries live in the application registry.
-- Water core does not import shadcn.
+- Wasser core does not import shadcn.
 - Prompt summaries are generated from the merged registry.
 
 ## Bind Project-Local Components
@@ -34,7 +34,7 @@ To use project-local shadcn source components, pass them to the binding factory:
 ```ts
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { createShadcnComponents } from "@water-ui/adapter-shadcn";
+import { createShadcnComponents } from "@wasser-ui/adapter-shadcn";
 
 const shadcnComponents = createShadcnComponents({
   components: {
@@ -48,7 +48,7 @@ const shadcnComponents = createShadcnComponents({
 ```
 
 This keeps imports controlled by the application. The adapter describes the
-Water contract and calls the bound components at render time.
+Wasser contract and calls the bound components at render time.
 
 ## Import Alias Helpers
 
@@ -60,7 +60,7 @@ import {
   createShadcnAdapterConfig,
   getShadcnImportPath,
   resolveShadcnRegistryTarget,
-} from "@water-ui/adapter-shadcn";
+} from "@wasser-ui/adapter-shadcn";
 
 const config = createShadcnAdapterConfig({
   aliases: {
@@ -80,7 +80,7 @@ resolveShadcnRegistryTarget(config, "@ui/ai/prompt-input.tsx");
 ## Component Coverage
 
 `shadcnComponents` includes registry entries for the full shadcn/ui catalog.
-Components with Water-specific behavior, such as `Button`, `Card`, `Alert`,
+Components with Wasser-specific behavior, such as `Button`, `Card`, `Alert`,
 `Input`, and `Badge`, keep strict prop validation. Other shadcn entries accept
 project-local props and render through the component binding passed to
 `createShadcnComponents`.
@@ -100,7 +100,7 @@ objects. For example, prefer a product-level `CustomerTable` entry over asking
 the agent to assemble a table from low-level cells for every response.
 
 Generated UI should stay close to the user intent. The application can still use
-normal React and shadcn outside the generated Water subtree.
+normal React and shadcn outside the generated Wasser subtree.
 
 ## Related Reference
 

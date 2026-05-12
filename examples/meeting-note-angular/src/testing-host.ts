@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { WaterRendererComponent, WaterStreamRendererComponent } from "@water-ui/angular";
+import { WasserRendererComponent, WasserStreamRendererComponent } from "@wasser-ui/angular";
 
 let renderRequest: any;
 
@@ -10,12 +10,12 @@ export function setRenderRequest(request: unknown): void {
 @Component({
   selector: "test-app",
   standalone: true,
-  imports: [WaterRendererComponent, WaterStreamRendererComponent],
+  imports: [WasserRendererComponent, WasserStreamRendererComponent],
   template: `
     @if (request.kind === "renderer") {
-      <water-renderer [ui]="request.ui" [runtime]="request.runtime" />
+      <wasser-renderer [ui]="request.ui" [runtime]="request.runtime" />
     } @else {
-      <water-stream-renderer [stream]="request.stream" [runtime]="request.runtime" />
+      <wasser-stream-renderer [stream]="request.stream" [runtime]="request.runtime" />
     }
   `,
 })

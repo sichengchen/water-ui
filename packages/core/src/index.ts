@@ -39,7 +39,7 @@ export type SlotPolicy = Record<
 
 export type ComponentProfile = string | readonly string[];
 
-export type WaterComponentExample = {
+export type WasserComponentExample = {
   intent: string;
   node: {
     type: string;
@@ -49,28 +49,28 @@ export type WaterComponentExample = {
   };
 };
 
-export type WaterPropPromptSummary = {
+export type WasserPropPromptSummary = {
   name: string;
   description: string;
   required?: boolean;
   allowedValues?: readonly unknown[];
 };
 
-export type WaterComponentPromptHints = {
-  props?: readonly WaterPropPromptSummary[];
+export type WasserComponentPromptHints = {
+  props?: readonly WasserPropPromptSummary[];
   notes?: readonly string[];
 };
 
-export type WaterPropsSchema<Props = unknown> = z.ZodType<Props>;
+export type WasserPropsSchema<Props = unknown> = z.ZodType<Props>;
 
-export type WaterComponentDefinition<Props = unknown> = {
+export type WasserComponentDefinition<Props = unknown> = {
   description: string;
-  propsSchema?: WaterPropsSchema<Props>;
+  propsSchema?: WasserPropsSchema<Props>;
   children?: ChildrenPolicy;
   slots?: SlotPolicy;
-  prompt?: WaterComponentPromptHints;
-  examples?: readonly WaterComponentExample[];
-  antiExamples?: readonly WaterComponentExample[];
+  prompt?: WasserComponentPromptHints;
+  examples?: readonly WasserComponentExample[];
+  antiExamples?: readonly WasserComponentExample[];
   profile?: ComponentProfile;
   risk?: "low" | "medium" | "high" | "destructive";
   metadata?: Record<string, unknown>;
@@ -78,22 +78,22 @@ export type WaterComponentDefinition<Props = unknown> = {
   __type?: Props;
 };
 
-export type WaterComponentEntry<Props = unknown> = WaterComponentDefinition<Props> & {
+export type WasserComponentEntry<Props = unknown> = WasserComponentDefinition<Props> & {
   type: string;
 };
 
-export type WaterRegistryInput =
-  | Record<string, WaterComponentDefinition | WaterComponentEntry>
-  | readonly WaterComponentEntry[];
+export type WasserRegistryInput =
+  | Record<string, WasserComponentDefinition | WasserComponentEntry>
+  | readonly WasserComponentEntry[];
 
-export type CreateWaterRegistryOptions = {
-  components: WaterRegistryInput;
+export type CreateWasserRegistryOptions = {
+  components: WasserRegistryInput;
 };
 
-export type WaterRegistry = {
+export type WasserRegistry = {
   ok: boolean;
-  components: Readonly<Record<string, WaterComponentEntry>>;
-  entries: readonly WaterComponentEntry[];
+  components: Readonly<Record<string, WasserComponentEntry>>;
+  entries: readonly WasserComponentEntry[];
   diagnostics: readonly RegistryDiagnostic[];
 };
 
@@ -101,13 +101,13 @@ export type RegistryComponentSummary = {
   type: string;
   description: string;
   children: ChildrenPolicy;
-  props?: readonly WaterPropPromptSummary[];
+  props?: readonly WasserPropPromptSummary[];
   slots?: SlotPolicy;
   profile?: ComponentProfile;
-  risk?: WaterComponentEntry["risk"];
+  risk?: WasserComponentEntry["risk"];
   notes?: readonly string[];
-  examples?: readonly WaterComponentExample[];
-  antiExamples?: readonly WaterComponentExample[];
+  examples?: readonly WasserComponentExample[];
+  antiExamples?: readonly WasserComponentExample[];
 };
 
 export type RegistrySummary = {
@@ -121,17 +121,17 @@ type CollectedComponentEntry = {
   path: string;
 };
 
-export function defineWaterComponent<Props = Record<string, unknown>>(
-  definition: WaterComponentDefinition<Props>,
-): WaterComponentDefinition<Props> {
+export function defineWasserComponent<Props = Record<string, unknown>>(
+  definition: WasserComponentDefinition<Props>,
+): WasserComponentDefinition<Props> {
   return Object.freeze({ ...definition });
 }
 
-export function createWaterRegistry(options: CreateWaterRegistryOptions): WaterRegistry {
+export function createWasserRegistry(options: CreateWasserRegistryOptions): WasserRegistry {
   return buildRegistry(collectComponentEntries(options.components));
 }
 
-export function mergeWaterRegistries(...registries: readonly WaterRegistry[]): WaterRegistry {
+export function mergeWasserRegistries(...registries: readonly WasserRegistry[]): WasserRegistry {
   const entries = registries.flatMap((registry, registryIndex) =>
     registry.entries.map((entry, entryIndex) => ({
       entry,
@@ -143,21 +143,21 @@ export function mergeWaterRegistries(...registries: readonly WaterRegistry[]): W
   return buildRegistry(entries, diagnostics);
 }
 
-export function getWaterComponent(
-  registry: WaterRegistry,
+export function getWasserComponent(
+  registry: WasserRegistry,
   type: string,
-): WaterComponentEntry | undefined {
+): WasserComponentEntry | undefined {
   return registry.components[type];
 }
 
-export function listWaterComponents(registry: WaterRegistry): readonly WaterComponentEntry[] {
+export function listWasserComponents(registry: WasserRegistry): readonly WasserComponentEntry[] {
   return registry.entries;
 }
 
-export function selectWaterRegistryEntries(
-  registry: WaterRegistry,
+export function selectWasserRegistryEntries(
+  registry: WasserRegistry,
   profile?: string,
-): readonly WaterComponentEntry[] {
+): readonly WasserComponentEntry[] {
   if (!profile) {
     return registry.entries;
   }
@@ -165,11 +165,11 @@ export function selectWaterRegistryEntries(
   return registry.entries.filter((entry) => matchesProfile(entry.profile, profile));
 }
 
-export function summarizeWaterRegistry(
-  registry: WaterRegistry,
+export function summarizeWasserRegistry(
+  registry: WasserRegistry,
   options: { profile?: string } = {},
 ): RegistrySummary {
-  const components = selectWaterRegistryEntries(registry, options.profile).map((entry) => {
+  const components = selectWasserRegistryEntries(registry, options.profile).map((entry) => {
     const summary: RegistryComponentSummary = {
       type: entry.type,
       description: entry.description,
@@ -214,13 +214,13 @@ export function summarizeWaterRegistry(
 }
 
 export function serializePromptSafeRegistryDescription(
-  registry: WaterRegistry,
+  registry: WasserRegistry,
   options: { profile?: string; space?: number } = {},
 ): string {
-  return JSON.stringify(summarizeWaterRegistry(registry, options), null, options.space);
+  return JSON.stringify(summarizeWasserRegistry(registry, options), null, options.space);
 }
 
-function collectComponentEntries(input: WaterRegistryInput): CollectedComponentEntry[] {
+function collectComponentEntries(input: WasserRegistryInput): CollectedComponentEntry[] {
   if (Array.isArray(input)) {
     return input.map((entry, index) => ({
       entry: isRecord(entry) ? { ...entry } : entry,
@@ -250,9 +250,9 @@ function collectComponentEntries(input: WaterRegistryInput): CollectedComponentE
 function buildRegistry(
   entries: readonly CollectedComponentEntry[],
   inheritedDiagnostics: readonly RegistryDiagnostic[] = [],
-): WaterRegistry {
-  const components: Record<string, WaterComponentEntry> = Object.create(null);
-  const orderedEntries: WaterComponentEntry[] = [];
+): WasserRegistry {
+  const components: Record<string, WasserComponentEntry> = Object.create(null);
+  const orderedEntries: WasserComponentEntry[] = [];
   const diagnostics: RegistryDiagnostic[] = [...inheritedDiagnostics];
 
   entries.forEach(({ entry, typeHint, path }) => {
@@ -338,7 +338,7 @@ function buildRegistry(
       description: entry.description.trim(),
       type,
       children: (entry.children ?? "none") as ChildrenPolicy,
-    }) as WaterComponentEntry;
+    }) as WasserComponentEntry;
 
     components[type] = normalizedEntry;
     orderedEntries.push(normalizedEntry);

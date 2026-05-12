@@ -3,7 +3,7 @@
 Prompt compiler target:
 
 ```ts
-const systemPrompt = water.prompt.compileSystemPrompt({
+const systemPrompt = wasser.prompt.compileSystemPrompt({
   mode: "document",
   profile: "admin",
   registry,
@@ -30,7 +30,7 @@ import {
   compileRepairPrompt,
   compileStreamPrompt,
   compileSystemPrompt,
-} from "@water-ui/prompt";
+} from "@wasser-ui/prompt";
 ```
 
 System prompt:

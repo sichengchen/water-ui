@@ -1,6 +1,6 @@
 {
-  "kind": "water.ui.document",
-  "version": "water.ui.v2",
+  "kind": "wasser.ui.document",
+  "version": "wasser.ui.v2",
   "root": "page",
   "nodes": {
     "page": {

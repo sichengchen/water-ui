@@ -1,7 +1,7 @@
 {
-  "name": "@water-ui/devtools",
+  "name": "@wasser-ui/devtools",
   "version": "0.0.0",
-  "description": "DevTools package for Water UI inspection.",
+  "description": "DevTools package for Wasser UI inspection.",
   "license": "MIT",
   "files": [
     "dist"
@@ -20,9 +20,9 @@
     "test": "vp test"
   },
   "dependencies": {
-    "@water-ui/core": "workspace:*",
-    "@water-ui/prompt": "workspace:*",
-    "@water-ui/runtime": "workspace:*"
+    "@wasser-ui/core": "workspace:*",
+    "@wasser-ui/prompt": "workspace:*",
+    "@wasser-ui/runtime": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

@@ -6,7 +6,7 @@ bindings.
 Package:
 
 ```txt
-@water-ui/adapter-shadcn
+@wasser-ui/adapter-shadcn
 ```
 
 The adapter may expose:
@@ -21,10 +21,10 @@ The adapter may expose:
 Usage:
 
 ```ts
-import { createWaterRegistry } from "@water-ui/core";
-import { shadcnComponents } from "@water-ui/adapter-shadcn";
+import { createWasserRegistry } from "@wasser-ui/core";
+import { shadcnComponents } from "@wasser-ui/adapter-shadcn";
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     ...shadcnComponents,
     CustomerTable,
@@ -33,5 +33,5 @@ const registry = createWaterRegistry({
 });
 ```
 
-shadcn definitions live in the adapter. Water core has no shadcn definitions and
+shadcn definitions live in the adapter. Wasser core has no shadcn definitions and
 does not use shadcn as its identity.

@@ -2,14 +2,14 @@
 
 Schema UI is the model-facing JSON-compatible protocol.
 
-Current protocol version: `water.ui.v1`.
+Current protocol version: `wasser.ui.v1`.
 
 Document:
 
 ```ts
 type SchemaUIDocument = {
-  kind: "water.ui.document";
-  version: "water.ui.v1";
+  kind: "wasser.ui.document";
+  version: "wasser.ui.v1";
   root: NodeId;
   nodes: Record<NodeId, SchemaUINode>;
   meta?: DocumentMeta;
@@ -37,8 +37,8 @@ Patch:
 
 ```ts
 type SchemaUIPatch = {
-  kind: "water.ui.patch";
-  version: "water.ui.v1";
+  kind: "wasser.ui.patch";
+  version: "wasser.ui.v1";
   target: NodeId;
   ops: SchemaUIPatchOperation[];
   meta?: DocumentMeta;

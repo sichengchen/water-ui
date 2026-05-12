@@ -8,10 +8,10 @@ side effects live in application code.
 ## Register the Runtime Action
 
 ```ts
-import { createWaterRuntime } from "@water-ui/runtime";
+import { createWasserRuntime } from "@wasser-ui/runtime";
 import { z } from "zod";
 
-const runtime = createWaterRuntime({
+const runtime = createWasserRuntime({
   permissions: {
     canRunAction: ({ risk }) => risk !== "destructive",
   },
@@ -33,7 +33,7 @@ runtime.actions.register({
 The registry entry should describe the prop that carries the action reference:
 
 ```ts
-const ExportButton = defineWaterComponent({
+const ExportButton = defineWasserComponent({
   description: "Button that exports the current customer list.",
   propsSchema: z
     .object({
@@ -76,13 +76,13 @@ Unknown actions are blocked by verification or runtime guards.
 
 ## Invoke the Action From a Render Binding
 
-Render bindings receive action bindings after Water resolves runtime
+Render bindings receive action bindings after Wasser resolves runtime
 references:
 
 ```tsx
 const renderExportButton = (({ props, bindings }) => {
   return <Button onClick={() => bindings.actions[props.actionId]?.({})}>{props.label}</Button>;
-}) satisfies WaterRenderBinding<ExportButtonProps>;
+}) satisfies WasserRenderBinding<ExportButtonProps>;
 ```
 
 The renderer checks that referenced actions exist in the current runtime. The
@@ -102,7 +102,7 @@ The runtime emits `runtime.action.run` for successful actions and
 Use action metadata and runtime permissions for sensitive operations:
 
 ```ts
-const runtime = createWaterRuntime({
+const runtime = createWasserRuntime({
   permissions: {
     canRunAction: ({ risk }) => risk !== "destructive",
   },
@@ -118,7 +118,7 @@ runtime.actions.register({
 ```
 
 Use a confirmation UI in application code before invoking destructive actions.
-Water verifies references; it does not decide product policy by itself.
+Wasser verifies references; it does not decide product policy by itself.
 
 ## Checklist
 

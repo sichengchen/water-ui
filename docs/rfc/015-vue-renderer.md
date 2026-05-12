@@ -1,11 +1,11 @@
 # RFC 015: Vue Renderer
 
-Vue is a renderer target for Water.
+Vue is a renderer target for Wasser.
 
 The Vue renderer renders only VerifiedSchemaUI:
 
 ```ts
-h(WaterRuntimeProvider, { runtime, registry }, () => h(WaterRenderer, { ui: verifiedUi }));
+h(WasserRuntimeProvider, { runtime, registry }, () => h(WasserRenderer, { ui: verifiedUi }));
 ```
 
 Renderer responsibilities:

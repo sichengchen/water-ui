@@ -1,7 +1,7 @@
 {
-  "name": "@water-ui/runtime",
+  "name": "@wasser-ui/runtime",
   "version": "0.0.0",
-  "description": "Runtime capability boundary for Water UI.",
+  "description": "Runtime capability boundary for Wasser UI.",
   "license": "MIT",
   "files": [
     "dist"
@@ -20,7 +20,7 @@
     "test": "vp test"
   },
   "dependencies": {
-    "@water-ui/core": "workspace:*",
+    "@wasser-ui/core": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

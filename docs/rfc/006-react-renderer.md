@@ -1,13 +1,13 @@
 # RFC 006: React Renderer
 
-React is the first renderer target for Water.
+React is the first renderer target for Wasser.
 
 The React renderer renders only VerifiedSchemaUI:
 
 ```tsx
-<WaterRuntimeProvider runtime={runtime}>
-  <WaterRenderer ui={verifiedUi} />
-</WaterRuntimeProvider>
+<WasserRuntimeProvider runtime={runtime}>
+  <WasserRenderer ui={verifiedUi} />
+</WasserRuntimeProvider>
 ```
 
 Renderer responsibilities:

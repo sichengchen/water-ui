@@ -1,6 +1,6 @@
 # RFC 010: JSONL Streaming
 
-Water supports progressive generation through JSONL stream events.
+Wasser supports progressive generation through JSONL stream events.
 
 Example:
 

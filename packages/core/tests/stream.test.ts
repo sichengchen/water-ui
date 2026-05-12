@@ -3,12 +3,12 @@ import { z } from "zod";
 import {
   applyStreamEvent,
   createStreamState,
-  createWaterRegistry,
+  createWasserRegistry,
   finalizeStreamState,
   parseStreamEvent,
 } from "../src/index.ts";
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     AdminPage: {
       description: "Admin page shell.",

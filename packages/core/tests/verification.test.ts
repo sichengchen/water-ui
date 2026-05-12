@@ -3,19 +3,19 @@ import { expect, test } from "vite-plus/test";
 import { z } from "zod";
 import {
   assertVerifiedSchemaUI,
-  createWaterRegistry,
+  createWasserRegistry,
   isVerifiedSchemaUI,
   verifyDocument,
 } from "../src/index.ts";
 import type {
   RuntimeCapabilityDescription,
   VerificationResult,
-  WaterRegistryInput,
+  WasserRegistryInput,
 } from "../src/index.ts";
 
 const fixtureRoot = new URL("../../../docs/fixtures/verification/", import.meta.url);
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     AdminPage: {
       description: "Page shell for admin workflows.",
@@ -134,8 +134,8 @@ test("verifies root, child references, slot references, cycles, and orphans", ()
 test("rejects unknown component types", () => {
   const result = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "root",
       nodes: {
         root: {
@@ -159,8 +159,8 @@ test("rejects unknown component types", () => {
 test("validates props against registry schemas", () => {
   const result = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "table",
       nodes: {
         table: {
@@ -192,8 +192,8 @@ test("validates props against registry schemas", () => {
 test("stores Zod-parsed props in VerifiedSchemaUI", () => {
   const result = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "settings",
       nodes: {
         settings: {
@@ -215,8 +215,8 @@ test("stores Zod-parsed props in VerifiedSchemaUI", () => {
 
 test("deep-freezes verified props without freezing source input", () => {
   const source = {
-    kind: "water.ui.document",
-    version: "water.ui.v1",
+    kind: "wasser.ui.document",
+    version: "wasser.ui.v1",
     root: "settings",
     nodes: {
       settings: {
@@ -230,7 +230,7 @@ test("deep-freezes verified props without freezing source input", () => {
       },
     },
   };
-  const localRegistry = createWaterRegistry({
+  const localRegistry = createWasserRegistry({
     components: {
       DisplaySettings: {
         description: "Stores nested display settings.",
@@ -261,19 +261,19 @@ test("deep-freezes verified props without freezing source input", () => {
 });
 
 test("rejects verification when the registry has diagnostics", () => {
-  const invalidRegistry = createWaterRegistry({
+  const invalidRegistry = createWasserRegistry({
     components: {
       DisplaySettings: {
         description: "Valid component retained in an invalid registry.",
       },
       MissingDescription: {},
-    } as unknown as WaterRegistryInput,
+    } as unknown as WasserRegistryInput,
   });
 
   const result = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "settings",
       nodes: {
         settings: {
@@ -294,7 +294,7 @@ test("rejects verification when the registry has diagnostics", () => {
 });
 
 test("does not treat every ActionId/DataRef/StateKey suffix as a runtime capability", () => {
-  const localRegistry = createWaterRegistry({
+  const localRegistry = createWasserRegistry({
     components: {
       CommandPalette: {
         description: "Uses local identifiers that are not runtime capability references.",
@@ -312,8 +312,8 @@ test("does not treat every ActionId/DataRef/StateKey suffix as a runtime capabil
 
   const result = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "palette",
       nodes: {
         palette: {
@@ -335,8 +335,8 @@ test("does not treat every ActionId/DataRef/StateKey suffix as a runtime capabil
 test("validates action IDs, data refs, and state keys against runtime capabilities", () => {
   const result = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "page",
       nodes: {
         page: {

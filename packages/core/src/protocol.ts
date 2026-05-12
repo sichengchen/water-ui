@@ -1,4 +1,4 @@
-export type SchemaUIVersion = "water.ui.v1";
+export type SchemaUIVersion = "wasser.ui.v1";
 export type SchemaUINodeId = string;
 
 export type SchemaUIDiagnosticCode =
@@ -40,7 +40,7 @@ export type SchemaUIParseResult<T> =
     };
 
 export type SchemaUIDocument = {
-  kind: "water.ui.document";
+  kind: "wasser.ui.document";
   version: SchemaUIVersion;
   root: SchemaUINodeId;
   nodes: Record<SchemaUINodeId, SchemaUINode>;
@@ -55,7 +55,7 @@ export type SchemaUINode = {
 };
 
 export type SchemaUIPatch = {
-  kind: "water.ui.patch";
+  kind: "wasser.ui.patch";
   version: SchemaUIVersion;
   target: SchemaUINodeId;
   ops: SchemaUIPatchOperation[];
@@ -138,7 +138,7 @@ export type SchemaUIStreamEvent =
   | { seq: number; kind: "slot.unset"; id: SchemaUINodeId; slot: string }
   | { seq: number; kind: "done" };
 
-const SCHEMA_UI_VERSION: SchemaUIVersion = "water.ui.v1";
+const SCHEMA_UI_VERSION: SchemaUIVersion = "wasser.ui.v1";
 
 export function parseSchemaUIDocument(input: unknown): SchemaUIParseResult<SchemaUIDocument> {
   const prepared = prepareProtocolInput(input);
@@ -156,7 +156,7 @@ export function parseSchemaUIDocument(input: unknown): SchemaUIParseResult<Schem
     return fail(diagnostics);
   }
 
-  validateKind(raw.kind, "water.ui.document", "$.kind", diagnostics);
+  validateKind(raw.kind, "wasser.ui.document", "$.kind", diagnostics);
   validateVersion(raw.version, "$.version", diagnostics);
 
   const root = parseNodeId(raw.root, "$.root", "invalid_document_root", diagnostics);
@@ -171,7 +171,7 @@ export function parseSchemaUIDocument(input: unknown): SchemaUIParseResult<Schem
   }
 
   return succeed(
-    freezeDocument({ kind: "water.ui.document", version: SCHEMA_UI_VERSION, root, nodes, meta }),
+    freezeDocument({ kind: "wasser.ui.document", version: SCHEMA_UI_VERSION, root, nodes, meta }),
   );
 }
 
@@ -196,7 +196,7 @@ export function normalizeSchemaUIDocument(input: unknown): SchemaUIParseResult<S
 
   return succeed(
     freezeDocument({
-      kind: "water.ui.document",
+      kind: "wasser.ui.document",
       version: SCHEMA_UI_VERSION,
       root: parsed.value.root,
       nodes,
@@ -221,7 +221,7 @@ export function parseSchemaUIPatch(input: unknown): SchemaUIParseResult<SchemaUI
     return fail(diagnostics);
   }
 
-  validateKind(raw.kind, "water.ui.patch", "$.kind", diagnostics);
+  validateKind(raw.kind, "wasser.ui.patch", "$.kind", diagnostics);
   validateVersion(raw.version, "$.version", diagnostics);
 
   const target = parseNodeId(raw.target, "$.target", "invalid_patch_target", diagnostics);
@@ -237,7 +237,7 @@ export function parseSchemaUIPatch(input: unknown): SchemaUIParseResult<SchemaUI
 
   return succeed(
     Object.freeze({
-      kind: "water.ui.patch",
+      kind: "wasser.ui.patch",
       version: SCHEMA_UI_VERSION,
       target,
       ops: Object.freeze(ops),
@@ -723,7 +723,7 @@ function parseStreamEventByKind(
 
 function validateKind(
   value: unknown,
-  expected: "water.ui.document" | "water.ui.patch",
+  expected: "wasser.ui.document" | "wasser.ui.patch",
   path: string,
   diagnostics: SchemaUIDiagnostic[],
 ): void {
@@ -876,7 +876,7 @@ function normalizeSlots(
 }
 
 function freezeDocument(document: {
-  kind: "water.ui.document";
+  kind: "wasser.ui.document";
   version: SchemaUIVersion;
   root: string;
   nodes: Record<string, SchemaUINode>;

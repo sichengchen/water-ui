@@ -1,21 +1,21 @@
 # RFC 002: Registry-First Architecture
 
-The registry is the source of truth for what agents may generate and what Water
+The registry is the source of truth for what agents may generate and what Wasser
 may render.
 
 High-level flow:
 
 ```txt
 Developer-defined Component Registry
-  -> Water Prompt Compiler
+  -> Wasser Prompt Compiler
   -> Agent outputs Schema UI
-  -> Water Verifier
+  -> Wasser Verifier
   -> VerifiedSchemaUI
-  -> Water Renderer / Stream Renderer
+  -> Wasser Renderer / Stream Renderer
   -> Application React Components
 ```
 
-Water core does not define Button, Card, Table, Dialog, Page, or any other
+Wasser core does not define Button, Card, Table, Dialog, Page, or any other
 visual component. Those definitions belong to user application registries or
 adapter packages.
 

@@ -4,40 +4,44 @@ import { expect, test } from "vite-plus/test";
 import {
   applyStreamEvent,
   createStreamState,
-  createWaterRegistry,
+  createWasserRegistry,
   verifyDocument,
-} from "@water-ui/core";
+} from "@wasser-ui/core";
 import {
   NodeRenderer,
   SlotRenderer,
-  WaterRenderer,
-  WaterRuntimeProvider,
-  WaterStreamRenderer,
+  WasserRenderer,
+  WasserRuntimeProvider,
+  WasserStreamRenderer,
 } from "../src/index.ts";
 import type {
-  WaterActionContext,
-  WaterRenderBinding,
-  WaterRenderContext,
-  WaterRenderDiagnostic,
-  WaterRuntime,
-  WaterRuntimeEvent,
+  WasserActionContext,
+  WasserRenderBinding,
+  WasserRenderContext,
+  WasserRenderDiagnostic,
+  WasserRuntime,
+  WasserRuntimeEvent,
 } from "../src/index.ts";
 
 test("renders the verified root node through a registry render binding", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       Page: {
         description: "Page root.",
         render: (({ nodeId }) =>
-          createElement("main", { "data-node": nodeId }, "Dashboard")) satisfies WaterRenderBinding,
+          createElement(
+            "main",
+            { "data-node": nodeId },
+            "Dashboard",
+          )) satisfies WasserRenderBinding,
       },
     },
   });
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "page",
         nodes: {
           page: {
@@ -51,9 +55,9 @@ test("renders the verified root node through a registry render binding", () => {
 
   const html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { runtime: {}, registry },
-      createElement(WaterRenderer, { ui }),
+      createElement(WasserRenderer, { ui }),
     ),
   );
 
@@ -61,7 +65,7 @@ test("renders the verified root node through a registry render binding", () => {
 });
 
 test("renders recursive children and named slots", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       Layout: {
         description: "Layout with header and body.",
@@ -77,12 +81,12 @@ test("renders recursive children and named slots", () => {
             null,
             createElement("header", null, slots.header),
             createElement("div", null, children),
-          )) satisfies WaterRenderBinding,
+          )) satisfies WasserRenderBinding,
       },
       Text: {
         description: "Text node.",
         render: (({ props }) =>
-          createElement("p", null, String(props.label))) satisfies WaterRenderBinding<{
+          createElement("p", null, String(props.label))) satisfies WasserRenderBinding<{
           label: string;
         }>,
       },
@@ -91,8 +95,8 @@ test("renders recursive children and named slots", () => {
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "layout",
         nodes: {
           layout: {
@@ -122,9 +126,9 @@ test("renders recursive children and named slots", () => {
 
   const html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { runtime: {}, registry },
-      createElement(WaterRenderer, { ui }),
+      createElement(WasserRenderer, { ui }),
     ),
   );
 
@@ -132,7 +136,7 @@ test("renders recursive children and named slots", () => {
 });
 
 test("exposes node, slot, and stream renderer components", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       Layout: {
         description: "Layout with slots.",
@@ -140,12 +144,12 @@ test("exposes node, slot, and stream renderer components", () => {
           header: {},
         },
         render: (({ slots }) =>
-          createElement("section", null, slots.header)) satisfies WaterRenderBinding,
+          createElement("section", null, slots.header)) satisfies WasserRenderBinding,
       },
       Text: {
         description: "Text node.",
         render: (({ props }) =>
-          createElement("p", null, String(props.label))) satisfies WaterRenderBinding<{
+          createElement("p", null, String(props.label))) satisfies WasserRenderBinding<{
           label: string;
         }>,
       },
@@ -154,8 +158,8 @@ test("exposes node, slot, and stream renderer components", () => {
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "layout",
         nodes: {
           layout: {
@@ -178,23 +182,23 @@ test("exposes node, slot, and stream renderer components", () => {
 
   const nodeHtml = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { runtime: {}, registry },
       createElement(NodeRenderer, { ui, nodeId: "title" }),
     ),
   );
   const slotHtml = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { runtime: {}, registry },
       createElement(SlotRenderer, { ui, nodeId: "layout", name: "header" }),
     ),
   );
   const streamHtml = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { runtime: {}, registry },
-      createElement(WaterStreamRenderer, { ui }),
+      createElement(WasserStreamRenderer, { ui }),
     ),
   );
 
@@ -203,19 +207,19 @@ test("exposes node, slot, and stream renderer components", () => {
   expect(streamHtml).toBe("<section><p>Customers</p></section>");
 });
 
-test("renders verified stream state through WaterStreamRenderer", () => {
-  const registry = createWaterRegistry({
+test("renders verified stream state through WasserStreamRenderer", () => {
+  const registry = createWasserRegistry({
     components: {
       Page: {
         description: "Page shell.",
         children: "nodes",
         render: (({ children }) =>
-          createElement("main", null, children)) satisfies WaterRenderBinding,
+          createElement("main", null, children)) satisfies WasserRenderBinding,
       },
       Text: {
         description: "Text node.",
         render: (({ props }) =>
-          createElement("p", null, String(props.label))) satisfies WaterRenderBinding<{
+          createElement("p", null, String(props.label))) satisfies WasserRenderBinding<{
           label: string;
         }>,
       },
@@ -258,9 +262,9 @@ test("renders verified stream state through WaterStreamRenderer", () => {
 
   const html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { runtime: {}, registry },
-      createElement(WaterStreamRenderer, { stream }),
+      createElement(WasserStreamRenderer, { stream }),
     ),
   );
 
@@ -268,17 +272,17 @@ test("renders verified stream state through WaterStreamRenderer", () => {
 });
 
 test("binds runtime data, actions, and telemetry into render context", () => {
-  let actionContext: WaterActionContext | undefined;
-  let tableContext: WaterRenderContext | undefined;
-  let buttonContext: WaterRenderContext | undefined;
-  const events: WaterRuntimeEvent[] = [];
-  const registry = createWaterRegistry({
+  let actionContext: WasserActionContext | undefined;
+  let tableContext: WasserRenderContext | undefined;
+  let buttonContext: WasserRenderContext | undefined;
+  const events: WasserRuntimeEvent[] = [];
+  const registry = createWasserRegistry({
     components: {
       App: {
         description: "App shell.",
         children: "nodes",
         render: (({ children }) =>
-          createElement("div", null, children)) satisfies WaterRenderBinding,
+          createElement("div", null, children)) satisfies WasserRenderBinding,
       },
       CustomerTable: {
         description: "Customer table.",
@@ -286,7 +290,7 @@ test("binds runtime data, actions, and telemetry into render context", () => {
           tableContext = context;
           const rows = context.bindings.data["queries.customers.data"] as string[];
           return createElement("table", null, createElement("caption", null, rows.join(", ")));
-        }) satisfies WaterRenderBinding,
+        }) satisfies WasserRenderBinding,
       },
       ExportButton: {
         description: "Export button.",
@@ -299,11 +303,11 @@ test("binds runtime data, actions, and telemetry into render context", () => {
             },
             "Export",
           );
-        }) satisfies WaterRenderBinding,
+        }) satisfies WasserRenderBinding,
       },
     },
   });
-  const runtime: WaterRuntime = {
+  const runtime: WasserRuntime = {
     resolveData: (dataRef) => {
       expect(dataRef).toBe("queries.customers.data");
       return ["Ada", "Grace"];
@@ -317,8 +321,8 @@ test("binds runtime data, actions, and telemetry into render context", () => {
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "app",
         nodes: {
           app: {
@@ -351,9 +355,9 @@ test("binds runtime data, actions, and telemetry into render context", () => {
 
   const html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { runtime, registry },
-      createElement(WaterRenderer, { ui }),
+      createElement(WasserRenderer, { ui }),
     ),
   );
 
@@ -395,22 +399,22 @@ test("binds runtime data, actions, and telemetry into render context", () => {
 
 test("applies permission guards before calling render bindings", () => {
   let called = false;
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       AdminPanel: {
         description: "Admin panel.",
         render: (() => {
           called = true;
           return createElement("section", null, "Admin");
-        }) satisfies WaterRenderBinding,
+        }) satisfies WasserRenderBinding,
       },
     },
   });
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "admin",
         nodes: {
           admin: {
@@ -424,18 +428,18 @@ test("applies permission guards before calling render bindings", () => {
       { registry },
     ),
   );
-  const diagnostics: Array<readonly WaterRenderDiagnostic[]> = [];
+  const diagnostics: Array<readonly WasserRenderDiagnostic[]> = [];
 
   const html = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       {
         runtime: {
           permissions: () => false,
         },
         registry,
       },
-      createElement(WaterRenderer, {
+      createElement(WasserRenderer, {
         ui,
         onDiagnostics: (next) => {
           diagnostics.push(next);
@@ -446,7 +450,7 @@ test("applies permission guards before calling render bindings", () => {
 
   expect(called).toBe(false);
   expect(html).toBe(
-    '<span data-water-fallback="permission_denied" data-water-node-id="admin" data-water-component-type="AdminPanel"></span>',
+    '<span data-wasser-fallback="permission_denied" data-wasser-node-id="admin" data-wasser-component-type="AdminPanel"></span>',
   );
   expect(diagnostics[0]).toEqual([
     expect.objectContaining({
@@ -458,7 +462,7 @@ test("applies permission guards before calling render bindings", () => {
 });
 
 test("renders safe fallbacks for missing render bindings and raw schema input", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       Metric: {
         description: "Metric without a render binding.",
@@ -468,8 +472,8 @@ test("renders safe fallbacks for missing render bindings and raw schema input", 
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "metric",
         nodes: {
           metric: {
@@ -480,13 +484,13 @@ test("renders safe fallbacks for missing render bindings and raw schema input", 
       { registry },
     ),
   );
-  const missingBindingDiagnostics: Array<readonly WaterRenderDiagnostic[]> = [];
+  const missingBindingDiagnostics: Array<readonly WasserRenderDiagnostic[]> = [];
 
   const missingBindingHtml = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { runtime: {}, registry },
-      createElement(WaterRenderer, {
+      createElement(WasserRenderer, {
         ui,
         onDiagnostics: (next) => missingBindingDiagnostics.push(next),
       }),
@@ -494,19 +498,19 @@ test("renders safe fallbacks for missing render bindings and raw schema input", 
   );
 
   expect(missingBindingHtml).toBe(
-    '<span data-water-fallback="missing_render_binding" data-water-node-id="metric" data-water-component-type="Metric"></span>',
+    '<span data-wasser-fallback="missing_render_binding" data-wasser-node-id="metric" data-wasser-component-type="Metric"></span>',
   );
   expect(missingBindingDiagnostics[0]?.[0]?.code).toBe("missing_render_binding");
 
-  const rawDiagnostics: Array<readonly WaterRenderDiagnostic[]> = [];
+  const rawDiagnostics: Array<readonly WasserRenderDiagnostic[]> = [];
   const rawHtml = renderToStaticMarkup(
     createElement(
-      WaterRuntimeProvider,
+      WasserRuntimeProvider,
       { runtime: {}, registry },
-      createElement(WaterRenderer, {
+      createElement(WasserRenderer, {
         ui: {
-          kind: "water.ui.document",
-          version: "water.ui.v1",
+          kind: "wasser.ui.document",
+          version: "wasser.ui.v1",
           root: "metric",
           nodes: {
             metric: {
@@ -519,7 +523,7 @@ test("renders safe fallbacks for missing render bindings and raw schema input", 
     ),
   );
 
-  expect(rawHtml).toBe('<span data-water-fallback="invalid_renderer_input"></span>');
+  expect(rawHtml).toBe('<span data-wasser-fallback="invalid_renderer_input"></span>');
   expect(rawDiagnostics[0]?.[0]?.code).toBe("invalid_renderer_input");
 });
 

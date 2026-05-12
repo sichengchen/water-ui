@@ -1,5 +1,5 @@
 import { expect, test } from "vite-plus/test";
-import { renderWaterStreamToHtml, renderWaterToHtml } from "@water-ui/svelte";
+import { renderWasserStreamToHtml, renderWasserToHtml } from "@wasser-ui/svelte";
 import { render } from "svelte/server";
 import {
   compileMeetingActionsPrompt,
@@ -9,8 +9,8 @@ import {
   mockMeetingActionsAgent,
   runMeetingActionsDemo,
 } from "../src/index.ts";
-import { applyStreamEvent, createStreamState, verifyDocument } from "@water-ui/core";
-import type { WaterRuntime, WaterSvelteComponentRenderer } from "@water-ui/svelte";
+import { applyStreamEvent, createStreamState, verifyDocument } from "@wasser-ui/core";
+import type { WasserRuntime, WasserSvelteComponentRenderer } from "@wasser-ui/svelte";
 
 test("mock agent output verifies against app components and runtime capabilities", async () => {
   const runtime = createMeetingRuntime();
@@ -45,7 +45,7 @@ test("compiled prompt exposes only registered app components and runtime ids", (
 test("renders the verified todo list", async () => {
   const result = await runMeetingActionsDemo();
 
-  const html = renderWaterToHtml({
+  const html = renderWasserToHtml({
     ui: result.ui,
     registry: meetingActionsRegistry,
     runtime: withServerComponentRendering(result.runtime.renderRuntime),
@@ -72,7 +72,7 @@ test("streams the todo list one task at a time", () => {
     runtime: runtime.capabilityRuntime.describe(),
   }).state;
 
-  let html = renderWaterStreamToHtml({
+  let html = renderWasserStreamToHtml({
     stream,
     registry: meetingActionsRegistry,
     runtime: withServerComponentRendering(runtime.renderRuntime),
@@ -87,7 +87,7 @@ test("streams the todo list one task at a time", () => {
     runtime: runtime.capabilityRuntime.describe(),
   }).state;
 
-  html = renderWaterStreamToHtml({
+  html = renderWasserStreamToHtml({
     stream,
     registry: meetingActionsRegistry,
     runtime: withServerComponentRendering(runtime.renderRuntime),
@@ -100,8 +100,8 @@ test("streams the todo list one task at a time", () => {
 
 function withServerComponentRendering(
   runtime: ReturnType<typeof createMeetingRuntime>["renderRuntime"],
-): WaterRuntime {
-  const renderComponent: WaterSvelteComponentRenderer = (component, props) =>
+): WasserRuntime {
+  const renderComponent: WasserSvelteComponentRenderer = (component, props) =>
     render(component, { props }).body;
 
   return {

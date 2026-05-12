@@ -7,4 +7,4 @@ Registry fixtures cover:
 - duplicate component types are diagnosed
 - profile selection works
 - prompt-safe summaries exclude unsafe implementation details
-- core has zero Water-owned visual components
+- core has zero Wasser-owned visual components

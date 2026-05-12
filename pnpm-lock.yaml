@@ -114,9 +114,21 @@ importers:
 
   .:
     devDependencies:
+      '@sveltejs/vite-plugin-svelte':
+        specifier: 'catalog:'
+        version: 7.1.2(svelte@5.55.5)(vite@8.0.11(@types/node@24.12.3)(esbuild@0.27.3)(jiti@2.7.0)(sass@1.97.3))
+      '@vitejs/plugin-vue':
+        specifier: 'catalog:'
+        version: 6.0.6(vite@8.0.11(@types/node@24.12.3)(esbuild@0.27.3)(jiti@2.7.0)(sass@1.97.3))(vue@3.5.34(typescript@5.9.3))
+      svelte:
+        specifier: 'catalog:'
+        version: 5.55.5
       vite-plus:
         specifier: 'catalog:'
         version: 0.1.20(@types/node@24.12.3)(esbuild@0.27.3)(jiti@2.7.0)(sass@1.97.3)(typescript@5.9.3)(vite@8.0.11(@types/node@24.12.3)(esbuild@0.27.3)(jiti@2.7.0)(sass@1.97.3))
+      vue:
+        specifier: 'catalog:'
+        version: 3.5.34(typescript@5.9.3)
 
   examples/meeting-note-angular:
     dependencies:
@@ -138,16 +150,16 @@ importers:
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.0(vite@8.0.11(@types/node@24.12.3)(esbuild@0.27.3)(jiti@2.7.0)(sass@1.97.3))
-      '@water-ui/angular':
+      '@wasser-ui/angular':
         specifier: workspace:*
         version: link:../../packages/angular
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@water-ui/prompt':
+      '@wasser-ui/prompt':
         specifier: workspace:*
         version: link:../../packages/prompt
-      '@water-ui/runtime':
+      '@wasser-ui/runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
       class-variance-authority:
@@ -196,16 +208,16 @@ importers:
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.0(vite@8.0.11(@types/node@24.12.3)(esbuild@0.27.3)(jiti@2.7.0)(sass@1.97.3))
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@water-ui/prompt':
+      '@wasser-ui/prompt':
         specifier: workspace:*
         version: link:../../packages/prompt
-      '@water-ui/react':
+      '@wasser-ui/react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@water-ui/runtime':
+      '@wasser-ui/runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
       class-variance-authority:
@@ -260,16 +272,16 @@ importers:
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.0(vite@8.0.11(@types/node@24.12.3)(esbuild@0.27.3)(jiti@2.7.0)(sass@1.97.3))
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@water-ui/prompt':
+      '@wasser-ui/prompt':
         specifier: workspace:*
         version: link:../../packages/prompt
-      '@water-ui/runtime':
+      '@wasser-ui/runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
-      '@water-ui/svelte':
+      '@wasser-ui/svelte':
         specifier: workspace:*
         version: link:../../packages/svelte
       class-variance-authority:
@@ -312,16 +324,16 @@ importers:
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.0(vite@8.0.11(@types/node@24.12.3)(esbuild@0.27.3)(jiti@2.7.0)(sass@1.97.3))
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@water-ui/prompt':
+      '@wasser-ui/prompt':
         specifier: workspace:*
         version: link:../../packages/prompt
-      '@water-ui/runtime':
+      '@wasser-ui/runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
-      '@water-ui/vue':
+      '@wasser-ui/vue':
         specifier: workspace:*
         version: link:../../packages/vue
       class-variance-authority:
@@ -364,10 +376,10 @@ importers:
 
   packages/adapter-shadcn:
     dependencies:
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../core
-      '@water-ui/react':
+      '@wasser-ui/react':
         specifier: workspace:*
         version: link:../react
       zod:
@@ -398,7 +410,7 @@ importers:
 
   packages/angular:
     dependencies:
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../core
       tslib:
@@ -469,13 +481,13 @@ importers:
 
   packages/devtools:
     dependencies:
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../core
-      '@water-ui/prompt':
+      '@wasser-ui/prompt':
         specifier: workspace:*
         version: link:../prompt
-      '@water-ui/runtime':
+      '@wasser-ui/runtime':
         specifier: workspace:*
         version: link:../runtime
     devDependencies:
@@ -494,7 +506,7 @@ importers:
 
   packages/prompt:
     dependencies:
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -513,7 +525,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -541,7 +553,7 @@ importers:
 
   packages/runtime:
     dependencies:
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../core
       zod:
@@ -560,7 +572,7 @@ importers:
 
   packages/svelte:
     dependencies:
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -579,7 +591,7 @@ importers:
 
   packages/vue:
     dependencies:
-      '@water-ui/core':
+      '@wasser-ui/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

@@ -1,40 +1,40 @@
-# Water UI
+# Wasser UI
 
-Water UI is a generative UI toolkit for agent-driven applications.
+Wasser UI is a generative UI toolkit for agent-driven applications.
 
-Applications expose their own components through a Water UI registry. Water UI
+Applications expose their own components through a Wasser UI registry. Wasser UI
 uses that registry to compile prompts, parse model output, verify Schema UI,
 render verified UI, apply patches, and consume streaming UI updates.
 
 ## Packages
 
-- `@water-ui/core`: registries, Schema UI protocol parsing, verification,
+- `@wasser-ui/core`: registries, Schema UI protocol parsing, verification,
   semantic patches, stream state, and diagnostics.
-- `@water-ui/react`: React rendering for `VerifiedSchemaUI`, runtime binding,
+- `@wasser-ui/react`: React rendering for `VerifiedSchemaUI`, runtime binding,
   safe fallbacks, and stream rendering.
-- `@water-ui/vue`: Vue rendering for `VerifiedSchemaUI`, runtime binding, safe
+- `@wasser-ui/vue`: Vue rendering for `VerifiedSchemaUI`, runtime binding, safe
   fallbacks, and stream rendering.
-- `@water-ui/svelte`: Svelte snippet and HTML rendering for
+- `@wasser-ui/svelte`: Svelte snippet and HTML rendering for
   `VerifiedSchemaUI`, runtime binding, safe fallbacks, and stream rendering.
-- `@water-ui/angular`: Angular rendering for `VerifiedSchemaUI`, runtime
+- `@wasser-ui/angular`: Angular rendering for `VerifiedSchemaUI`, runtime
   binding, safe fallbacks, and stream rendering.
-- `@water-ui/runtime`: state, query, action, mutation, permission, and runtime
+- `@wasser-ui/runtime`: state, query, action, mutation, permission, and runtime
   event registries.
-- `@water-ui/prompt`: prompt compilers for document, patch, stream, and repair
+- `@wasser-ui/prompt`: prompt compilers for document, patch, stream, and repair
   flows.
-- `@water-ui/adapter-shadcn`: (optional) shadcn registry entries and render
+- `@wasser-ui/adapter-shadcn`: (optional) shadcn registry entries and render
   bindings.
-- `@water-ui/devtools`: serializable inspection models for registries, Schema
+- `@wasser-ui/devtools`: serializable inspection models for registries, Schema
   UI, verification, patches, streams, runtime events, prompts, and render
   bindings.
-- `@water-ui/cli`: command-line package entry point.
+- `@wasser-ui/cli`: command-line package entry point.
 
 ## How It Works
 
 1. Define a registry of user-owned components.
 2. Register runtime capabilities for data, actions, mutations, and state.
 3. Compile prompts from the same registry and runtime capabilities.
-4. Parse model output as a Water document, patch, or JSONL stream.
+4. Parse model output as a Wasser document, patch, or JSONL stream.
 5. Verify the output against the registry and runtime description.
 6. Render `VerifiedSchemaUI` with React, Vue, Svelte, Angular, or inspect it with
    DevTools.
@@ -45,12 +45,12 @@ returns a `VerifiedSchemaUI`.
 ## Basic Usage
 
 ```ts
-import { createWaterRegistry, defineWaterComponent, verifyDocument } from "@water-ui/core";
-import { createWaterRuntime } from "@water-ui/runtime";
-import { compileDocumentPrompt } from "@water-ui/prompt";
+import { createWasserRegistry, defineWasserComponent, verifyDocument } from "@wasser-ui/core";
+import { createWasserRuntime } from "@wasser-ui/runtime";
+import { compileDocumentPrompt } from "@wasser-ui/prompt";
 import { z } from "zod";
 
-const CustomerTable = defineWaterComponent({
+const CustomerTable = defineWasserComponent({
   description: "Displays customers with status, revenue, and owner.",
   propsSchema: z
     .object({
@@ -70,13 +70,13 @@ const CustomerTable = defineWaterComponent({
   },
 });
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     CustomerTable,
   },
 });
 
-const runtime = createWaterRuntime();
+const runtime = createWasserRuntime();
 
 runtime.queries.register({
   id: "customers",
@@ -105,29 +105,29 @@ if (result.ok) {
 React rendering consumes verified UI:
 
 ```tsx
-import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/react";
+import { WasserRenderer, WasserRuntimeProvider } from "@wasser-ui/react";
 
-<WaterRuntimeProvider runtime={runtime} registry={registry}>
-  <WaterRenderer ui={verifiedUi} />
-</WaterRuntimeProvider>;
+<WasserRuntimeProvider runtime={runtime} registry={registry}>
+  <WasserRenderer ui={verifiedUi} />
+</WasserRuntimeProvider>;
 ```
 
 Vue rendering consumes the same verified UI contract:
 
 ```ts
 import { h } from "vue";
-import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/vue";
+import { WasserRenderer, WasserRuntimeProvider } from "@wasser-ui/vue";
 
-h(WaterRuntimeProvider, { runtime, registry }, () => h(WaterRenderer, { ui: verifiedUi }));
+h(WasserRuntimeProvider, { runtime, registry }, () => h(WasserRenderer, { ui: verifiedUi }));
 ```
 
 Svelte rendering exposes snippets and server HTML helpers:
 
 ```svelte
 <script lang="ts">
-  import { createWaterRenderer } from "@water-ui/svelte";
+  import { createWasserRenderer } from "@wasser-ui/svelte";
 
-  const renderer = createWaterRenderer({ ui: verifiedUi, runtime, registry });
+  const renderer = createWasserRenderer({ ui: verifiedUi, runtime, registry });
 </script>
 
 {@render renderer()}
@@ -136,15 +136,15 @@ Svelte rendering exposes snippets and server HTML helpers:
 Angular rendering consumes the same verified UI contract:
 
 ```ts
-import { provideWaterRuntime } from "@water-ui/angular";
+import { provideWasserRuntime } from "@wasser-ui/angular";
 
 bootstrapApplication(AppComponent, {
-  providers: [provideWaterRuntime({ runtime, registry })],
+  providers: [provideWasserRuntime({ runtime, registry })],
 });
 ```
 
 ```html
-<water-renderer [ui]="verifiedUi" />
+<wasser-renderer [ui]="verifiedUi" />
 ```
 
 ## Documentation

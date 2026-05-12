@@ -1,4 +1,4 @@
-import { compileStreamPrompt } from "@water-ui/prompt";
+import { compileStreamPrompt } from "@wasser-ui/prompt";
 import {
   createMeetingSummaryFromNote,
   exampleMeetingNote,
@@ -9,7 +9,7 @@ import type {
   RuntimeCapabilityDescription,
   SchemaUIDocument,
   SchemaUIStreamEvent,
-} from "@water-ui/core";
+} from "@wasser-ui/core";
 import type { MeetingTask } from "./types.js";
 
 export const meetingActionsIntent = "Turn this meeting note into a todo list.";
@@ -37,8 +37,8 @@ export async function mockMeetingActionsAgent(
   const tasks = resolveMeetingTasks(options);
 
   return {
-    kind: "water.ui.document",
-    version: "water.ui.v1",
+    kind: "wasser.ui.document",
+    version: "wasser.ui.v1",
     root: "task_list",
     nodes: {
       task_list: {

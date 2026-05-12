@@ -1,7 +1,7 @@
 {
-  "name": "@water-ui/adapter-shadcn",
+  "name": "@wasser-ui/adapter-shadcn",
   "version": "0.0.0",
-  "description": "Optional shadcn registry adapter for Water UI.",
+  "description": "Optional shadcn registry adapter for Wasser UI.",
   "license": "MIT",
   "files": [
     "dist"
@@ -20,8 +20,8 @@
     "test": "vp test"
   },
   "dependencies": {
-    "@water-ui/core": "workspace:*",
-    "@water-ui/react": "workspace:*",
+    "@wasser-ui/core": "workspace:*",
+    "@wasser-ui/react": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

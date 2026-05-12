@@ -2,7 +2,7 @@
 
 The component registry is developer-defined.
 
-It describes what agents may use and how Water should verify, render, stream,
+It describes what agents may use and how Wasser should verify, render, stream,
 patch, and prompt that UI.
 
 Registry entries may include:
@@ -39,9 +39,9 @@ const CustomerTablePropsSchema = z
   })
   .strict();
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
-    CustomerTable: defineWaterComponent({
+    CustomerTable: defineWasserComponent({
       description: "Displays customers with status, revenue, and account owner.",
       propsSchema: CustomerTablePropsSchema,
       children: "none",
@@ -70,9 +70,9 @@ const registry = createWaterRegistry({
 });
 ```
 
-`propsSchema` is intentionally Zod-backed rather than a Water-specific schema
-dialect. The verifier calls `safeParse` and reports Zod issue paths as Water
+`propsSchema` is intentionally Zod-backed rather than a Wasser-specific schema
+dialect. The verifier calls `safeParse` and reports Zod issue paths as Wasser
 diagnostics.
 
-Water core owns registry mechanics. User applications and adapters own component
+Wasser core owns registry mechanics. User applications and adapters own component
 definitions.

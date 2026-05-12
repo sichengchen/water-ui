@@ -1,6 +1,6 @@
 # RFC 014: Evaluation
 
-Water needs an eval suite from the beginning.
+Wasser needs an eval suite from the beginning.
 
 Eval dimensions:
 

@@ -1,6 +1,6 @@
-# @water-ui/devtools
+# @wasser-ui/devtools
 
-DevTools inspection models for Water UI.
+DevTools inspection models for Wasser UI.
 
 This package provides:
 
@@ -17,7 +17,7 @@ This package provides:
 ## Usage
 
 ```ts
-import { createDevToolsInspection } from "@water-ui/devtools";
+import { createDevToolsInspection } from "@wasser-ui/devtools";
 
 const inspection = createDevToolsInspection({
   registry,

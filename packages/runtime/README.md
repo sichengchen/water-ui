@@ -1,6 +1,6 @@
-# @water-ui/runtime
+# @wasser-ui/runtime
 
-Runtime capability system for Water UI applications.
+Runtime capability system for Wasser UI applications.
 
 This package provides:
 
@@ -18,9 +18,9 @@ The model references capabilities. Application code implements them.
 ## Usage
 
 ```ts
-import { createWaterRuntime } from "@water-ui/runtime";
+import { createWasserRuntime } from "@wasser-ui/runtime";
 
-const runtime = createWaterRuntime({
+const runtime = createWasserRuntime({
   permissions: {
     canRunAction: ({ risk }) => risk !== "destructive",
   },
@@ -46,6 +46,6 @@ runtime.actions.register({
 runtime.describe();
 ```
 
-`runtime.describe()` returns the capability lists used by Water verification.
+`runtime.describe()` returns the capability lists used by Wasser verification.
 Unknown actions, queries, mutations, and state keys are blocked before
 execution.

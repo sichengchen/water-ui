@@ -1,6 +1,6 @@
-# @water-ui/prompt
+# @wasser-ui/prompt
 
-Prompt compiler package for Water UI.
+Prompt compiler package for Wasser UI.
 
 This package provides:
 
@@ -18,7 +18,7 @@ Prompts are generated from the same registry used for verification.
 ## Usage
 
 ```ts
-import { compileSystemPrompt } from "@water-ui/prompt";
+import { compileSystemPrompt } from "@wasser-ui/prompt";
 
 const prompt = compileSystemPrompt({
   mode: "document",

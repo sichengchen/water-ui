@@ -2,7 +2,7 @@
 
 Patch protocol fixtures cover:
 
-- valid `water.ui.patch` inputs parse
+- valid `wasser.ui.patch` inputs parse
 - invalid patch shapes are diagnosed
 - registered inserted nodes are accepted
 - unregistered inserted nodes are rejected

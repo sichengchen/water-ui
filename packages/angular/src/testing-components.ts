@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { WaterOutletComponent } from "./index.js";
+import { WasserOutletComponent } from "./index.js";
 
 @Component({
   selector: "test-page",
@@ -13,9 +13,9 @@ export class TestPageComponent {
 @Component({
   selector: "test-layout",
   standalone: true,
-  imports: [WaterOutletComponent],
+  imports: [WasserOutletComponent],
   template:
-    "<section><header><water-outlet [value]='header' /></header><div><water-outlet [value]='children' /></div></section>",
+    "<section><header><wasser-outlet [value]='header' /></header><div><wasser-outlet [value]='children' /></div></section>",
 })
 export class TestLayoutComponent {
   @Input() children: readonly unknown[] = [];

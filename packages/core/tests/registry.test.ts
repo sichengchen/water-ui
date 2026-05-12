@@ -6,31 +6,31 @@ import {
   ExportButton,
 } from "../fixtures/registry.ts";
 import {
-  createWaterRegistry,
-  defineWaterComponent,
-  getWaterComponent,
-  listWaterComponents,
-  mergeWaterRegistries,
-  selectWaterRegistryEntries,
+  createWasserRegistry,
+  defineWasserComponent,
+  getWasserComponent,
+  listWasserComponents,
+  mergeWasserRegistries,
+  selectWasserRegistryEntries,
   serializePromptSafeRegistryDescription,
-  summarizeWaterRegistry,
+  summarizeWasserRegistry,
 } from "../src/index.ts";
-import type { WaterRegistryInput } from "../src/index.ts";
+import type { WasserRegistryInput } from "../src/index.ts";
 
 test("creates a registry from developer-defined components", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: customAdminRegistryInput,
   });
 
   expect(registry.ok).toBe(true);
   expect(registry.diagnostics).toEqual([]);
-  expect(getWaterComponent(registry, "CustomerTable")?.description).toBe(
+  expect(getWasserComponent(registry, "CustomerTable")?.description).toBe(
     "Displays customers with status, revenue, and account owner.",
   );
 });
 
 test("defines frozen registry entries", () => {
-  const InternalMetric = defineWaterComponent({
+  const InternalMetric = defineWasserComponent({
     description: "Displays an internal metric.",
   });
 
@@ -38,12 +38,12 @@ test("defines frozen registry entries", () => {
 });
 
 test("merges registry presets in stable order", () => {
-  const appRegistry = createWaterRegistry({ components: customAdminRegistryInput });
-  const adapterRegistry = createWaterRegistry({ components: adapterPresetRegistryInput });
-  const merged = mergeWaterRegistries(appRegistry, adapterRegistry);
+  const appRegistry = createWasserRegistry({ components: customAdminRegistryInput });
+  const adapterRegistry = createWasserRegistry({ components: adapterPresetRegistryInput });
+  const merged = mergeWasserRegistries(appRegistry, adapterRegistry);
 
   expect(merged.ok).toBe(true);
-  expect(listWaterComponents(merged).map((entry) => entry.type)).toEqual([
+  expect(listWasserComponents(merged).map((entry) => entry.type)).toEqual([
     "CustomerTable",
     "RevenueChart",
     "ExportButton",
@@ -51,10 +51,10 @@ test("merges registry presets in stable order", () => {
 });
 
 test("reports duplicate component types when merging presets", () => {
-  const appRegistry = createWaterRegistry({ components: customAdminRegistryInput });
-  const duplicateRegistry = createWaterRegistry({ components: duplicateRegistryInput });
+  const appRegistry = createWasserRegistry({ components: customAdminRegistryInput });
+  const duplicateRegistry = createWasserRegistry({ components: duplicateRegistryInput });
 
-  const merged = mergeWaterRegistries(appRegistry, duplicateRegistry);
+  const merged = mergeWasserRegistries(appRegistry, duplicateRegistry);
 
   expect(merged.ok).toBe(false);
   expect(merged.diagnostics).toEqual([
@@ -66,7 +66,7 @@ test("reports duplicate component types when merging presets", () => {
 });
 
 test("reports mismatched keyed component types", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       CustomerTable: {
         type: "OrdersTable",
@@ -93,9 +93,9 @@ test("reports invalid registry entries without throwing", () => {
     { type: "NoDescription" },
     { type: "BadChildren", description: "Bad children.", children: "anything" },
     { type: "BadSlots", description: "Bad slots.", slots: { "": {} } },
-  ] as unknown as WaterRegistryInput;
+  ] as unknown as WasserRegistryInput;
 
-  const registry = createWaterRegistry({ components: invalidInput });
+  const registry = createWasserRegistry({ components: invalidInput });
 
   expect(registry.ok).toBe(false);
   expect(registry.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
@@ -108,7 +108,7 @@ test("reports invalid registry entries without throwing", () => {
 });
 
 test("selects registry entries by profile while retaining shared entries", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: [
       {
         type: "AdminOnlyPanel",
@@ -127,20 +127,20 @@ test("selects registry entries by profile while retaining shared entries", () =>
     ],
   });
 
-  expect(selectWaterRegistryEntries(registry, "admin").map((entry) => entry.type)).toEqual([
+  expect(selectWasserRegistryEntries(registry, "admin").map((entry) => entry.type)).toEqual([
     "AdminOnlyPanel",
     "SharedMetric",
   ]);
 });
 
 test("summarizes prompt-safe registry details", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       ExportButton,
     },
   });
 
-  const summary = summarizeWaterRegistry(registry);
+  const summary = summarizeWasserRegistry(registry);
 
   expect(summary).toEqual({
     componentCount: 1,
@@ -164,7 +164,7 @@ test("summarizes prompt-safe registry details", () => {
 });
 
 test("prompt-safe registry serialization excludes render bindings and raw schemas", () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       ExportButton,
     },
@@ -178,10 +178,10 @@ test("prompt-safe registry serialization excludes render bindings and raw schema
   expect(serialized).not.toContain("render bindings are not prompt-safe");
 });
 
-test("core has no Water-owned visual component definitions", () => {
-  const registry = createWaterRegistry({ components: {} });
+test("core has no Wasser-owned visual component definitions", () => {
+  const registry = createWasserRegistry({ components: {} });
 
   expect(registry.ok).toBe(true);
   expect(registry.entries).toHaveLength(0);
-  expect(summarizeWaterRegistry(registry).componentCount).toBe(0);
+  expect(summarizeWasserRegistry(registry).componentCount).toBe(0);
 });

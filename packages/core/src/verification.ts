@@ -3,8 +3,8 @@ import type {
   DiagnosticSeverity,
   RegistryDiagnostic,
   RegistryDiagnosticCode,
-  WaterComponentEntry,
-  WaterRegistry,
+  WasserComponentEntry,
+  WasserRegistry,
 } from "./index.js";
 import type { SchemaUIDiagnostic, SchemaUIDocument, SchemaUINode } from "./protocol.js";
 
@@ -68,7 +68,7 @@ export type VerificationResult =
     };
 
 export type VerifyDocumentOptions = {
-  registry: WaterRegistry;
+  registry: WasserRegistry;
   runtime?: RuntimeCapabilityDescription;
 };
 
@@ -324,7 +324,7 @@ function verifyRegistry(
 function verifyChildrenPolicy(
   nodeId: string,
   node: SchemaUINode,
-  entry: WaterComponentEntry,
+  entry: WasserComponentEntry,
   diagnostics: VerificationDiagnostic[],
 ): void {
   const children = node.children ?? [];
@@ -383,7 +383,7 @@ function verifyChildrenPolicy(
 function verifySlotPolicy(
   nodeId: string,
   node: SchemaUINode,
-  entry: WaterComponentEntry,
+  entry: WasserComponentEntry,
   diagnostics: VerificationDiagnostic[],
 ): void {
   const slots = node.slots ?? {};
@@ -444,7 +444,7 @@ function verifySlotPolicy(
 function verifyProps(
   nodeId: string,
   node: SchemaUINode,
-  entry: WaterComponentEntry,
+  entry: WasserComponentEntry,
   diagnostics: VerificationDiagnostic[],
 ): PropsVerificationResult {
   if (!entry.propsSchema) {

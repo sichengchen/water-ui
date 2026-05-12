@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { expect, test } from "vite-plus/test";
 import { z } from "zod";
-import { createWaterRegistry, verifyDocument } from "@water-ui/core";
+import { createWasserRegistry, verifyDocument } from "@wasser-ui/core";
 import {
   compileDocumentPrompt,
   compilePatchPrompt,
@@ -12,7 +12,7 @@ import {
 
 const goldenRoot = new URL("../../../goldens/prompts/", import.meta.url);
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     AdminPage: {
       description: "Admin page shell.",
@@ -107,7 +107,7 @@ test("compiles system prompt from registry and runtime capabilities", () => {
 
 test("compiles mode-specific document, patch, and stream prompts", () => {
   expect(compileDocumentPrompt({ registry, runtime })).toContain(
-    'Return exactly one JSON object with kind "water.ui.document".',
+    'Return exactly one JSON object with kind "wasser.ui.document".',
   );
   expect(compilePatchPrompt({ registry, runtime })).toContain(
     "Use semantic operations instead of regenerating the full document.",
@@ -122,8 +122,8 @@ test("includes current document context for patch prompts", () => {
     registry,
     runtime,
     currentDocument: {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "page",
       nodes: {
         page: {
@@ -140,8 +140,8 @@ test("includes current document context for patch prompts", () => {
 test("generates repair prompt from diagnostics", () => {
   const verification = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "table",
       nodes: {
         table: {
@@ -163,8 +163,8 @@ test("generates repair prompt from diagnostics", () => {
     registry,
     runtime,
     invalidOutput: {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "table",
       nodes: {
         table: {
@@ -211,8 +211,8 @@ test("matches golden repair prompt fixture", () => {
     registry,
     runtime,
     invalidOutput: {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "table",
       nodes: {
         table: {

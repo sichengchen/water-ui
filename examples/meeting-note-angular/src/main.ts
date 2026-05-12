@@ -6,8 +6,8 @@ import "./styles.css";
 const bootstrap = bootstrapApplication(AppComponent);
 
 (
-  globalThis as typeof globalThis & { __waterAngularDemoBootstrap?: unknown }
-).__waterAngularDemoBootstrap = bootstrap;
+  globalThis as typeof globalThis & { __wasserAngularDemoBootstrap?: unknown }
+).__wasserAngularDemoBootstrap = bootstrap;
 
 bootstrap.catch((error: unknown) => {
   console.error(error);

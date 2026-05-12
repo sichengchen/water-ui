@@ -11,7 +11,7 @@ import {
   type VerificationDiagnosticCode,
   type VerifiedSchemaUI,
 } from "./verification.js";
-import type { WaterRegistry } from "./index.js";
+import type { WasserRegistry } from "./index.js";
 
 export type StreamDiagnosticCode =
   | "duplicate_stream_seq"
@@ -45,7 +45,7 @@ export type CreateStreamStateOptions = {
 };
 
 export type StreamEngineOptions = {
-  registry: WaterRegistry;
+  registry: WasserRegistry;
   runtime?: RuntimeCapabilityDescription;
 };
 
@@ -428,8 +428,8 @@ function verifyNodeEvent(
 ): StreamDiagnostic[] {
   const verification = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: nodeId,
       nodes: {
         [nodeId]: {
@@ -466,7 +466,7 @@ function createReachableDocument(document: SchemaUIDocument): SchemaUIDocument {
   visit(document.root);
 
   return {
-    kind: "water.ui.document",
+    kind: "wasser.ui.document",
     version: document.version,
     root: document.root,
     nodes: Object.fromEntries(
@@ -478,8 +478,8 @@ function createReachableDocument(document: SchemaUIDocument): SchemaUIDocument {
 
 function createDocument(root?: string): SchemaUIDocument {
   return {
-    kind: "water.ui.document",
-    version: "water.ui.v1",
+    kind: "wasser.ui.document",
+    version: "wasser.ui.v1",
     root: root ?? "",
     nodes: {},
   };
@@ -528,7 +528,7 @@ function result(
 
 function cloneDocument(document: SchemaUIDocument): SchemaUIDocument {
   return {
-    kind: "water.ui.document",
+    kind: "wasser.ui.document",
     version: document.version,
     root: document.root,
     nodes: Object.fromEntries(

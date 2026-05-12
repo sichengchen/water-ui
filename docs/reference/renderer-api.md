@@ -3,9 +3,9 @@
 React API target:
 
 ```tsx
-<WaterRuntimeProvider runtime={runtime} registry={registry}>
-  <WaterRenderer ui={verifiedUi} />
-</WaterRuntimeProvider>
+<WasserRuntimeProvider runtime={runtime} registry={registry}>
+  <WasserRenderer ui={verifiedUi} />
+</WasserRuntimeProvider>
 ```
 
 Vue API target:
@@ -13,16 +13,16 @@ Vue API target:
 ```ts
 import { h } from "vue";
 
-h(WaterRuntimeProvider, { runtime, registry }, () => h(WaterRenderer, { ui: verifiedUi }));
+h(WasserRuntimeProvider, { runtime, registry }, () => h(WasserRenderer, { ui: verifiedUi }));
 ```
 
 Svelte API target:
 
 ```svelte
 <script lang="ts">
-  import { createWaterRenderer } from "@water-ui/svelte";
+  import { createWasserRenderer } from "@wasser-ui/svelte";
 
-  const renderer = createWaterRenderer({ ui: verifiedUi, runtime, registry });
+  const renderer = createWasserRenderer({ ui: verifiedUi, runtime, registry });
 </script>
 
 {@render renderer()}
@@ -31,48 +31,48 @@ Svelte API target:
 Angular API target:
 
 ```ts
-import { provideWaterRuntime } from "@water-ui/angular";
+import { provideWasserRuntime } from "@wasser-ui/angular";
 
 bootstrapApplication(AppComponent, {
-  providers: [provideWaterRuntime({ runtime, registry })],
+  providers: [provideWasserRuntime({ runtime, registry })],
 });
 ```
 
 ```html
-<water-renderer [ui]="verifiedUi" />
+<wasser-renderer [ui]="verifiedUi" />
 ```
 
 React and Vue renderer components:
 
-- `WaterRenderer`
-- `WaterStreamRenderer`
-- `WaterRuntimeProvider`
+- `WasserRenderer`
+- `WasserStreamRenderer`
+- `WasserRuntimeProvider`
 - `NodeRenderer`
 - `SlotRenderer`
 
 Angular renderer components and helpers:
 
-- `WaterRendererComponent`
-- `WaterStreamRendererComponent`
+- `WasserRendererComponent`
+- `WasserStreamRendererComponent`
 - `NodeRendererComponent`
 - `SlotRendererComponent`
-- `WaterOutletComponent`
-- `provideWaterRuntime`
-- `waterComponent`
+- `WasserOutletComponent`
+- `provideWasserRuntime`
+- `wasserComponent`
 
 Svelte renderer helpers:
 
-- `createWaterRenderer`
-- `createWaterStreamRenderer`
+- `createWasserRenderer`
+- `createWasserStreamRenderer`
 - `createNodeRenderer`
 - `createSlotRenderer`
-- `renderWaterToHtml`
-- `renderWaterStreamToHtml`
-- `renderWaterNodeToHtml`
-- `renderWaterSlotToHtml`
-- `waterComponent`
-- `waterElement`
-- `waterRawHtml`
+- `renderWasserToHtml`
+- `renderWasserStreamToHtml`
+- `renderWasserNodeToHtml`
+- `renderWasserSlotToHtml`
+- `wasserComponent`
+- `wasserElement`
+- `wasserRawHtml`
 
 Renderer input is VerifiedSchemaUI.
 

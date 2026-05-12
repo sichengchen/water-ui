@@ -1,21 +1,21 @@
 # Generate UI With an Agent
 
-Generation creates a full Water document from a user intent. The model output is
-untrusted until Water parses and verifies it.
+Generation creates a full Wasser document from a user intent. The model output is
+untrusted until Wasser parses and verifies it.
 
 ## Flow
 
 1. Developer defines a registry.
-2. Water compiles the system prompt from that registry.
-3. Agent outputs a full `water.ui.document`.
-4. Water parses and verifies the document.
-5. Water returns VerifiedSchemaUI on success.
+2. Wasser compiles the system prompt from that registry.
+3. Agent outputs a full `wasser.ui.document`.
+4. Wasser parses and verifies the document.
+5. Wasser returns VerifiedSchemaUI on success.
 6. Renderer renders VerifiedSchemaUI.
 
 ## Compile the Prompt
 
 ```ts
-import { compileDocumentPrompt } from "@water-ui/prompt";
+import { compileDocumentPrompt } from "@wasser-ui/prompt";
 
 const systemPrompt = compileDocumentPrompt({
   registry,
@@ -30,12 +30,12 @@ contract for the agent; that creates drift.
 
 ## Expected Model Output
 
-The agent should return a single Water document:
+The agent should return a single Wasser document:
 
 ```json
 {
-  "kind": "water.ui.document",
-  "version": "water.ui.v1",
+  "kind": "wasser.ui.document",
+  "version": "wasser.ui.v1",
   "root": "customers_page",
   "nodes": {
     "customers_page": {
@@ -63,7 +63,7 @@ The agent should return a single Water document:
 ## Parse and Verify
 
 ```ts
-import { parseSchemaUIDocument, verifyDocument } from "@water-ui/core";
+import { parseSchemaUIDocument, verifyDocument } from "@wasser-ui/core";
 
 const parsed = parseSchemaUIDocument(modelOutput);
 
@@ -89,11 +89,11 @@ runtime references. On success it returns immutable `VerifiedSchemaUI`.
 ## Render
 
 ```tsx
-import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/react";
+import { WasserRenderer, WasserRuntimeProvider } from "@wasser-ui/react";
 
-<WaterRuntimeProvider registry={registry} runtime={runtime}>
-  <WaterRenderer ui={verification.ui} />
-</WaterRuntimeProvider>;
+<WasserRuntimeProvider registry={registry} runtime={runtime}>
+  <WasserRenderer ui={verification.ui} />
+</WasserRuntimeProvider>;
 ```
 
 The renderer consumes `VerifiedSchemaUI`, not raw model output.
@@ -103,7 +103,7 @@ The renderer consumes `VerifiedSchemaUI`, not raw model output.
 When verification fails, diagnostics can be fed into a repair prompt:
 
 ```ts
-import { compileRepairPrompt } from "@water-ui/prompt";
+import { compileRepairPrompt } from "@wasser-ui/prompt";
 
 const repairPrompt = compileRepairPrompt({
   registry,

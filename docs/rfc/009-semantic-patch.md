@@ -6,8 +6,8 @@ Patch shape:
 
 ```json
 {
-  "kind": "water.ui.patch",
-  "version": "water.ui.v1",
+  "kind": "wasser.ui.patch",
+  "version": "wasser.ui.v1",
   "target": "page_1",
   "ops": [
     {

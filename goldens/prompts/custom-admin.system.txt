@@ -1,9 +1,9 @@
-Water UI Prompt
+Wasser UI Prompt
 Mode: document
 Profile: admin
 
 Rules:
-- Only output Water Schema UI.
+- Only output Wasser Schema UI.
 - Do not output JSX.
 - Do not output JavaScript.
 - Do not invent component types.
@@ -49,6 +49,6 @@ Runtime capabilities:
 - mutations: deleteCustomer
 
 Output requirements:
-- Return exactly one JSON object with kind "water.ui.document".
-- Use version "water.ui.v1".
+- Return exactly one JSON object with kind "wasser.ui.document".
+- Use version "wasser.ui.v1".
 - Include root and nodes.

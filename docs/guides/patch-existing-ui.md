@@ -7,18 +7,18 @@ regenerating a full document.
 ## Flow
 
 1. Start from VerifiedSchemaUI.
-2. Agent outputs `water.ui.patch`.
-3. Water validates operation shape.
-4. Water applies operations to a copy of the document.
-5. Water verifies affected nodes or the full document.
-6. Water returns new VerifiedSchemaUI or diagnostics.
+2. Agent outputs `wasser.ui.patch`.
+3. Wasser validates operation shape.
+4. Wasser applies operations to a copy of the document.
+5. Wasser verifies affected nodes or the full document.
+6. Wasser returns new VerifiedSchemaUI or diagnostics.
 
 Patches must not mutate input documents.
 
 ## API
 
 ```ts
-import { applyPatch, createPatchHistory } from "@water-ui/core";
+import { applyPatch, createPatchHistory } from "@wasser-ui/core";
 
 const history = createPatchHistory();
 const result = applyPatch(verifiedUi, patch, {
@@ -51,7 +51,7 @@ Supported operations:
 - `unsetSlot`
 
 Invalid operations return structured diagnostics and do not commit. After the
-operations apply to a cloned document, Water runs full verification before
+operations apply to a cloned document, Wasser runs full verification before
 returning a new `VerifiedSchemaUI`.
 
 ## Patch Prompt
@@ -59,7 +59,7 @@ returning a new `VerifiedSchemaUI`.
 Use a patch prompt when asking a model to edit current UI:
 
 ```ts
-import { compilePatchPrompt } from "@water-ui/prompt";
+import { compilePatchPrompt } from "@wasser-ui/prompt";
 
 const prompt = compilePatchPrompt({
   registry,
@@ -76,8 +76,8 @@ patch output instructions.
 
 ```json
 {
-  "kind": "water.ui.patch",
-  "version": "water.ui.v1",
+  "kind": "wasser.ui.patch",
+  "version": "wasser.ui.v1",
   "target": "customers_page",
   "ops": [
     {

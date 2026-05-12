@@ -1,7 +1,7 @@
 {
-  "name": "@water-ui/prompt",
+  "name": "@wasser-ui/prompt",
   "version": "0.0.0",
-  "description": "Prompt compiler package for Water UI.",
+  "description": "Prompt compiler package for Wasser UI.",
   "license": "MIT",
   "files": [
     "dist"
@@ -20,7 +20,7 @@
     "test": "vp test"
   },
   "dependencies": {
-    "@water-ui/core": "workspace:*"
+    "@wasser-ui/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

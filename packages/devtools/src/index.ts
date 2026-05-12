@@ -1,17 +1,17 @@
 import {
   isVerifiedSchemaUI,
-  listWaterComponents,
-  summarizeWaterRegistry,
+  listWasserComponents,
+  summarizeWasserRegistry,
   type PatchHistory,
   type PatchHistoryEntry,
   type SchemaUIDocument,
   type SchemaUIStreamEvent,
   type StreamState,
   type VerifiedSchemaUI,
-  type WaterComponentEntry,
-  type WaterRegistry,
-} from "@water-ui/core";
-import type { RuntimeEventRecord } from "@water-ui/runtime";
+  type WasserComponentEntry,
+  type WasserRegistry,
+} from "@wasser-ui/core";
+import type { RuntimeEventRecord } from "@wasser-ui/runtime";
 
 export type DevToolsPanelId =
   | "registry"
@@ -117,7 +117,7 @@ export type RenderInspectionRow = {
 };
 
 export type DevToolsInspectionInput = {
-  registry?: WaterRegistry;
+  registry?: WasserRegistry;
   rawSchemaUI?: unknown;
   verifiedUI?: VerifiedSchemaUI;
   diagnostics?: readonly DiagnosticLike[];
@@ -204,14 +204,14 @@ export function createDevToolsInspection(input: DevToolsInspectionInput): DevToo
 }
 
 export function inspectRegistry(
-  registry: WaterRegistry | undefined,
+  registry: WasserRegistry | undefined,
 ): DevToolsPanel<RegistryInspectionRow> {
   if (!registry) {
     return panel("registry", "Registry Inspector", "No registry provided.", "warning", []);
   }
 
-  const summary = summarizeWaterRegistry(registry);
-  const entriesByType = new Map(listWaterComponents(registry).map((entry) => [entry.type, entry]));
+  const summary = summarizeWasserRegistry(registry);
+  const entriesByType = new Map(listWasserComponents(registry).map((entry) => [entry.type, entry]));
   const rows = summary.components.map((component) => {
     const entry = entriesByType.get(component.type);
     return Object.freeze({
@@ -422,13 +422,13 @@ export function inspectPrompts(
 }
 
 export function inspectRenderBindings(
-  registry: WaterRegistry | undefined,
+  registry: WasserRegistry | undefined,
   traces: readonly RenderTrace[] = [],
 ): DevToolsPanel<RenderInspectionRow> {
   const rows: RenderInspectionRow[] = [];
   const tracesByType = new Map(traces.map((trace) => [trace.componentType, trace]));
 
-  for (const entry of registry ? listWaterComponents(registry) : []) {
+  for (const entry of registry ? listWasserComponents(registry) : []) {
     rows.push(renderBindingRow(entry, tracesByType.get(entry.type)));
   }
 
@@ -490,7 +490,7 @@ export function createDebugEventBus(): DevToolsDebugEventBus {
 }
 
 function renderBindingRow(
-  entry: WaterComponentEntry,
+  entry: WasserComponentEntry,
   trace: RenderTrace | undefined,
 ): RenderInspectionRow {
   const hasRenderBinding = typeof entry.render === "function";

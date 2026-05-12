@@ -3,12 +3,12 @@ import { z } from "zod";
 import {
   applyPatch,
   createPatchHistory,
-  createWaterRegistry,
+  createWasserRegistry,
   verifyDocument,
 } from "../src/index.ts";
 import type { VerificationResult } from "../src/index.ts";
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     Page: {
       description: "Page container.",
@@ -58,8 +58,8 @@ test("applies upsertNode and child insertion operations", () => {
   const result = applyPatch(
     ui,
     {
-      kind: "water.ui.patch",
-      version: "water.ui.v1",
+      kind: "wasser.ui.patch",
+      version: "wasser.ui.v1",
       target: "page",
       ops: [
         {
@@ -95,8 +95,8 @@ test("applies updateProps, moveNode, removeNode, and replaceChildren", () => {
   const initial = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "page",
         nodes: {
           page: {
@@ -130,8 +130,8 @@ test("applies updateProps, moveNode, removeNode, and replaceChildren", () => {
   const result = applyPatch(
     initial,
     {
-      kind: "water.ui.patch",
-      version: "water.ui.v1",
+      kind: "wasser.ui.patch",
+      version: "wasser.ui.v1",
       target: "page",
       ops: [
         {
@@ -178,8 +178,8 @@ test("applies slot operations and records patch history", () => {
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "panel",
         nodes: {
           panel: {
@@ -207,8 +207,8 @@ test("applies slot operations and records patch history", () => {
   const result = applyPatch(
     ui,
     {
-      kind: "water.ui.patch",
-      version: "water.ui.v1",
+      kind: "wasser.ui.patch",
+      version: "wasser.ui.v1",
       target: "panel",
       ops: [
         {
@@ -240,8 +240,8 @@ test("rejects unregistered inserted nodes through full verification", () => {
   const result = applyPatch(
     createBaseUI(),
     {
-      kind: "water.ui.patch",
-      version: "water.ui.v1",
+      kind: "wasser.ui.patch",
+      version: "wasser.ui.v1",
       target: "page",
       ops: [
         {
@@ -274,8 +274,8 @@ test("rejects invalid operation references before commit", () => {
   const result = applyPatch(
     createBaseUI(),
     {
-      kind: "water.ui.patch",
-      version: "water.ui.v1",
+      kind: "wasser.ui.patch",
+      version: "wasser.ui.v1",
       target: "page",
       ops: [
         {
@@ -301,8 +301,8 @@ function createBaseUI() {
   return expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "page",
         nodes: {
           page: {

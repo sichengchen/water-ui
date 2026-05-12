@@ -14,7 +14,7 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 
 <!--VITE PLUS END-->
 
-# Water UI Project Rules
+# Wasser UI Project Rules
 
 Always answer in English unless the user explicitly instructs otherwise.
 
@@ -27,8 +27,8 @@ Use VitePlus as the project toolchain:
 - `vp run -r build`
 - `vp pack`
 
-Water UI is registry-first and component-library-neutral. Do not add Water-owned
-visual components to `@water-ui/core`; component definitions belong in user
-registries or adapter packages such as `@water-ui/adapter-shadcn`.
+Wasser UI is registry-first and component-library-neutral. Do not add Wasser-owned
+visual components to `@wasser-ui/core`; component definitions belong in user
+registries or adapter packages such as `@wasser-ui/adapter-shadcn`.
 
 Commit messages must use Conventional Commits.

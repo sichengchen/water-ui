@@ -3,18 +3,18 @@
 The registry is the source of truth for what an agent may generate.
 It should describe application concepts, not low-level UI implementation
 details. A good registry gives the model enough information to fill component
-props correctly and gives Water enough structure to verify the result before
+props correctly and gives Wasser enough structure to verify the result before
 rendering.
 
-Use `createWaterRegistry` with user-owned component entries:
+Use `createWasserRegistry` with user-owned component entries:
 
 ```ts
-import { createWaterRegistry } from "@water-ui/core";
-import { CustomerTable } from "./components/customer-table.water";
-import { ExportCustomersButton } from "./components/export-customers-button.water";
-import { RevenueChart } from "./components/revenue-chart.water";
+import { createWasserRegistry } from "@wasser-ui/core";
+import { CustomerTable } from "./components/customer-table.wasser";
+import { ExportCustomersButton } from "./components/export-customers-button.wasser";
+import { RevenueChart } from "./components/revenue-chart.wasser";
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     CustomerTable,
     RevenueChart,
@@ -41,7 +41,7 @@ to compose them:
 - raw component-library prop surfaces
 - internal layout wrappers that users never think about
 
-Water is registry-first because the registry is both the prompt contract and the
+Wasser is registry-first because the registry is both the prompt contract and the
 verification contract. If a component is missing from the registry, generated UI
 cannot use it. If a prop is missing from the schema, generated UI cannot pass it.
 
@@ -62,9 +62,9 @@ The registry says which components exist. The runtime says which capabilities
 exist at render or action time:
 
 ```ts
-import { createWaterRuntime } from "@water-ui/runtime";
+import { createWasserRuntime } from "@wasser-ui/runtime";
 
-const runtime = createWaterRuntime();
+const runtime = createWasserRuntime();
 
 runtime.queries.register({
   id: "customers",
@@ -96,7 +96,7 @@ const verification = verifyDocument(modelOutput, {
 ```
 
 This keeps generation and verification aligned. The model sees the same
-component and runtime vocabulary that Water later enforces.
+component and runtime vocabulary that Wasser later enforces.
 
 ## When to Split a Registry
 
@@ -108,7 +108,7 @@ Use adapter packages for reusable component-library mappings, and merge them
 with application-specific components at the boundary:
 
 ```ts
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     ...shadcnComponents,
     CustomerTable,

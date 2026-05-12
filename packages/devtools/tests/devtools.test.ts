@@ -5,11 +5,11 @@ import {
   applyStreamEvent,
   createPatchHistory,
   createStreamState,
-  createWaterRegistry,
+  createWasserRegistry,
   verifyDocument,
-} from "@water-ui/core";
-import { compileSystemPrompt } from "@water-ui/prompt";
-import { createWaterRuntime } from "@water-ui/runtime";
+} from "@wasser-ui/core";
+import { compileSystemPrompt } from "@wasser-ui/prompt";
+import { createWasserRuntime } from "@wasser-ui/runtime";
 import {
   createDebugEventBus,
   createDevToolsInspection,
@@ -24,7 +24,7 @@ import {
   inspectVerifiedSchemaUI,
 } from "../src/index.ts";
 
-const registry = createWaterRegistry({
+const registry = createWasserRegistry({
   components: {
     Page: {
       description: "Page shell.",
@@ -70,8 +70,8 @@ const runtimeDescription = {
 };
 
 const rawDocument = {
-  kind: "water.ui.document",
-  version: "water.ui.v1",
+  kind: "wasser.ui.document",
+  version: "wasser.ui.v1",
   root: "page",
   nodes: {
     page: {
@@ -130,8 +130,8 @@ test("inspects raw and verified UI documents", () => {
 test("inspects validation diagnostics", () => {
   const result = verifyDocument(
     {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "missing",
       nodes: {
         page: {
@@ -166,8 +166,8 @@ test("inspects patch history and stream state", () => {
   const patchResult = applyPatch(
     verified,
     {
-      kind: "water.ui.patch",
-      version: "water.ui.v1",
+      kind: "wasser.ui.patch",
+      version: "wasser.ui.v1",
       target: "page",
       ops: [
         {
@@ -231,7 +231,7 @@ test("inspects patch history and stream state", () => {
 });
 
 test("inspects runtime events and compiled prompts", async () => {
-  const runtime = createWaterRuntime();
+  const runtime = createWasserRuntime();
   runtime.queries.register({
     id: "customers",
     dataRef: "queries.customers.data",

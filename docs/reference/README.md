@@ -1,6 +1,6 @@
 # Reference
 
-Public API and protocol reference for Water UI.
+Public API and protocol reference for Wasser UI.
 
 ## APIs
 

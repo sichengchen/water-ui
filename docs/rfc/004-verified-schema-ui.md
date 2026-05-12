@@ -29,7 +29,7 @@ Renderer APIs accept VerifiedSchemaUI. They do not accept raw model output.
 Example usage:
 
 ```ts
-const result = water.verify(rawSchemaUi);
+const result = wasser.verify(rawSchemaUi);
 
 if (!result.ok) {
   return result.diagnostics;
@@ -39,5 +39,5 @@ const verifiedUi = result.ui;
 ```
 
 ```tsx
-<WaterRenderer ui={verifiedUi} />
+<WasserRenderer ui={verifiedUi} />
 ```

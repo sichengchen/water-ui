@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { applyStreamEvent, createStreamState } from "@water-ui/core";
-import { WaterRuntimeProvider, WaterStreamRenderer } from "@water-ui/vue";
+import { applyStreamEvent, createStreamState } from "@wasser-ui/core";
+import { WasserRuntimeProvider, WasserStreamRenderer } from "@wasser-ui/vue";
 import { computed, ref } from "vue";
 import {
   compileMeetingActionsPrompt,
@@ -10,7 +10,7 @@ import {
 import { meetingActionsRegistry } from "./registry.js";
 import { createMeetingRuntimeFromNote } from "./runtime.js";
 import { exampleMeetingNote } from "./types.js";
-import type { StreamState } from "@water-ui/core";
+import type { StreamState } from "@wasser-ui/core";
 import type { MeetingRuntime } from "./runtime.js";
 
 type ChatStatus = "idle" | "streaming" | "ready" | "error";
@@ -125,7 +125,7 @@ async function sendMessage(): Promise<void> {
                   : 'border-transparent bg-primary text-primary-foreground'
               "
             >
-              {{ status === "idle" ? "Demo" : "Water UI" }}
+              {{ status === "idle" ? "Demo" : "Wasser UI" }}
             </span>
           </div>
           <p class="text-muted-foreground text-sm">Ask the agent to transform the note</p>
@@ -143,7 +143,7 @@ async function sendMessage(): Promise<void> {
             </div>
 
             <div v-if="status === 'idle'" class="text-muted-foreground mr-auto max-w-[88%] text-sm">
-              <p>Click the prompt to generate a Water UI todo list from the note.</p>
+              <p>Click the prompt to generate a Wasser UI todo list from the note.</p>
             </div>
             <div
               v-else-if="status === 'error'"
@@ -152,12 +152,12 @@ async function sendMessage(): Promise<void> {
               <p>{{ errorMessage }}</p>
             </div>
             <div v-else-if="stream && meetingRuntime" class="mr-auto w-full max-w-[92%]">
-              <WaterRuntimeProvider
+              <WasserRuntimeProvider
                 :registry="meetingActionsRegistry"
                 :runtime="meetingRuntime.renderRuntime"
               >
-                <WaterStreamRenderer :stream="stream" />
-              </WaterRuntimeProvider>
+                <WasserStreamRenderer :stream="stream" />
+              </WasserRuntimeProvider>
             </div>
           </div>
 
@@ -198,7 +198,7 @@ async function sendMessage(): Promise<void> {
         <header class="flex flex-col gap-2 text-center sm:text-left">
           <h2 class="text-lg leading-none font-semibold">Prompt &amp; Response</h2>
           <p class="text-muted-foreground text-sm">
-            The Water UI stream prompt and the mocked JSONL events returned by the demo agent.
+            The Wasser UI stream prompt and the mocked JSONL events returned by the demo agent.
           </p>
         </header>
         <button

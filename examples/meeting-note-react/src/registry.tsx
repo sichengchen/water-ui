@@ -1,8 +1,8 @@
-import { createWaterRegistry, defineWaterComponent } from "@water-ui/core";
+import { createWasserRegistry, defineWasserComponent } from "@wasser-ui/core";
 import { z } from "zod";
 import { MeetingTaskList } from "./components/meeting-task-list.js";
 import { meetingTaskSchema } from "./types.js";
-import type { WaterRenderBinding } from "@water-ui/react";
+import type { WasserRenderBinding } from "@wasser-ui/react";
 
 const taskListPropsSchema = z
   .object({
@@ -12,9 +12,9 @@ const taskListPropsSchema = z
 
 type TaskListProps = z.infer<typeof taskListPropsSchema>;
 
-export const meetingActionsRegistry = createWaterRegistry({
+export const meetingActionsRegistry = createWasserRegistry({
   components: {
-    TaskList: defineWaterComponent<TaskListProps>({
+    TaskList: defineWasserComponent<TaskListProps>({
       description: "TaskList renders todos extracted directly from the meeting note.",
       propsSchema: taskListPropsSchema,
       children: "none",
@@ -60,7 +60,7 @@ export const meetingActionsRegistry = createWaterRegistry({
       ],
       render: (({ props }) => (
         <MeetingTaskList tasks={props.tasks} />
-      )) satisfies WaterRenderBinding<TaskListProps>,
+      )) satisfies WasserRenderBinding<TaskListProps>,
     }),
   },
 });

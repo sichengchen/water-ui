@@ -1,6 +1,6 @@
 # Schema UI v1
 
-Schema UI v1 is the model-facing protocol for Water UI. It supports full
+Schema UI v1 is the model-facing protocol for Wasser UI. It supports full
 documents, semantic patches, and JSONL stream events.
 
 Public parser API:
@@ -19,19 +19,19 @@ node graph integrity.
 Version:
 
 ```txt
-water.ui.v1
+wasser.ui.v1
 ```
 
 Document kind:
 
 ```txt
-water.ui.document
+wasser.ui.document
 ```
 
 Patch kind:
 
 ```txt
-water.ui.patch
+wasser.ui.patch
 ```
 
 Fixture coverage:

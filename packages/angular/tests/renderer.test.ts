@@ -6,10 +6,10 @@ import { expect, test } from "vite-plus/test";
 import {
   applyStreamEvent,
   createStreamState,
-  createWaterRegistry,
+  createWasserRegistry,
   verifyDocument,
-} from "@water-ui/core";
-import { provideWaterRuntime, waterComponent } from "../src/index.ts";
+} from "@wasser-ui/core";
+import { provideWasserRuntime, wasserComponent } from "../src/index.ts";
 import { TestHostComponent, setRenderRequest } from "../src/testing-host.ts";
 import {
   TestLayoutComponent,
@@ -18,19 +18,19 @@ import {
 } from "../src/testing-components.ts";
 
 test("renders the verified root node through a registry render binding", async () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       Page: {
         description: "Page root.",
-        render: ({ nodeId }) => waterComponent(TestPageComponent, { nodeId }),
+        render: ({ nodeId }) => wasserComponent(TestPageComponent, { nodeId }),
       },
     },
   });
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "page",
         nodes: {
           page: {
@@ -42,13 +42,13 @@ test("renders the verified root node through a registry render binding", async (
     ),
   );
 
-  const html = await renderWater({ kind: "renderer", ui, registry });
+  const html = await renderWasser({ kind: "renderer", ui, registry });
 
   expect(html).toContain('<main data-node="page">Dashboard</main>');
 });
 
 test("renders recursive children, named slots, node, slot, and stream renderers", async () => {
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       Layout: {
         description: "Layout with header and body.",
@@ -59,22 +59,22 @@ test("renders recursive children, named slots, node, slot, and stream renderers"
           },
         },
         render: ({ children, slots }) =>
-          waterComponent(TestLayoutComponent, {
+          wasserComponent(TestLayoutComponent, {
             children,
             header: slots.header,
           }),
       },
       Text: {
         description: "Text node.",
-        render: ({ props }) => waterComponent(TestTextComponent, { label: String(props.label) }),
+        render: ({ props }) => wasserComponent(TestTextComponent, { label: String(props.label) }),
       },
     },
   });
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "layout",
         nodes: {
           layout: {
@@ -102,9 +102,9 @@ test("renders recursive children, named slots, node, slot, and stream renderers"
     ),
   );
 
-  const rootHtml = await renderWater({ kind: "renderer", ui, registry });
-  const nodeHtml = await renderWater({ kind: "node", ui, nodeId: "title", registry });
-  const slotHtml = await renderWater({
+  const rootHtml = await renderWasser({ kind: "renderer", ui, registry });
+  const nodeHtml = await renderWasser({ kind: "node", ui, nodeId: "title", registry });
+  const slotHtml = await renderWasser({
     kind: "slot",
     ui,
     nodeId: "layout",
@@ -126,26 +126,26 @@ test("renders verified stream state and binds runtime data, actions, and telemet
   let tableContext;
   let buttonContext;
   const events = [];
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       App: {
         description: "App shell.",
         children: "nodes",
-        render: ({ children }) => waterComponent(TestLayoutComponent, { children }),
+        render: ({ children }) => wasserComponent(TestLayoutComponent, { children }),
       },
       CustomerTable: {
         description: "Customer table.",
         render: (context) => {
           tableContext = context;
           const rows = context.bindings.data["queries.customers.data"];
-          return waterComponent(TestTextComponent, { label: rows.join(", ") });
+          return wasserComponent(TestTextComponent, { label: rows.join(", ") });
         },
       },
       ExportButton: {
         description: "Export button.",
         render: (context) => {
           buttonContext = context;
-          return waterComponent(TestTextComponent, {
+          return wasserComponent(TestTextComponent, {
             label: String(typeof context.bindings.actions.exportCustomers === "function"),
           });
         },
@@ -166,8 +166,8 @@ test("renders verified stream state and binds runtime data, actions, and telemet
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "app",
         nodes: {
           app: {
@@ -209,8 +209,8 @@ test("renders verified stream state and binds runtime data, actions, and telemet
     { registry },
   ).state;
 
-  const html = await renderWater({ kind: "renderer", ui, registry, runtime });
-  const streamHtml = await renderWater({ kind: "stream", stream, registry });
+  const html = await renderWasser({ kind: "renderer", ui, registry, runtime });
+  const streamHtml = await renderWasser({ kind: "stream", stream, registry });
 
   expect(html).toContain("<p>Ada, Grace</p>");
   expect(html).toContain("<p>true</p>");
@@ -235,13 +235,13 @@ test("renders verified stream state and binds runtime data, actions, and telemet
 
 test("applies permission guards and renders safe fallbacks", async () => {
   let called = false;
-  const registry = createWaterRegistry({
+  const registry = createWasserRegistry({
     components: {
       AdminPanel: {
         description: "Admin panel.",
         render: () => {
           called = true;
-          return waterComponent(TestTextComponent, { label: "Admin" });
+          return wasserComponent(TestTextComponent, { label: "Admin" });
         },
       },
       Metric: {
@@ -252,8 +252,8 @@ test("applies permission guards and renders safe fallbacks", async () => {
   const ui = expectVerified(
     verifyDocument(
       {
-        kind: "water.ui.document",
-        version: "water.ui.v1",
+        kind: "wasser.ui.document",
+        version: "wasser.ui.v1",
         root: "admin",
         nodes: {
           admin: {
@@ -269,7 +269,7 @@ test("applies permission guards and renders safe fallbacks", async () => {
   );
   const diagnostics = [];
 
-  const deniedHtml = await renderWater({
+  const deniedHtml = await renderWasser({
     kind: "renderer",
     ui,
     registry,
@@ -278,11 +278,11 @@ test("applies permission guards and renders safe fallbacks", async () => {
     },
     onDiagnostics: (next) => diagnostics.push(next),
   });
-  const rawHtml = await renderWater({
+  const rawHtml = await renderWasser({
     kind: "renderer",
     ui: {
-      kind: "water.ui.document",
-      version: "water.ui.v1",
+      kind: "wasser.ui.document",
+      version: "wasser.ui.v1",
       root: "metric",
       nodes: {
         metric: {
@@ -294,18 +294,18 @@ test("applies permission guards and renders safe fallbacks", async () => {
   });
 
   expect(called).toBe(false);
-  expect(deniedHtml).toContain('data-water-fallback="permission_denied"');
-  expect(deniedHtml).toContain('data-water-node-id="admin"');
+  expect(deniedHtml).toContain('data-wasser-fallback="permission_denied"');
+  expect(deniedHtml).toContain('data-wasser-node-id="admin"');
   expect(diagnostics[0][0]).toEqual(
     expect.objectContaining({
       code: "permission_denied",
       nodeId: "admin",
     }),
   );
-  expect(rawHtml).toContain('data-water-fallback="invalid_renderer_input"');
+  expect(rawHtml).toContain('data-wasser-fallback="invalid_renderer_input"');
 });
 
-function renderWater(request) {
+function renderWasser(request) {
   setRenderRequest(request);
   return renderApplication(
     (context) =>
@@ -313,7 +313,7 @@ function renderWater(request) {
         TestHostComponent,
         {
           providers: [
-            provideWaterRuntime({
+            provideWasserRuntime({
               runtime: request.runtime ?? {},
               registry: request.registry,
             }),

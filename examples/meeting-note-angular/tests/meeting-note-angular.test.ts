@@ -3,7 +3,7 @@ import "@angular/compiler";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { renderApplication } from "@angular/platform-server";
 import { expect, test } from "vite-plus/test";
-import { provideWaterRuntime } from "@water-ui/angular";
+import { provideWasserRuntime } from "@wasser-ui/angular";
 import {
   compileMeetingActionsPrompt,
   createMockMeetingActionsStreamEvents,
@@ -12,7 +12,7 @@ import {
   mockMeetingActionsAgent,
   runMeetingActionsDemo,
 } from "../src/index.ts";
-import { applyStreamEvent, createStreamState, verifyDocument } from "@water-ui/core";
+import { applyStreamEvent, createStreamState, verifyDocument } from "@wasser-ui/core";
 import { TestHostComponent, setRenderRequest } from "../src/testing-host.ts";
 
 test("mock agent output verifies against app components and runtime capabilities", async () => {
@@ -48,7 +48,7 @@ test("compiled prompt exposes only registered app components and runtime ids", (
 test("renders the verified todo list", async () => {
   const result = await runMeetingActionsDemo();
 
-  const html = await renderWater({
+  const html = await renderWasser({
     kind: "renderer",
     ui: result.ui,
     runtime: result.runtime.renderRuntime,
@@ -75,7 +75,7 @@ test("streams the todo list one task at a time", async () => {
     runtime: runtime.capabilityRuntime.describe(),
   }).state;
 
-  let html = await renderWater({
+  let html = await renderWasser({
     kind: "stream",
     stream,
     runtime: runtime.renderRuntime,
@@ -90,7 +90,7 @@ test("streams the todo list one task at a time", async () => {
     runtime: runtime.capabilityRuntime.describe(),
   }).state;
 
-  html = await renderWater({
+  html = await renderWasser({
     kind: "stream",
     stream,
     runtime: runtime.renderRuntime,
@@ -101,7 +101,7 @@ test("streams the todo list one task at a time", async () => {
   expect(html).not.toContain("Confirm support coverage");
 });
 
-function renderWater(request) {
+function renderWasser(request) {
   setRenderRequest(request);
   return renderApplication(
     (context) =>
@@ -109,7 +109,7 @@ function renderWater(request) {
         TestHostComponent,
         {
           providers: [
-            provideWaterRuntime({
+            provideWasserRuntime({
               runtime: request.runtime,
               registry: meetingActionsRegistry,
             }),

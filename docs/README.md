@@ -1,6 +1,6 @@
-# Water UI Documentation
+# Wasser UI Documentation
 
-Water UI is a registry-first generative UI toolkit. The registry defines what
+Wasser UI is a registry-first generative UI toolkit. The registry defines what
 agents may use, the verifier checks generated Schema UI against that registry,
 renderers consume only `VerifiedSchemaUI`, and prompts are generated from the
 same registry and runtime capabilities.
@@ -16,7 +16,7 @@ same registry and runtime capabilities.
 
 ## Non-Negotiables
 
-- Water core has no Water-owned visual component definitions.
+- Wasser core has no Wasser-owned visual component definitions.
 - shadcn is an optional adapter, not the core abstraction.
 - Raw model output is untrusted.
 - Renderers accept `VerifiedSchemaUI`, not arbitrary model output.
