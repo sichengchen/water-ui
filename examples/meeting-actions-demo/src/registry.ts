@@ -16,8 +16,7 @@ type TaskListProps = z.infer<typeof taskListPropsSchema>;
 export const meetingActionsRegistry = createWaterRegistry({
   components: {
     TaskList: defineWaterComponent<TaskListProps>({
-      description:
-        "Use TaskList as the only generated component. Fill props.tasks with todos extracted directly from the meeting note.",
+      description: "TaskList renders todos extracted directly from the meeting note.",
       propsSchema: taskListPropsSchema,
       children: "none",
       prompt: {
@@ -30,9 +29,8 @@ export const meetingActionsRegistry = createWaterRegistry({
           },
         ],
         notes: [
-          'Return exactly one node: type "TaskList" with props.tasks filled from the meeting note.',
-          'Use TaskList as the document root; a stable root id such as "task_list" is appropriate.',
-          "Do not generate the notebook, chat UI, summary card, forms, or Create tasks button.",
+          'Start the stream with a node.upsert event for id "task_list" and type "TaskList".',
+          'For each additional todo, emit node.props.update for id "task_list" with the current props.tasks array.',
         ],
       },
       examples: [

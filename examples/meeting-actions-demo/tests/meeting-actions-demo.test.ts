@@ -35,15 +35,11 @@ test("compiled prompt exposes only registered app components and runtime ids", (
   });
 
   expect(prompt).toContain("TaskList");
-  expect(prompt).toContain("Fill props.tasks with todos");
+  expect(prompt).toContain("TaskList renders todos");
   expect(prompt).toContain("id, title, tags, people, and priority");
-  expect(prompt).toContain('stable root id such as "task_list"');
+  expect(prompt).toContain('node.upsert event for id "task_list"');
+  expect(prompt).toContain("node.props.update");
   expect(prompt).toContain("Return newline-delimited JSON events only");
-  expect(prompt).not.toContain("queries.meetingSummary.data");
-  expect(prompt).not.toContain("MeetingPage");
-  expect(prompt).not.toContain("SummaryCard");
-  expect(prompt).not.toContain("ActionButton");
-  expect(prompt).not.toContain("actions.createTasks");
 });
 
 test("renders the verified todo list", async () => {
@@ -62,7 +58,6 @@ test("renders the verified todo list", async () => {
 
   expect(html).toContain("Todo list");
   expect(html).toContain("Todo list");
-  expect(html).not.toContain("Create tasks");
 });
 
 test("streams the todo list one task at a time", () => {

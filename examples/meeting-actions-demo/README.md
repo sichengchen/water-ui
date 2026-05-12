@@ -1,14 +1,15 @@
 # Meeting Actions Demo
 
-This starter example turns a meeting note intent into a verified task panel:
+This starter example turns a meeting note into a streamed, verified todo list:
 
-1. The app registers four Water components: `MeetingPage`, `SummaryCard`, `TaskList`, and `ActionButton`.
-2. The app registers runtime capabilities: `queries.meetingSummary.data` and `actions.createTasks`.
-3. A mock agent returns Water Schema UI for the prompt: `Turn this meeting note into action items.`
-4. Water verifies the document against the component registry and runtime capabilities.
-5. React renders the verified UI, and the final button invokes `actions.createTasks`.
+1. The React app shows a notebook on the left and an assistant panel on the right.
+2. The user clicks `Turn this meeting note into a todo list.`
+3. A mock agent returns Water stream events for `TaskList`.
+4. Water verifies each stream event against the registry.
+5. React renders the verified todo list as each item arrives.
 
-The generated page is intentionally simple: meeting summary at the top, task list below, and a `Create tasks` button at the end.
+The demo uses a mock agent so the example stays focused on the Water UI path:
+app component registry, generated schema UI, verification, and rendering.
 
 ## Run
 
