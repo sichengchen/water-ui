@@ -1,5 +1,5 @@
 import { assertVerifiedSchemaUI, getWaterComponent, isVerifiedSchemaUI } from "@water-ui/core";
-import { createRawSnippet } from "svelte";
+import { createRawSnippet, mount, unmount } from "svelte";
 import type {
   SchemaUINode,
   StreamState,
@@ -7,7 +7,7 @@ import type {
   WaterComponentEntry,
   WaterRegistry,
 } from "@water-ui/core";
-import type { Snippet } from "svelte";
+import type { Component, Snippet } from "svelte";
 
 export type WaterRenderDiagnosticCode =
   | "invalid_renderer_input"
@@ -83,6 +83,11 @@ export type WaterTelemetrySink =
       emit: (event: WaterRuntimeEvent) => void;
     };
 
+export type WaterSvelteComponentRenderer = (
+  component: Component<Record<string, unknown>>,
+  props: WaterSvelteComponentProps,
+) => string;
+
 export type WaterRuntime = {
   registry?: WaterRegistry;
   resolveData?: (dataRef: string, context: WaterDataContext) => unknown;
@@ -90,6 +95,7 @@ export type WaterRuntime = {
   canRender?: (context: WaterPermissionContext) => boolean;
   permissions?: WaterPermissionGuard;
   telemetry?: WaterTelemetrySink;
+  renderComponent?: WaterSvelteComponentRenderer;
 };
 
 export type WaterBoundAction = (payload?: unknown) => unknown;
@@ -104,6 +110,7 @@ export type WaterSveltePrimitive = string | number | boolean | null | undefined;
 export type WaterSvelteChild =
   | WaterSveltePrimitive
   | WaterSvelteElement
+  | WaterSvelteComponent
   | WaterSvelteRawHtml
   | readonly WaterSvelteChild[];
 
@@ -119,6 +126,14 @@ export type WaterSvelteElement = Readonly<{
 export type WaterSvelteRawHtml = Readonly<{
   kind: "water.svelte.raw-html";
   html: string;
+}>;
+
+export type WaterSvelteComponentProps = Readonly<Record<string, unknown>>;
+
+export type WaterSvelteComponent = Readonly<{
+  kind: "water.svelte.component";
+  component: Component<Record<string, unknown>>;
+  props?: WaterSvelteComponentProps;
 }>;
 
 export type WaterRenderContext<Props = Record<string, unknown>> = {
@@ -188,6 +203,22 @@ type RenderSession = {
   fallback?: WaterSvelteChild;
 };
 
+type PendingSvelteMount = {
+  id: string;
+  component: Component<Record<string, unknown>>;
+  props: WaterSvelteComponentProps;
+};
+
+type RenderHtmlResult = {
+  html: string;
+  mounts: PendingSvelteMount[];
+};
+
+type RenderHtmlOptions = {
+  runtime: WaterRuntime;
+  mounts: PendingSvelteMount[];
+};
+
 const emptyRuntime = Object.freeze({});
 
 export function createWaterRuntime({
@@ -220,6 +251,17 @@ export function waterRawHtml(html: string): WaterSvelteRawHtml {
   });
 }
 
+export function waterComponent<Props extends Record<string, unknown>>(
+  component: Component<Props>,
+  props?: Readonly<Props>,
+): WaterSvelteComponent {
+  return Object.freeze({
+    kind: "water.svelte.component",
+    component: component as Component<Record<string, unknown>>,
+    ...(props ? { props } : {}),
+  });
+}
+
 export function createWaterRenderer(
   props: WaterRendererProps,
   context: WaterRuntimeContextValue = createWaterRuntime({
@@ -227,9 +269,7 @@ export function createWaterRenderer(
     registry: props.registry,
   }),
 ): Snippet {
-  return createRawSnippet(() => ({
-    render: () => renderWaterToHtml(props, context),
-  }));
+  return createWaterSnippet(() => renderWaterToResult(props, context));
 }
 
 export function createWaterStreamRenderer(
@@ -239,9 +279,7 @@ export function createWaterStreamRenderer(
     registry: props.registry,
   }),
 ): Snippet {
-  return createRawSnippet(() => ({
-    render: () => renderWaterStreamToHtml(props, context),
-  }));
+  return createWaterSnippet(() => renderWaterStreamToResult(props, context));
 }
 
 export function createNodeRenderer(
@@ -251,9 +289,7 @@ export function createNodeRenderer(
     registry: props.registry,
   }),
 ): Snippet {
-  return createRawSnippet(() => ({
-    render: () => renderWaterNodeToHtml(props, context),
-  }));
+  return createWaterSnippet(() => renderWaterNodeToResult(props, context));
 }
 
 export function createSlotRenderer(
@@ -263,39 +299,17 @@ export function createSlotRenderer(
     registry: props.registry,
   }),
 ): Snippet {
-  return createRawSnippet(() => ({
-    render: () => renderWaterSlotToHtml(props, context),
-  }));
+  return createWaterSnippet(() => renderWaterSlotToResult(props, context));
 }
 
 export function renderWaterToHtml(
-  { ui, registry, runtime, fallback, onDiagnostics }: WaterRendererProps,
+  props: WaterRendererProps,
   context: WaterRuntimeContextValue = createWaterRuntime({
-    runtime: runtime ?? emptyRuntime,
-    registry,
+    runtime: props.runtime ?? emptyRuntime,
+    registry: props.registry,
   }),
 ): string {
-  const diagnostics: WaterRenderDiagnostic[] = [];
-
-  if (!isVerifiedSchemaUI(ui)) {
-    diagnostics.push(
-      diagnostic("invalid_renderer_input", "$", "WaterRenderer accepts only VerifiedSchemaUI."),
-    );
-    onDiagnostics?.(Object.freeze(diagnostics));
-    return renderChildToHtml(renderFallback(fallback, diagnostics[0]));
-  }
-
-  const session: RenderSession = {
-    ui,
-    registry: registry ?? context.registry ?? context.runtime.registry,
-    runtime: runtime ?? context.runtime,
-    diagnostics,
-    fallback,
-  };
-  const output = renderNode(ui.root, session);
-
-  onDiagnostics?.(Object.freeze([...diagnostics]));
-  return renderChildToHtml(output);
+  return renderWaterToResult(props, context).html;
 }
 
 export function renderWaterStreamToHtml(
@@ -305,12 +319,135 @@ export function renderWaterStreamToHtml(
     registry: props.registry,
   }),
 ): string {
-  const verifiedUi = props.ui ?? props.stream?.ui;
-  if (!verifiedUi) {
-    return renderChildToHtml(props.fallback ?? null);
+  return renderWaterStreamToResult(props, context).html;
+}
+
+export function renderWaterNodeToHtml(
+  props: NodeRendererProps,
+  context: WaterRuntimeContextValue = createWaterRuntime({
+    runtime: props.runtime ?? emptyRuntime,
+    registry: props.registry,
+  }),
+): string {
+  return renderWaterNodeToResult(props, context).html;
+}
+
+export function renderWaterSlotToHtml(
+  props: SlotRendererProps,
+  context: WaterRuntimeContextValue = createWaterRuntime({
+    runtime: props.runtime ?? emptyRuntime,
+    registry: props.registry,
+  }),
+): string {
+  return renderWaterSlotToResult(props, context).html;
+}
+
+function createWaterSnippet(render: () => RenderHtmlResult): Snippet {
+  return createRawSnippet(() => {
+    let result: RenderHtmlResult | undefined;
+    const getResult = () => {
+      result ??= render();
+      return result;
+    };
+
+    return {
+      render: () => getResult().html,
+      setup: (element) => setupSvelteMounts(element, getResult().mounts),
+    };
+  });
+}
+
+function setupSvelteMounts(element: Element, mounts: readonly PendingSvelteMount[]) {
+  if (mounts.length === 0) {
+    return undefined;
   }
 
-  return renderWaterToHtml(
+  const mounted = mounts.flatMap((item) => {
+    const target = element.querySelector(`[data-water-svelte-component="${item.id}"]`);
+    if (!target) {
+      return [];
+    }
+
+    return [
+      mount(item.component, {
+        target,
+        props: item.props,
+      }),
+    ];
+  });
+
+  return () => {
+    for (const component of mounted) {
+      void unmount(component);
+    }
+  };
+}
+
+function renderWaterToResult(
+  { ui, registry, runtime, fallback, onDiagnostics }: WaterRendererProps,
+  context: WaterRuntimeContextValue = createWaterRuntime({
+    runtime: runtime ?? emptyRuntime,
+    registry,
+  }),
+): RenderHtmlResult {
+  const diagnostics: WaterRenderDiagnostic[] = [];
+  const effectiveRuntime = runtime ?? context.runtime;
+  const mounts: PendingSvelteMount[] = [];
+
+  if (!isVerifiedSchemaUI(ui)) {
+    diagnostics.push(
+      diagnostic("invalid_renderer_input", "$", "WaterRenderer accepts only VerifiedSchemaUI."),
+    );
+    onDiagnostics?.(Object.freeze(diagnostics));
+    return {
+      html: renderChildToHtml(renderFallback(fallback, diagnostics[0]), {
+        runtime: effectiveRuntime,
+        mounts,
+      }),
+      mounts,
+    };
+  }
+
+  const session: RenderSession = {
+    ui,
+    registry: registry ?? context.registry ?? effectiveRuntime.registry,
+    runtime: effectiveRuntime,
+    diagnostics,
+    fallback,
+  };
+  const output = renderNode(ui.root, session);
+
+  onDiagnostics?.(Object.freeze([...diagnostics]));
+  return {
+    html: renderChildToHtml(output, {
+      runtime: effectiveRuntime,
+      mounts,
+    }),
+    mounts,
+  };
+}
+
+function renderWaterStreamToResult(
+  props: WaterStreamRendererProps,
+  context: WaterRuntimeContextValue = createWaterRuntime({
+    runtime: props.runtime ?? emptyRuntime,
+    registry: props.registry,
+  }),
+): RenderHtmlResult {
+  const verifiedUi = props.ui ?? props.stream?.ui;
+  const mounts: PendingSvelteMount[] = [];
+
+  if (!verifiedUi) {
+    return {
+      html: renderChildToHtml(props.fallback ?? null, {
+        runtime: props.runtime ?? context.runtime,
+        mounts,
+      }),
+      mounts,
+    };
+  }
+
+  return renderWaterToResult(
     {
       ...props,
       ui: verifiedUi,
@@ -319,16 +456,17 @@ export function renderWaterStreamToHtml(
   );
 }
 
-export function renderWaterNodeToHtml(
+function renderWaterNodeToResult(
   { ui: uiProp, registry, runtime, nodeId, fallback, onDiagnostics }: NodeRendererProps,
   context: WaterRuntimeContextValue = createWaterRuntime({
     runtime: runtime ?? emptyRuntime,
     registry,
   }),
-): string {
+): RenderHtmlResult {
   const effectiveRuntime = runtime ?? context.runtime;
   const ui = uiProp ?? getVerifiedUIFromRuntime(effectiveRuntime);
   const diagnostics: WaterRenderDiagnostic[] = [];
+  const mounts: PendingSvelteMount[] = [];
 
   if (!ui) {
     diagnostics.push(
@@ -339,7 +477,13 @@ export function renderWaterNodeToHtml(
       ),
     );
     onDiagnostics?.(Object.freeze(diagnostics));
-    return renderChildToHtml(renderFallback(fallback, diagnostics[0]));
+    return {
+      html: renderChildToHtml(renderFallback(fallback, diagnostics[0]), {
+        runtime: effectiveRuntime,
+        mounts,
+      }),
+      mounts,
+    };
   }
 
   const output = renderNode(nodeId, {
@@ -351,19 +495,26 @@ export function renderWaterNodeToHtml(
   });
 
   onDiagnostics?.(Object.freeze([...diagnostics]));
-  return renderChildToHtml(output);
+  return {
+    html: renderChildToHtml(output, {
+      runtime: effectiveRuntime,
+      mounts,
+    }),
+    mounts,
+  };
 }
 
-export function renderWaterSlotToHtml(
+function renderWaterSlotToResult(
   { ui: uiProp, registry, runtime, nodeId, name, fallback, onDiagnostics }: SlotRendererProps,
   context: WaterRuntimeContextValue = createWaterRuntime({
     runtime: runtime ?? emptyRuntime,
     registry,
   }),
-): string {
+): RenderHtmlResult {
   const effectiveRuntime = runtime ?? context.runtime;
   const ui = uiProp ?? getVerifiedUIFromRuntime(effectiveRuntime);
   const diagnostics: WaterRenderDiagnostic[] = [];
+  const mounts: PendingSvelteMount[] = [];
 
   if (!ui) {
     diagnostics.push(
@@ -374,7 +525,13 @@ export function renderWaterSlotToHtml(
       ),
     );
     onDiagnostics?.(Object.freeze(diagnostics));
-    return renderChildToHtml(renderFallback(fallback, diagnostics[0]));
+    return {
+      html: renderChildToHtml(renderFallback(fallback, diagnostics[0]), {
+        runtime: effectiveRuntime,
+        mounts,
+      }),
+      mounts,
+    };
   }
 
   const output = renderSlot(nodeId, name, {
@@ -386,7 +543,13 @@ export function renderWaterSlotToHtml(
   });
 
   onDiagnostics?.(Object.freeze([...diagnostics]));
-  return renderChildToHtml(output);
+  return {
+    html: renderChildToHtml(output, {
+      runtime: effectiveRuntime,
+      mounts,
+    }),
+    mounts,
+  };
 }
 
 function renderNode(nodeId: string, session: RenderSession): WaterSvelteChild {
@@ -714,7 +877,7 @@ function renderFallback(
   });
 }
 
-function renderChildToHtml(child: WaterSvelteChild): string {
+function renderChildToHtml(child: WaterSvelteChild, options: RenderHtmlOptions): string {
   if (child === null || child === undefined || typeof child === "boolean") {
     return "";
   }
@@ -724,27 +887,43 @@ function renderChildToHtml(child: WaterSvelteChild): string {
   }
 
   if (Array.isArray(child)) {
-    return child.map((item) => renderChildToHtml(item)).join("");
+    return child.map((item) => renderChildToHtml(item, options)).join("");
   }
 
   if (isRawHtml(child)) {
     return child.html;
   }
 
+  if (isSvelteComponent(child)) {
+    const props = child.props ?? {};
+    const html = options.runtime.renderComponent?.(child.component, props);
+    if (html !== undefined) {
+      return html;
+    }
+
+    const id = `component-${options.mounts.length}`;
+    options.mounts.push({
+      id,
+      component: child.component,
+      props,
+    });
+    return `<span data-water-svelte-component="${id}"></span>`;
+  }
+
   if (isWaterElement(child)) {
-    return renderElementToHtml(child);
+    return renderElementToHtml(child, options);
   }
 
   return "";
 }
 
-function renderElementToHtml(element: WaterSvelteElement): string {
+function renderElementToHtml(element: WaterSvelteElement, options: RenderHtmlOptions): string {
   if (!isSafeTagName(element.tag)) {
     return "";
   }
 
   const attributes = renderAttributes(element.props ?? {});
-  return `<${element.tag}${attributes}>${renderChildToHtml(element.children)}</${element.tag}>`;
+  return `<${element.tag}${attributes}>${renderChildToHtml(element.children, options)}</${element.tag}>`;
 }
 
 function renderAttributes(props: WaterSvelteElementProps): string {
@@ -868,6 +1047,14 @@ function isWaterElement(value: unknown): value is WaterSvelteElement {
 function isRawHtml(value: unknown): value is WaterSvelteRawHtml {
   return (
     isRecord(value) && value.kind === "water.svelte.raw-html" && typeof value.html === "string"
+  );
+}
+
+function isSvelteComponent(value: unknown): value is WaterSvelteComponent {
+  return (
+    isRecord(value) &&
+    value.kind === "water.svelte.component" &&
+    typeof value.component === "function"
   );
 }
 

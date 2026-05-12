@@ -28,6 +28,7 @@ Renderer responsibilities:
 - Resolve the root node.
 - Look up the registry entry for each node.
 - Render through registry render functions or adapter bindings.
+- Support app-owned Svelte components returned through `waterComponent`.
 - Render children recursively.
 - Render named slots.
 - Resolve runtime data refs.

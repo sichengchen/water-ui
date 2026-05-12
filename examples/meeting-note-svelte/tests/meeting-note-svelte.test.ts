@@ -1,5 +1,6 @@
 import { expect, test } from "vite-plus/test";
 import { renderWaterStreamToHtml, renderWaterToHtml } from "@water-ui/svelte";
+import { render } from "svelte/server";
 import {
   compileMeetingActionsPrompt,
   createMockMeetingActionsStreamEvents,
@@ -9,6 +10,7 @@ import {
   runMeetingActionsDemo,
 } from "../src/index.ts";
 import { applyStreamEvent, createStreamState, verifyDocument } from "@water-ui/core";
+import type { WaterRuntime, WaterSvelteComponentRenderer } from "@water-ui/svelte";
 
 test("mock agent output verifies against app components and runtime capabilities", async () => {
   const runtime = createMeetingRuntime();
@@ -46,7 +48,7 @@ test("renders the verified todo list", async () => {
   const html = renderWaterToHtml({
     ui: result.ui,
     registry: meetingActionsRegistry,
-    runtime: result.runtime.renderRuntime,
+    runtime: withServerComponentRendering(result.runtime.renderRuntime),
   });
 
   expect(html).toContain("Todo list");
@@ -73,7 +75,7 @@ test("streams the todo list one task at a time", () => {
   let html = renderWaterStreamToHtml({
     stream,
     registry: meetingActionsRegistry,
-    runtime: runtime.renderRuntime,
+    runtime: withServerComponentRendering(runtime.renderRuntime),
   });
 
   expect(html).toContain("1 extracted task");
@@ -88,10 +90,22 @@ test("streams the todo list one task at a time", () => {
   html = renderWaterStreamToHtml({
     stream,
     registry: meetingActionsRegistry,
-    runtime: runtime.renderRuntime,
+    runtime: withServerComponentRendering(runtime.renderRuntime),
   });
 
   expect(html).toContain("2 extracted tasks");
   expect(html).toContain("Open staging checklist");
   expect(html).not.toContain("Confirm support coverage");
 });
+
+function withServerComponentRendering(
+  runtime: ReturnType<typeof createMeetingRuntime>["renderRuntime"],
+): WaterRuntime {
+  const renderComponent: WaterSvelteComponentRenderer = (component, props) =>
+    render(component, { props }).body;
+
+  return {
+    ...runtime,
+    renderComponent,
+  };
+}

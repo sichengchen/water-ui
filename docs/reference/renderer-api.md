@@ -46,6 +46,7 @@ Svelte renderer helpers:
 - `renderWaterStreamToHtml`
 - `renderWaterNodeToHtml`
 - `renderWaterSlotToHtml`
+- `waterComponent`
 - `waterElement`
 - `waterRawHtml`
 

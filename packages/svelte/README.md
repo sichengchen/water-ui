@@ -10,8 +10,12 @@ This package provides:
 - `createSlotRenderer`
 - `createWaterRuntime`
 - `renderWaterToHtml`
+- `waterComponent`
+- `waterElement`
+- `waterRawHtml`
 - recursive node and slot rendering
 - runtime data and action binding
+- Svelte component bindings for app-owned components
 - render diagnostics
 - safe fallback rendering
 

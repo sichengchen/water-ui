@@ -1,6 +1,7 @@
 import { createWaterRegistry, defineWaterComponent } from "@water-ui/core";
+import { waterComponent } from "@water-ui/svelte";
 import { z } from "zod";
-import { renderMeetingTaskList } from "./components/meeting-task-list.js";
+import MeetingTaskList from "./components/MeetingTaskList.svelte";
 import { meetingTaskSchema } from "./types.js";
 import type { WaterRenderBinding } from "@water-ui/svelte";
 
@@ -59,7 +60,9 @@ export const meetingActionsRegistry = createWaterRegistry({
         },
       ],
       render: (({ props }) =>
-        renderMeetingTaskList(props.tasks)) satisfies WaterRenderBinding<TaskListProps>,
+        waterComponent(MeetingTaskList, {
+          tasks: props.tasks,
+        })) satisfies WaterRenderBinding<TaskListProps>,
     }),
   },
 });
