@@ -131,12 +131,13 @@ Project-local shadcn components can be bound with `createShadcnComponents`.
 
 ## Documentation
 
-- `docs/guides/`: task-focused usage guides.
-- `docs/reference/`: public API and protocol references.
-- `docs/fixtures/`: protocol, registry, and verification fixtures.
-- `docs/rfc/`: architecture notes and design rationale.
-- `goldens/`: golden fixtures for registries, documents, patches, streams, and
-  prompts.
+- [Guides](./docs/guides/README.md): task-focused usage guides.
+- [Reference](./docs/reference/README.md): public API and protocol references.
+- [Fixtures](./docs/fixtures/README.md): protocol, registry, and verification
+  fixtures.
+- [RFCs](./docs/rfc/README.md): architecture notes and design rationale.
+- [Goldens](./goldens/): golden fixtures for registries, documents, patches,
+  streams, and prompts.
 
 ## Development
 

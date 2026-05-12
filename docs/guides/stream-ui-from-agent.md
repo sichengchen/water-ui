@@ -1,8 +1,11 @@
 # Stream UI From an Agent
 
 Streaming uses ordered JSONL events.
+Use streaming when the agent can produce useful verified UI before the full
+document is complete, such as progressively adding list items, dashboard cards,
+or sections of a page.
 
-Flow:
+## Flow
 
 1. Parse each event.
 2. Validate event shape.
@@ -14,7 +17,20 @@ Flow:
 
 Invalid events emit diagnostics and must not crash the stream.
 
-API:
+## Event Shape
+
+Each stream event is one JSON object per line:
+
+```jsonl
+{"seq":1,"kind":"node.upsert","id":"task_list","type":"TaskList","props":{"tasks":[{"id":"task-copy","title":"Finalize copy","tags":["Copy","Friday"],"people":["Mina"],"priority":"high"}]}}
+{"seq":2,"kind":"node.props.update","id":"task_list","props":{"tasks":[{"id":"task-copy","title":"Finalize copy","tags":["Copy","Friday"],"people":["Mina"],"priority":"high"},{"id":"task-staging","title":"Open staging checklist","tags":["Staging","Beta"],"people":["Dev"],"priority":"medium"}]}}
+{"seq":3,"kind":"done"}
+```
+
+`seq` must be unique and ordered by the producer. The stream engine rejects
+duplicates and reports diagnostics.
+
+## Core API
 
 ```ts
 import { applyStreamEvent, createStreamState, finalizeStreamState } from "@water-ui/core";
@@ -49,3 +65,50 @@ React:
 Water buffers unresolved relationship events, rejects duplicate sequence numbers,
 rejects invalid component events, and exposes only verified partial UI snapshots.
 The `done` event triggers full-document verification.
+
+## React Rendering
+
+```tsx
+import { WaterRuntimeProvider, WaterStreamRenderer } from "@water-ui/react";
+
+<WaterRuntimeProvider registry={registry} runtime={runtime}>
+  <WaterStreamRenderer stream={stream} fallback={null} />
+</WaterRuntimeProvider>;
+```
+
+`WaterStreamRenderer` renders `stream.ui` when the current partial state verifies.
+If the stream has not produced a valid reachable root yet, it renders the
+fallback.
+
+## Prompt Compilation
+
+Use the stream prompt compiler for streaming agents:
+
+```ts
+import { compileStreamPrompt } from "@water-ui/prompt";
+
+const prompt = compileStreamPrompt({
+  registry,
+  runtime: runtime.describe(),
+  userIntent: "Turn this meeting note into a todo list.",
+});
+```
+
+The registry entry should describe the positive event pattern the component
+expects. For a list component, that usually means upserting the root node and
+then updating the list props as items arrive.
+
+## Diagnostics Strategy
+
+For user-facing streaming UI:
+
+- keep the last verified UI on screen when a later event fails
+- log or inspect warning diagnostics for buffered references
+- stop or repair the stream on error diagnostics
+- run `finalizeStreamState` if the provider closes without a `done` event
+
+## Related Reference
+
+- [Schema UI v1](../reference/schema-ui-v1.md)
+- [Renderer API](../reference/renderer-api.md)
+- [Diagnostics](../reference/diagnostics.md)
