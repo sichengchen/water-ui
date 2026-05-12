@@ -1,6 +1,6 @@
 # Wasser UI
 
-![https://img.shields.io/npm/v/@wasser-ui/core](https://www.npmjs.com/package/@wasser-ui/core)
+[![npm](https://img.shields.io/npm/v/@wasser-ui/core)](https://www.npmjs.com/package/@wasser-ui/core)
 
 Wasser UI is a generative UI toolkit for agent-driven applications.
 
