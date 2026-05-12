@@ -1,15 +1,11 @@
 # Water UI
 
-Water UI is a registry-first generative UI toolkit for agent-driven
-applications.
+Water UI is a generative UI toolkit for agent-driven applications.
 
-Applications expose their own components through a Water registry. Water uses
-that registry to compile prompts, parse model output, verify Schema UI, render
-only verified UI, apply semantic patches, and consume streaming UI updates.
+Applications expose their own components through a Water UI registry. Water UI
+uses that registry to compile prompts, parse model output, verify Schema UI, 
+render verified UI, apply patches, and consume streaming UI updates.
 
-Water core is component-library-neutral. Visual components belong in application
-registries or adapter packages such as `@water-ui/adapter-shadcn`, not in
-`@water-ui/core`.
 
 ## Packages
 
@@ -21,7 +17,7 @@ registries or adapter packages such as `@water-ui/adapter-shadcn`, not in
   event registries.
 - `@water-ui/prompt`: prompt compilers for document, patch, stream, and repair
   flows.
-- `@water-ui/adapter-shadcn`: optional shadcn registry entries and render
+- `@water-ui/adapter-shadcn`: (optional) shadcn registry entries and render
   bindings.
 - `@water-ui/devtools`: serializable inspection models for registries, Schema
   UI, verification, patches, streams, runtime events, prompts, and render
@@ -110,38 +106,12 @@ import { WaterRenderer, WaterRuntimeProvider } from "@water-ui/react";
 </WaterRuntimeProvider>;
 ```
 
-## shadcn Adapter
-
-Use `@water-ui/adapter-shadcn` when an application wants standard shadcn-backed
-entries in its registry:
-
-```ts
-import { createWaterRegistry } from "@water-ui/core";
-import { shadcnComponents } from "@water-ui/adapter-shadcn";
-
-const registry = createWaterRegistry({
-  components: {
-    ...shadcnComponents,
-    CustomerTable,
-  },
-});
-```
-
-Project-local shadcn components can be bound with `createShadcnComponents`.
-
 ## Documentation
 
 - [Guides](./docs/guides/README.md): task-focused usage guides.
 - [Reference](./docs/reference/README.md): public API and protocol references.
-- [Fixtures](./docs/fixtures/README.md): protocol, registry, and verification
-  fixtures.
-- [RFCs](./docs/rfc/README.md): architecture notes and design rationale.
-- [Goldens](./goldens/): golden fixtures for registries, documents, patches,
-  streams, and prompts.
 
 ## Development
-
-This repository uses Vite+ through the `vp` CLI.
 
 ```bash
 vp install
