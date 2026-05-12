@@ -2,9 +2,9 @@
 
 Example applications and integration demos live in this directory.
 
-## Meeting Actions Demo
+## Meeting Note React
 
-Path: [`examples/meeting-actions-demo`](./meeting-actions-demo)
+Path: [`examples/meeting-note-react`](./meeting-note-react)
 
 A React + shadcn demo that turns a meeting note into a streamed Water UI todo list.
 
@@ -20,6 +20,20 @@ Run:
 
 ```sh
 vp install
-cd examples/meeting-actions-demo
+cd examples/meeting-note-react
+vp dev
+```
+
+## Meeting Note Vue
+
+Path: [`examples/meeting-note-vue`](./meeting-note-vue)
+
+A Vue demo that uses the same meeting note flow and renders the streamed Water UI todo list with `@water-ui/vue`.
+
+Run:
+
+```sh
+vp install
+cd examples/meeting-note-vue
 vp dev
 ```

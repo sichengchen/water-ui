@@ -1,4 +1,4 @@
-# Meeting Actions Demo
+# Meeting Note React
 
 This starter example turns a meeting note into a streamed, verified todo list:
 
@@ -15,6 +15,6 @@ app component registry, generated schema UI, verification, and rendering.
 
 ```sh
 vp install
-cd examples/meeting-actions-demo
+cd examples/meeting-note-react
 vp dev
 ```

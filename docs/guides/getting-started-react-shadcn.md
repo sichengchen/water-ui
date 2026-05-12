@@ -93,7 +93,7 @@ the meeting actions example exposes a `TaskList` component and lets Water
 generate only the todo list. The notebook and assistant shell are normal React
 UI; the generated output stays focused and easy to verify.
 
-See [examples/meeting-actions-demo](../../examples/meeting-actions-demo).
+See [examples/meeting-note-react](../../examples/meeting-note-react).
 
 ## Related Guides
 
