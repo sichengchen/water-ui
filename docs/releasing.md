@@ -1,7 +1,20 @@
 # Releasing Wasser UI
 
 Wasser UI publishes framework-specific packages under the `@wasser-ui` npm
-scope. The workspace root is private and is not published.
+scope. The workspace root is private and is not published. The current alpha
+release is available on npm as `0.1.0-alpha.0` under the `alpha` dist tag.
+
+## Published Packages
+
+- `@wasser-ui/core`
+- `@wasser-ui/runtime`
+- `@wasser-ui/prompt`
+- `@wasser-ui/react`
+- `@wasser-ui/vue`
+- `@wasser-ui/svelte`
+- `@wasser-ui/angular`
+- `@wasser-ui/adapter-shadcn`
+- `@wasser-ui/devtools`
 
 ## Prerequisites
 
@@ -10,7 +23,7 @@ scope. The workspace root is private and is not published.
   to publish public packages.
 - A clean git working tree.
 
-## First Alpha Release
+## Publishing an Alpha Release
 
 Run the full local release check:
 
@@ -25,7 +38,7 @@ Review the dry-run publish output:
 vp run publish:dry-run
 ```
 
-Publish the first alpha packages:
+Publish the alpha packages:
 
 ```sh
 vp run publish:alpha

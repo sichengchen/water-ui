@@ -7,12 +7,17 @@ same registry and runtime capabilities.
 
 ## Start Here
 
-1. Read `guides/define-your-registry.md`.
-2. Read `guides/generate-ui-with-agent.md`.
-3. Read `guides/register-actions.md`.
-4. Use `guides/use-the-shadcn-adapter.md` when working with shadcn.
-5. Use `reference/*.md` for public API and protocol details.
-6. Use `rfc/*.md` for architecture notes and design rationale.
+1. Install the npm packages for your renderer from the `alpha` dist tag.
+2. Read `guides/define-your-registry.md`.
+3. Read `guides/generate-ui-with-agent.md`.
+4. Read `guides/register-actions.md`.
+5. Use `guides/use-the-shadcn-adapter.md` when working with shadcn.
+6. Use `reference/*.md` for public API and protocol details.
+7. Use `rfc/*.md` for architecture notes and design rationale.
+
+```sh
+npm install @wasser-ui/core@alpha @wasser-ui/runtime@alpha @wasser-ui/prompt@alpha @wasser-ui/react@alpha
+```
 
 ## Non-Negotiables
 

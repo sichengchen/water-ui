@@ -7,12 +7,11 @@ neutral.
 ## Install
 
 ```sh
-vp add @wasser-ui/core @wasser-ui/react @wasser-ui/runtime @wasser-ui/prompt
-vp add @wasser-ui/adapter-shadcn
+npm install @wasser-ui/core@alpha @wasser-ui/react@alpha @wasser-ui/runtime@alpha @wasser-ui/prompt@alpha
+npm install @wasser-ui/adapter-shadcn@alpha zod
 ```
 
-Use the package manager and workspace tooling for your application. In this
-repo, use `vp`.
+Use the package manager for your application. In this repo, use `vp install`.
 
 ## Flow
 

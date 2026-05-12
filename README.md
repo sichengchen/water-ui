@@ -8,6 +8,23 @@ render verified UI, apply patches, and consume streaming UI updates.
 
 ## Packages
 
+Install the framework
+renderer your application uses:
+
+```sh
+npm install @wasser-ui/core@alpha @wasser-ui/runtime@alpha @wasser-ui/prompt@alpha @wasser-ui/react@alpha
+```
+
+Optional packages:
+
+```sh
+npm install @wasser-ui/vue@alpha
+npm install @wasser-ui/svelte@alpha
+npm install @wasser-ui/angular@alpha
+npm install @wasser-ui/adapter-shadcn@alpha
+npm install @wasser-ui/devtools@alpha
+```
+
 - `@wasser-ui/core`: registries, Schema UI protocol parsing, verification,
   semantic patches, stream state, and diagnostics.
 - `@wasser-ui/react`: React rendering for `VerifiedSchemaUI`, runtime binding,
