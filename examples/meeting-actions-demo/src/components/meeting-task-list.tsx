@@ -14,7 +14,9 @@ export function MeetingTaskList({ tasks }: MeetingTaskListProps): ReactNode {
     <Card className="gap-2 py-3">
       <CardHeader className="gap-1 px-4">
         <CardTitle className="text-base">Todo list</CardTitle>
-        <CardDescription>{tasks.length} extracted tasks</CardDescription>
+        <CardDescription>
+          {tasks.length} extracted {tasks.length === 1 ? "task" : "tasks"}
+        </CardDescription>
       </CardHeader>
       <CardContent className="px-4">
         <ul aria-label="Todo list" className="flex flex-col gap-1">

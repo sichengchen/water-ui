@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "catalog:",
+    "@radix-ui/react-dialog": "catalog:",
     "@radix-ui/react-slot": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@water-ui/core": "workspace:*",
@@ -28,6 +29,7 @@
     "react-dom": "catalog:",
     "tailwind-merge": "catalog:",
     "tailwindcss": "catalog:",
+    "tslib": "catalog:",
     "tw-animate-css": "catalog:",
     "zod": "catalog:"
   },
