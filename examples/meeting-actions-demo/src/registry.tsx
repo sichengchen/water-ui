@@ -1,5 +1,4 @@
 import { createWaterRegistry, defineWaterComponent } from "@water-ui/core";
-import { createElement } from "react";
 import { z } from "zod";
 import { MeetingTaskList } from "./components/meeting-task-list.js";
 import { meetingTaskSchema } from "./types.js";
@@ -59,10 +58,9 @@ export const meetingActionsRegistry = createWaterRegistry({
           },
         },
       ],
-      render: (({ props }) =>
-        createElement(MeetingTaskList, {
-          tasks: props.tasks,
-        })) satisfies WaterRenderBinding<TaskListProps>,
+      render: (({ props }) => (
+        <MeetingTaskList tasks={props.tasks} />
+      )) satisfies WaterRenderBinding<TaskListProps>,
     }),
   },
 });
