@@ -22,13 +22,9 @@ Verification fixtures:
 docs/fixtures/verification/documents/
 ```
 
-Golden eval fixtures live at repo root:
+Prompt golden fixtures live at repo root:
 
 ```txt
-goldens/registries/
-goldens/documents/
-goldens/patches/
-goldens/streams/
 goldens/prompts/
 ```
 

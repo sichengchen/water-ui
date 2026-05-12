@@ -30,10 +30,6 @@ Task categories:
 - Render same document with shadcn registry.
 - Render custom app registry without shadcn.
 
-Golden fixture families:
+Current golden fixture family:
 
-- registries
-- documents
-- patches
-- streams
 - prompts

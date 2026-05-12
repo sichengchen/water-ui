@@ -3,9 +3,8 @@
 Water UI is a generative UI toolkit for agent-driven applications.
 
 Applications expose their own components through a Water UI registry. Water UI
-uses that registry to compile prompts, parse model output, verify Schema UI, 
+uses that registry to compile prompts, parse model output, verify Schema UI,
 render verified UI, apply patches, and consume streaming UI updates.
-
 
 ## Packages
 
