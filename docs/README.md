@@ -20,6 +20,7 @@ same registry and runtime capabilities.
 - shadcn is an optional adapter, not the core abstraction.
 - Raw model output is untrusted.
 - Renderers accept `VerifiedSchemaUI`, not arbitrary model output.
+- React and Vue renderers share the same registry-first rendering contract.
 - Model output references runtime capabilities; application code implements
   them.
 - Prompts are compiled from the same registry used for verification.

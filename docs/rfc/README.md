@@ -16,3 +16,4 @@ Architecture notes and design rationale.
 - [012: Security Model](./012-security-model.md)
 - [013: DevTools](./013-devtools.md)
 - [014: Evaluation](./014-evaluation.md)
+- [015: Vue Renderer](./015-vue-renderer.md)

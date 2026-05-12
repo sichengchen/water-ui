@@ -8,6 +8,14 @@ React API target:
 </WaterRuntimeProvider>
 ```
 
+Vue API target:
+
+```ts
+import { h } from "vue";
+
+h(WaterRuntimeProvider, { runtime, registry }, () => h(WaterRenderer, { ui: verifiedUi }));
+```
+
 Renderer components:
 
 - `WaterRenderer`
@@ -27,4 +35,4 @@ Registry render bindings receive:
 - `renderNode` and `renderSlot` helpers
 
 Renderer diagnostics are reported through `onDiagnostics`, and fallback output
-uses safe React elements instead of raw HTML.
+uses safe framework elements instead of raw HTML.
